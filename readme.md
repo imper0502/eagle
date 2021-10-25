@@ -4,7 +4,7 @@
 
 *A short description of the keyboard/project*
 
-* Keyboard Maintainer: [imper0502](https://github.com/yourusername)
+* Keyboard Maintainer: [imper0502](https://github.com/imper0502)
 * Hardware Supported: *The PCBs, controllers supported*
 * Hardware Availability: *Links to where you can find this hardware*
 
