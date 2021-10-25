@@ -23,7 +23,7 @@ enum layer_names {
 
 // Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
-    QMKBEST = SAFE_RANGE
+    QMKBEST = SAFE_RANGE,
 };
 
 // Tap Dance declarations
@@ -80,12 +80,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
-// Initialize variable holding the binary
-// representation of active modifiers.
-uint8_t mod_state;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    // Store the current modifier state in the variable for later reference
-    mod_state = get_mods();
     switch (keycode) {
         case QMKBEST:
             if (record->event.pressed) {
@@ -96,266 +91,41 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code16(C(KC_V));
             }
             break;
-        // R1 keys
-        case SR_COMM:{
-            // Initialize a boolean variable that keeps track
-            // of the comma key status: registered or not?
-            static bool commakey_registered;
-            if (record->event.pressed) {
-                // Detect the activation of either shift keys
-                if (mod_state & MOD_MASK_SHIFT) {
-                    // First temporarily canceling both shifts so that
-                    // shift isn't applied to the KC_COMMA keycode
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code(KC_SCOLON);
-                    // Update the boolean variable to reflect the status of KC_COMMA
-                    commakey_registered = true;
-                    // Reapplying modifier state so that the held shift key(s)
-                    // still work even after having tapped the comma/semicolon key.
-                    set_mods(mod_state);
-                    return false;
-                }
-            } else {
-                // on release of KC_COMMA
-                // In case KC_SCOLON is still being sent even after the release of KC_COMMA
-                if (commakey_registered) {
-                    unregister_code(KC_SCOLON);
-                    commakey_registered = false;
-                    return false;
-                }
-            }
-            // Let QMK process the KC_COMMA keycode as usual outside of shift
-            return true;
-        }
-        case SR_DOT:{
-            static bool this_key_registered;
-            if (record->event.pressed) {
-                if (mod_state & MOD_MASK_SHIFT) {
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code16(KC_COLON);
-                    this_key_registered = true;
-                    set_mods(mod_state);
-                    return false;
-                }
-            } else {
-                if (this_key_registered) {
-                    unregister_code16(KC_COLON);
-                    this_key_registered = false;
-                    return false;
-                }
-            }
-            return true;
-        }
-        case SR_QUES:{
-            static bool this_key_registered;
-            if (record->event.pressed) {
-                if (mod_state & MOD_MASK_SHIFT) {
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code16(KC_EXCLAIM);
-                    this_key_registered = true;
-                    set_mods(mod_state);
-                    return false;
-                }
-            } else {
-                if (this_key_registered) {
-                    unregister_code16(KC_EXCLAIM);
-                    this_key_registered = false;
-                    return false;
-                }
-            }
-            return true;
-        }
-        // R4 keys
-        case SR_PIPE:{
-            static bool this_key_registered;
-            if (record->event.pressed) {
-                if (mod_state & MOD_MASK_SHIFT) {
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code16(KC_CIRCUMFLEX);
-                    this_key_registered = true;
-                    set_mods(mod_state);
-                    return false;
-                }
-            } else {
-                if (this_key_registered) {
-                    unregister_code16(KC_CIRCUMFLEX);
-                    this_key_registered = false;
-                    return false;
-                }
-            }
-            return true;
-        }
-        case SR_AT:{
-            static bool this_key_registered;
-            if (record->event.pressed) {
-                if (mod_state & MOD_MASK_SHIFT) {
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code(KC_GRAVE);
-                    this_key_registered = true;
-                    set_mods(mod_state);
-                    return false;
-                }
-            } else {
-                if (this_key_registered) {
-                    unregister_code(KC_GRAVE);
-                    this_key_registered = false;
-                    return false;
-                }
-            }
-            return true;
-        }
-        case SR_HASH:{
-            static bool this_key_registered;
-            if (record->event.pressed) {
-                if (mod_state & MOD_MASK_SHIFT) {
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code16(KC_TILDE);
-                    this_key_registered = true;
-                    set_mods(mod_state);
-                    return false;
-                }
-            } else {
-                if (this_key_registered) {
-                    unregister_code16(KC_TILDE);
-                    this_key_registered = false;
-                    return false;
-                }
-            }
-            return true;
-        }
-        case SR_ASTR:{
-            static bool this_key_registered;
-            if (record->event.pressed) {
-                if (mod_state & MOD_MASK_SHIFT) {
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code16(KC_AMPERSAND);
-                    this_key_registered = true;
-                    set_mods(mod_state);
-                    return false;
-                }
-            } else {
-                if (this_key_registered) {
-                    unregister_code16(KC_AMPERSAND);
-                    this_key_registered = false;
-                    return false;
-                }
-            }
-            return true;
-        }
-        case SR_PERC:{
-            static bool this_key_registered;
-            if (record->event.pressed) {
-                if (mod_state & MOD_MASK_SHIFT) {
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code16(KC_DOLLAR);
-                    this_key_registered = true;
-                    set_mods(mod_state);
-                    return false;
-                }
-            } else {
-                if (this_key_registered) {
-                    unregister_code16(KC_DOLLAR);
-                    this_key_registered = false;
-                    return false;
-                }
-            }
-            return true;
-        }
-        case SR_LABK:{
-            static bool this_key_registered;
-            if (record->event.pressed) {
-                if (mod_state & MOD_MASK_SHIFT) {
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code16(KC_RIGHT_ANGLE_BRACKET);
-                    this_key_registered = true;
-                    set_mods(mod_state);
-                    return false;
-                }
-            } else {
-                if (this_key_registered) {
-                    unregister_code16(KC_RIGHT_ANGLE_BRACKET);
-                    this_key_registered = false;
-                    return false;
-                }
-            }
-            return true;
-        }
-        case SR_LPRN:{
-            static bool this_key_registered;
-            if (record->event.pressed) {
-                if (mod_state & MOD_MASK_SHIFT) {
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code16(KC_RIGHT_PAREN);
-                    this_key_registered = true;
-                    set_mods(mod_state);
-                    return false;
-                }
-            } else {
-                if (this_key_registered) {
-                    unregister_code16(KC_RIGHT_PAREN);
-                    this_key_registered = false;
-                    return false;
-                }
-            }
-            return true;
-        }
-        case SR_LBRC:{
-            static bool this_key_registered;
-            if (record->event.pressed) {
-                if (mod_state & MOD_MASK_SHIFT) {
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code(KC_RBRACKET);
-                    this_key_registered = true;
-                    set_mods(mod_state);
-                    return false;
-                }
-            } else {
-                if (this_key_registered) {
-                    unregister_code(KC_RBRACKET);
-                    this_key_registered = false;
-                    return false;
-                }
-            }
-            return true;
-        }
-        case SR_LCBR:{
-            static bool this_key_registered;
-            if (record->event.pressed) {
-                if (mod_state & MOD_MASK_SHIFT) {
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code16(KC_RIGHT_CURLY_BRACE);
-                    this_key_registered = true;
-                    set_mods(mod_state);
-                    return false;
-                }
-            } else {
-                if (this_key_registered) {
-                    unregister_code16(KC_RIGHT_CURLY_BRACE);
-                    this_key_registered = false;
-                    return false;
-                }
-            }
-            return true;
-        }
-        case SR_SLSH:{
-            static bool this_key_registered;
-            if (record->event.pressed) {
-                if (mod_state & MOD_MASK_SHIFT) {
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code(KC_BSLASH);
-                    this_key_registered = true;
-                    set_mods(mod_state);
-                    return false;
-                }
-            } else {
-                if (this_key_registered) {
-                    unregister_code(KC_BSLASH);
-                    this_key_registered = false;
-                    return false;
-                }
-            }
-            return true;
-        }
     }
     return true;
 }
+
+// Key Overrides
+const key_override_t backspace_key_override = ko_make_basic(MOD_MASK_ALT, KC_BSPACE, KC_DELETE);
+const key_override_t comma_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMMA, KC_SCOLON);
+const key_override_t dot_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLON);
+const key_override_t question_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_QUESTION, KC_EXCLAIM);
+const key_override_t pipe_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_PIPE, KC_CIRCUMFLEX);
+const key_override_t at_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_GRAVE);
+const key_override_t hash_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_HASH, KC_TILDE);
+const key_override_t asterisk_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_ASTERISK, KC_AMPERSAND);
+const key_override_t percent_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_PERCENT, KC_DOLLAR);
+const key_override_t left_angle_bracket_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_ANGLE_BRACKET, KC_RIGHT_ANGLE_BRACKET);
+const key_override_t left_paren_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_PAREN, KC_RIGHT_PAREN);
+const key_override_t left_bracket_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_LBRACKET, KC_RBRACKET);
+const key_override_t left_curly_bracket_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_CURLY_BRACE, KC_RIGHT_CURLY_BRACE);
+const key_override_t slash_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_BSLASH);
+
+// This globally defines all key overrides to be used
+const key_override_t **key_overrides = (const key_override_t *[]){
+    &backspace_key_override,
+    &comma_key_override,
+    &dot_key_override,
+    &question_key_override,
+    &pipe_key_override,
+    &at_key_override,
+    &hash_key_override,
+    &asterisk_key_override,
+    &percent_key_override,
+    &left_angle_bracket_key_override,
+    &left_paren_key_override,
+    &left_bracket_key_override,
+    &left_curly_bracket_key_override,
+    &slash_key_override,
+    NULL // Null terminate the array of overrides!
+};
