@@ -85,20 +85,20 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Base */
     [_BS] = LAYOUT(
-    ALT_TAB,SR_PIPE,SR_AT  ,SR_HASH,SR_ASTR,SR_PERC,                SR_LABK,SR_LPRN,SR_LBRC,SR_LCBR,SR_SLSH,_______,
+    ALT_TAB,SR_PIPE,SR_AT  ,SR_HASH,SR_ASTR,SR_PERC,                SR_LABK,SR_LPRN,SR_LBRC,SR_LCBR,SR_SLSH, RESET ,
     KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
     KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUOT,
     KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,SR_COMM,SR_DOT ,SR_QUES,KC_RSFT,
                             KC_LALT,TD_LWIN,KC_LCTL,KC_LSFT,SFT_ENT,ST_SPC ,TT(_FN),KC_RALT,
-                            KC_ESC ,                QMKBEST,KC_CAPS,                 SR_IME
+                            SR_ESC ,                QMKBEST,_______,                 SR_IME
     ),
     [_FN] = LAYOUT(
     KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
-    _______,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                KC_PGUP,KC_HOME,KC_UP  ,KC_END ,KC_INS ,_______,
-    _______,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                KC_PGDN,KC_LEFT,KC_DOWN,KC_RGHT,KC_DEL ,_______,
-    _______,_______,KC_1   ,KC_2   ,KC_3   ,_______,                _______,_______,_______,_______,_______,_______,
+    _______,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                KC_PGUP,KC_HOME,KC_UP  ,KC_END ,KC_INS ,KC_VOLU,
+    _______,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                KC_PGDN,KC_LEFT,KC_DOWN,KC_RGHT,KC_DEL ,KC_VOLD,
+    _______,_______,KC_1   ,KC_2   ,KC_3   ,_______,                KC_WHOM,KC_WBAK,KC_WREF,KC_WFWD,KC_WSCH,KC_MUTE,
                             KC_EQL ,TD_DOT ,KC_0   ,KC_PENT,_______,_______,TT(_FN),_______,
-                            _______,                _______,_______,                _______
+                            KC_CALC,                _______,_______,                KC_CAPS
     )
 };
 
