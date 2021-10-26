@@ -47,25 +47,30 @@ uint16_t alt_tab_timer = 0;     // we will be using them soon.
 enum {
     TD_WIN_FN,
     TD_DOT_FN,
+    TD_IME_CAPSLOCK,
+    TD_ESCAPE_SCREENSHOT,
 };
 
 // Tap Dance definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_WIN_FN] = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_LWIN, _FN),
     [TD_DOT_FN] = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_DOT , _FN),
+    [TD_IME_CAPSLOCK] = ACTION_TAP_DANCE_DOUBLE(G(KC_SPC) , KC_CAPS),
+    [TD_ESCAPE_SCREENSHOT] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, LSG(KC_S)),
 };
 
 // RT keys
+#define SR_ESC  TD(TD_ESCAPE_SCREENSHOT)
 #define TD_LWIN TD(TD_WIN_FN)
 #define TD_DOT  TD(TD_DOT_FN)
 #define SFT_ENT KC_SFTENT
 #define ST_SPC  SFT_T(KC_SPC)
-#define SR_IME  G(KC_SPC)
-// R1 keys
+#define SR_IME  TD(TD_IME_CAPSLOCK)
+// R1 overriding keys
 #define SR_COMM KC_COMMA
 #define SR_DOT  KC_DOT
 #define SR_QUES KC_QUESTION
-// R4 keys
+// R4 overriding keys
 #define SR_PIPE KC_PIPE         // |^
 #define SR_AT   KC_AT           // @`
 #define SR_HASH KC_HASH         // #~
