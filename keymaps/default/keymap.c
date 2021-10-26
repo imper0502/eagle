@@ -102,7 +102,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
+int16_t typing_timer = 0;
+bool is_typing_timer_active = false;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (IS_LAYER_ON(_FN)) {
+        if (!is_typing_timer_active) is_typing_timer_active = true;
+        typing_timer = timer_read();
+    }
     switch (keycode) {
         case QMKBEST:
             if (record->event.pressed) {
@@ -132,12 +138,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 void matrix_scan_user(void) { // The very important timer.
     writePin(TXLED, IS_LAYER_OFF(_FN));
     writePin(RXLED, IS_LAYER_OFF(_FN));
+
+    if (is_alt_tab_active) {
+        if (timer_elapsed(alt_tab_timer) > 1000) {
+            unregister_code(KC_LALT);
+            is_alt_tab_active = false;
+        }
+    }
+    
+    if (IS_LAYER_ON(_FN) && is_typing_timer_active) {
+        if (timer_elapsed(typing_timer) > 30000) {
+            layer_off(_FN);
+            is_typing_timer_active = false;
         }
     }
 }
 
 // Key Overrides
-const key_override_t backspace_key_override = ko_make_basic(MOD_MASK_ALT, KC_BSPACE, KC_DELETE);
+const key_override_t backspace_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_BSPACE, KC_DELETE);
 const key_override_t comma_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMMA, KC_SCOLON);
 const key_override_t dot_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLON);
 const key_override_t question_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_QUESTION, KC_EXCLAIM);
