@@ -102,8 +102,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
-int16_t typing_timer = 0;
 bool is_typing_timer_active = false;
+int16_t typing_timer = 0;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (IS_LAYER_ON(_FN)) {
         if (!is_typing_timer_active) is_typing_timer_active = true;
@@ -137,7 +137,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 void matrix_scan_user(void) { // The very important timer.
     writePin(TXLED, IS_LAYER_OFF(_FN));
-    writePin(RXLED, IS_LAYER_OFF(_FN));
+    // writePin(RXLED, IS_LAYER_OFF(_FN));
 
     if (is_alt_tab_active) {
         if (timer_elapsed(alt_tab_timer) > 1000) {
@@ -146,7 +146,7 @@ void matrix_scan_user(void) { // The very important timer.
         }
     }
     
-    if (IS_LAYER_ON(_FN) && is_typing_timer_active) {
+    if (is_typing_timer_active && IS_LAYER_ON(_FN)) {
         if (timer_elapsed(typing_timer) > 30000) {
             layer_off(_FN);
             is_typing_timer_active = false;
