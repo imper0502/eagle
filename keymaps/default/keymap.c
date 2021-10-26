@@ -15,6 +15,20 @@
  */
 #include QMK_KEYBOARD_H
 
+/* 初始化指示燈 */
+#define TXLED D5
+#define RXLED B0
+#define LED_PIN_ON_STATE 0
+#define LED_ON 0
+#define LED_OFF 1
+ 
+void keyboard_pre_init_user(void) {
+    setPinOutput(TXLED);
+    setPinOutput(RXLED);
+    writePin(TXLED, LED_OFF);
+    writePin(RXLED, LED_OFF);
+}
+
 // Defines names for use in layer keycodes and the keymap
 enum layer_names {
     _BS,
@@ -111,10 +125,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 void matrix_scan_user(void) { // The very important timer.
-    if (is_alt_tab_active) {
-        if (timer_elapsed(alt_tab_timer) > 1000) {
-            unregister_code(KC_LALT);
-            is_alt_tab_active = false;
+    writePin(TXLED, IS_LAYER_OFF(_FN));
+    writePin(RXLED, IS_LAYER_OFF(_FN));
         }
     }
 }
