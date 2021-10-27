@@ -49,7 +49,33 @@ enum {
     TD_DOT_FN,
     TD_IME_CAPSLOCK,
     TD_ESCAPE_SCREENSHOT,
+    COPY_PASTE,
 };
+
+// Define a type containing as many tapdance states as you need
+typedef enum {
+    SINGLE_TAP,
+    SINGLE_HOLD,
+    DOUBLE_TAP,
+    OTHERWISE
+} td_state_t;
+
+typedef struct {
+    bool is_press_action;
+    td_state_t state;
+} td_tap_t;
+
+// Create a global instance of the tapdance state type
+static td_state_t td_state;
+
+// Declare tap dance functions:
+// Function to determine the current tapdance state
+uint8_t current_dance(qk_tap_dance_state_t *state);
+
+// `finished` and `reset` functions for each tapdance keycode
+#define CPY_PST TD(COPY_PASTE)
+void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
+void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
 
 // Tap Dance definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
@@ -57,6 +83,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_DOT_FN] = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_DOT , _FN),
     [TD_IME_CAPSLOCK] = ACTION_TAP_DANCE_DOUBLE(G(KC_SPC) , KC_CAPS),
     [TD_ESCAPE_SCREENSHOT] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, LSG(KC_S)),
+    [COPY_PASTE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
 };
 
 // RT keys
@@ -90,7 +117,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUOT,
     KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,SR_COMM,SR_DOT ,SR_QUES,KC_RSFT,
                             KC_LALT,TD_LWIN,KC_LCTL,KC_LSFT,SFT_ENT,ST_SPC ,TT(_FN),KC_RALT,
-                            SR_ESC ,                QMKBEST,G(KC_V),                 SR_IME
+                            SR_ESC ,                CPY_PST,G(KC_V),                 SR_IME
     ),
     [_FN] = LAYOUT(
     KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
@@ -188,3 +215,42 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     &slash_key_override,
     NULL // Null terminate the array of overrides!
 };
+
+// Declare tap dance functions:
+// Function to determine the current tapdance state
+uint8_t current_dance(qk_tap_dance_state_t *state);
+
+// `finished` and `reset` functions for each tapdance keycode
+#define CPY_PST TD(COPY_PASTE)
+void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
+void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
+
+// Tap Dance Functions Defination
+// Determine the tapdance state to return
+uint8_t current_dance(qk_tap_dance_state_t *state) {
+    switch (state->count) {
+        case 1:
+            if (!state->interrupted && !state->pressed) return SINGLE_TAP;
+            else if (state->pressed) return SINGLE_HOLD;
+        case 2:
+            if (!state->pressed) return DOUBLE_TAP;
+        default:
+            return OTHERWISE;
+    }
+}
+
+void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
+    td_state = current_dance(state);
+    switch (td_state) {
+        case SINGLE_TAP:  register_code16(C(KC_V)); break;
+        case SINGLE_HOLD: tap_code16(C(KC_C));      break;
+        default: return;
+    }
+}
+void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
+    switch (td_state) {
+        case SINGLE_TAP:  unregister_code16(C(KC_V)); break;
+        case SINGLE_HOLD: tap_code16(C(KC_V));        break;
+        default: return;
+    }
+}
