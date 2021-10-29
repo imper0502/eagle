@@ -15,20 +15,6 @@
  */
 #include QMK_KEYBOARD_H
 
-/* 初始化指示燈 */
-#define TXLED D5
-#define RXLED B0
-#define LED_PIN_ON_STATE 0
-#define LED_ON 0
-#define LED_OFF 1
- 
-void keyboard_pre_init_user(void) {
-    setPinOutput(TXLED);
-    setPinOutput(RXLED);
-    writePin(TXLED, LED_OFF);
-    writePin(RXLED, LED_OFF);
-}
-
 // Defines names for use in layer keycodes and the keymap
 enum layer_names {
     _BS,
@@ -40,8 +26,6 @@ enum custom_keycodes {
     QMKBEST = SAFE_RANGE,
     ALT_TAB
 };
-bool is_alt_tab_active = false; // ADD this near the begining of keymap.c
-uint16_t alt_tab_timer = 0;     // we will be using them soon.
 
 // Tap Dance declarations
 enum {
@@ -52,90 +36,68 @@ enum {
     COPY_PASTE,
 };
 
-// Define a type containing as many tapdance states as you need
-typedef enum {
-    SINGLE_TAP,
-    SINGLE_HOLD,
-    DOUBLE_TAP,
-    OTHERWISE
-} td_state_t;
-
-typedef struct {
-    bool is_press_action;
-    td_state_t state;
-} td_tap_t;
-
-// Create a global instance of the tapdance state type
-static td_state_t td_state;
-
-// Declare tap dance functions:
-// Function to determine the current tapdance state
-uint8_t current_dance(qk_tap_dance_state_t *state);
-
-// `finished` and `reset` functions for each tapdance keycode
-#define CPY_PST TD(COPY_PASTE)
-void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
-void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
-
-// Tap Dance definitions
-qk_tap_dance_action_t tap_dance_actions[] = {
-    [TD_WIN_FN] = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_LWIN, _FN),
-    [TD_DOT_FN] = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_DOT , _FN),
-    [TD_IME_CAPSLOCK] = ACTION_TAP_DANCE_DOUBLE(G(KC_SPC) , KC_CAPS),
-    [TD_ESCAPE_SCREENSHOT] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, LSG(KC_S)),
-    [COPY_PASTE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
-};
-
-// RT keys
-#define SR_ESC  TD(TD_ESCAPE_SCREENSHOT)
 #define TD_LWIN TD(TD_WIN_FN)
 #define TD_DOT  TD(TD_DOT_FN)
-#define SFT_ENT KC_SFTENT
-#define ST_SPC  SFT_T(KC_SPC)
-#define SR_IME  TD(TD_IME_CAPSLOCK)
-// R1 overriding keys
-#define SR_COMM KC_COMMA
-#define SR_DOT  KC_DOT
-#define SR_QUES KC_QUESTION
-// R4 overriding keys
-#define SR_PIPE KC_PIPE         // |^
-#define SR_AT   KC_AT           // @`
-#define SR_HASH KC_HASH         // #~
-#define SR_ASTR KC_ASTERISK     //\*&
-#define SR_PERC KC_PERCENT	    // %$
-#define SR_LABK KC_LEFT_ANGLE_BRACKET   // <>
-#define SR_LPRN KC_LEFT_PAREN           // ()
-#define SR_LBRC KC_LBRACKET             // []
-#define SR_LCBR KC_LEFT_CURLY_BRACE     // {}
-#define SR_SLSH KC_SLASH                // /
+#define TD_IME  TD(TD_IME_CAPSLOCK)
+#define TD_ESC  TD(TD_ESCAPE_SCREENSHOT)
+#define CPY_PST TD(COPY_PASTE)
 
+//
+#define ST_SPC  SFT_T(KC_SPC)
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    /* Base */
     [_BS] = LAYOUT(
-    ALT_TAB,SR_PIPE,SR_AT  ,SR_HASH,SR_ASTR,SR_PERC,                SR_LABK,SR_LPRN,SR_LBRC,SR_LCBR,SR_SLSH, RESET ,
+    ALT_TAB,KC_PIPE,KC_AT  ,KC_HASH,KC_ASTR,KC_PERC,                KC_LABK,KC_LPRN,KC_LBRC,KC_LCBR,KC_BSPC,KC_DEL ,
     KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
     KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUOT,
-    KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,SR_COMM,SR_DOT ,SR_QUES,KC_RSFT,
-                            KC_LALT,TD_LWIN,KC_LCTL,KC_LSFT,SFT_ENT,ST_SPC ,TT(_FN),KC_RALT,
-                            SR_ESC ,                CPY_PST,G(KC_V),                 SR_IME
+    KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_SLSH,KC_QUES,
+                            KC_LALT,TD_LWIN,KC_LCTL,KC_LSFT,KC_ENT ,ST_SPC ,MO(_FN),KC_INS ,
+                            TD_ESC ,                CPY_PST,XXXXXXX,                TD_IME
     ),
     [_FN] = LAYOUT(
     KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
-    _______,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                KC_PGUP,KC_HOME,KC_UP  ,KC_END ,KC_INS ,KC_VOLU,
-    _______,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                KC_PGDN,KC_LEFT,KC_DOWN,KC_RGHT,KC_DEL ,KC_VOLD,
-    _______,C(KC_Z),KC_1   ,KC_2   ,KC_3   ,KC_0   ,                KC_WHOM,KC_WBAK,KC_WREF,KC_WFWD,KC_WSCH,KC_MUTE,
-                            KC_EQL ,TD_DOT ,KC_0   ,KC_PENT,KC_RSFT,KC_RCTL,TT(_FN),KC_RALT,
-                            KC_CALC,                _______,_______,                KC_CAPS
+    _______,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                KC_PGUP,KC_HOME,KC_UP  ,KC_END ,KC_BRIU,KC_VOLU,
+    _______,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                KC_PGDN,KC_LEFT,KC_DOWN,KC_RGHT,KC_BRID,KC_VOLD,
+    _______,KC_0   ,KC_1   ,KC_2   ,KC_3   ,XXXXXXX,                XXXXXXX,KC_WBAK,KC_WREF,KC_WFWD,KC_WSCH,KC_MUTE,
+                            KC_EQL ,TD_DOT ,KC_0   ,KC_PENT,KC_RSFT,KC_RCTL,MO(_FN),KC_INS ,
+                            KC_CALC,                XXXXXXX,XXXXXXX,                KC_CAPS
     )
 };
 
 bool is_typing_timer_active = false;
-int16_t typing_timer = 0;
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (IS_LAYER_ON(_FN)) {
-        if (!is_typing_timer_active) is_typing_timer_active = true;
-        typing_timer = timer_read();
+uint16_t typing_timer = 0;
+bool is_alt_tab_active = false;
+uint16_t alt_tab_timer = 0;
+
+void keyboard_pre_init_user(void) {
+    setPinOutput(TXLED);
+    setPinOutput(RXLED);
+    writePin(TXLED, LED_OFF);
+    writePin(RXLED, LED_OFF);
+}
+
+void matrix_scan_user(void) { // The very important timer.
+    writePin(TXLED, IS_LAYER_OFF(_FN));
+    // writePin(RXLED, IS_LAYER_OFF(_FN));
+
+    if (is_alt_tab_active) {
+        if (timer_elapsed(alt_tab_timer) > 1000) {
+            unregister_code(KC_LALT);
+            is_alt_tab_active = false;
+        }
     }
+
+    if (is_typing_timer_active && IS_LAYER_ON(_FN)) {
+        if (timer_elapsed(typing_timer) > 30000) {
+            layer_off(_FN);
+            is_typing_timer_active = false;
+        }
+    }
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!is_typing_timer_active) is_typing_timer_active = IS_LAYER_ON(_FN);
+    else typing_timer = timer_read();
+
     switch (keycode) {
         case QMKBEST:
             if (record->event.pressed) {
@@ -162,27 +124,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-void matrix_scan_user(void) { // The very important timer.
-    writePin(TXLED, IS_LAYER_OFF(_FN));
-    // writePin(RXLED, IS_LAYER_OFF(_FN));
-
-    if (is_alt_tab_active) {
-        if (timer_elapsed(alt_tab_timer) > 1000) {
-            unregister_code(KC_LALT);
-            is_alt_tab_active = false;
-        }
-    }
-    
-    if (is_typing_timer_active && IS_LAYER_ON(_FN)) {
-        if (timer_elapsed(typing_timer) > 30000) {
-            layer_off(_FN);
-            is_typing_timer_active = false;
-        }
-    }
-}
-
 // Key Overrides
-const key_override_t backspace_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_BSPACE, KC_DELETE);
 const key_override_t comma_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMMA, KC_SCOLON);
 const key_override_t dot_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLON);
 const key_override_t question_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_QUESTION, KC_EXCLAIM);
@@ -199,7 +141,6 @@ const key_override_t slash_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_SLASH
 
 // This globally defines all key overrides to be used
 const key_override_t **key_overrides = (const key_override_t *[]){
-    &backspace_key_override,
     &comma_key_override,
     &dot_key_override,
     &question_key_override,
@@ -216,16 +157,25 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     NULL // Null terminate the array of overrides!
 };
 
+// Define a type containing as many tapdance states as you need
+typedef enum {
+    SINGLE_TAP,
+    SINGLE_HOLD,
+    DOUBLE_TAP,
+    OTHERWISE
+} td_state_t;
+
+typedef struct {
+    bool is_press_action;
+    td_state_t state;
+} td_tap_t;
+
+// Create a global instance of the tapdance state type
+static td_state_t td_state;
+
 // Declare tap dance functions:
 // Function to determine the current tapdance state
 uint8_t current_dance(qk_tap_dance_state_t *state);
-
-// `finished` and `reset` functions for each tapdance keycode
-#define CPY_PST TD(COPY_PASTE)
-void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
-void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
-
-// Tap Dance Functions Defination
 // Determine the tapdance state to return
 uint8_t current_dance(qk_tap_dance_state_t *state) {
     switch (state->count) {
@@ -239,6 +189,9 @@ uint8_t current_dance(qk_tap_dance_state_t *state) {
     }
 }
 
+// `finished` and `reset` functions for each tapdance keycode
+// 
+void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
 void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
     td_state = current_dance(state);
     switch (td_state) {
@@ -247,6 +200,8 @@ void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
         default: return;
     }
 }
+
+void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
 void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (td_state) {
         case SINGLE_TAP:  unregister_code16(C(KC_V)); break;
@@ -254,3 +209,12 @@ void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
         default: return;
     }
 }
+
+// Tap Dance
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [TD_WIN_FN] = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_LWIN, _FN),
+    [TD_DOT_FN] = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_DOT , _FN),
+    [TD_IME_CAPSLOCK] = ACTION_TAP_DANCE_DOUBLE(G(KC_SPC) , KC_CAPS),
+    [TD_ESCAPE_SCREENSHOT] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, LSG(KC_S)),
+    [COPY_PASTE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
+};

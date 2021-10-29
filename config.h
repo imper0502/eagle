@@ -150,3 +150,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Bootmagic Lite key configuration */
 //#define BOOTMAGIC_LITE_ROW 0
 //#define BOOTMAGIC_LITE_COLUMN 0
+
+#define TXLED D5
+#define RXLED B0
+#define LED_PIN_ON_STATE 0
+#define LED_ON 0
+#define LED_OFF 1
