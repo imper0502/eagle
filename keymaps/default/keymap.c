@@ -104,20 +104,28 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     switch (index) {
     case 0:
         if (clockwise) {
-            if (mod_state & MOD_MASK_SHIFT) {
+            if (mod_state & MOD_MASK_CTRL) {
+                IS_LAYER_ON(_FN) ? tap_code(KC_BRIU) : tap_code(KC_Y);
+            } else if (mod_state & MOD_MASK_SHIFT) {
                 del_mods(MOD_MASK_SHIFT);
                 IS_LAYER_ON(_FN) ? tap_code(KC_BRIU) : tap_code(KC_PGDN);
                 set_mods(mod_state);
+            } else if (mod_state & MOD_MASK_ALT) {
+                IS_LAYER_ON(_FN) ? tap_code(KC_VOLD) : tap_code(KC_BTN4);
             } else {
-                IS_LAYER_ON(_FN) ? tap_code(KC_VOLU) : tap_code(KC_WFWD);
+                IS_LAYER_ON(_FN) ? tap_code(KC_VOLU) : tap_code(KC_BTN4);
             }
         } else {
-            if (mod_state & MOD_MASK_SHIFT) {
+            if (mod_state & MOD_MASK_CTRL) {
+                IS_LAYER_ON(_FN) ? tap_code(KC_BRID) : tap_code(KC_Z);
+            } else if (mod_state & MOD_MASK_SHIFT) {
                 del_mods(MOD_MASK_SHIFT);
                 IS_LAYER_ON(_FN) ? tap_code(KC_BRID) : tap_code(KC_PGUP);            
                 set_mods(mod_state);
+            } else if (mod_state & MOD_MASK_ALT) {
+                IS_LAYER_ON(_FN) ? tap_code(KC_VOLD) : tap_code(KC_BTN4);
             } else {
-                IS_LAYER_ON(_FN) ? tap_code(KC_VOLD) : tap_code(KC_WBAK);
+                IS_LAYER_ON(_FN) ? tap_code(KC_VOLD) : tap_code(KC_BTN4);
             }
         }
         break;
