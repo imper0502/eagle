@@ -68,6 +68,7 @@ bool is_typing_timer_active = false;
 uint16_t typing_timer = 0;
 bool is_alt_tab_active = false;
 uint16_t alt_tab_timer = 0;
+uint8_t mod_state;
 
 void keyboard_pre_init_user(void) {
     setPinOutput(TXLED);
@@ -93,6 +94,32 @@ void matrix_scan_user(void) { // The very important timer.
             is_typing_timer_active = false;
         }
     }
+}
+
+bool encoder_update_user(uint8_t index, bool clockwise) {
+    mod_state = get_mods();
+    switch (index) {
+    case 0:
+        if (clockwise) {
+            if (mod_state & MOD_MASK_SHIFT) {
+                del_mods(MOD_MASK_SHIFT);
+                IS_LAYER_ON(_FN) ? tap_code(KC_BRIU) : tap_code16(C(KC_VOLU));
+                set_mods(mod_state);
+            } else {
+                IS_LAYER_ON(_FN) ? tap_code(KC_PGDN) : tap_code16(C(KC_Y));
+            }
+        } else {
+            if (mod_state & MOD_MASK_SHIFT) {
+                del_mods(MOD_MASK_SHIFT);
+                IS_LAYER_ON(_FN) ? tap_code(KC_BRID) : tap_code16(C(KC_VOLD));            
+                set_mods(mod_state);
+            } else {
+                IS_LAYER_ON(_FN) ? tap_code(KC_PGUP) : tap_code16(C(KC_Z));
+            }
+        }
+        break;
+    }
+    return false;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {

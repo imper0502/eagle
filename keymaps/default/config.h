@@ -1,2 +1,4 @@
 #define TAPPING_TOGGLE 2
 #define TAPPING_TERM 275
+#define ENCODERS_PAD_A { D3 }
+#define ENCODERS_PAD_B { D2 }
