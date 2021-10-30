@@ -46,22 +46,23 @@ enum {
 //
 #define SFT_ENT  KC_SFTENT
 #define ST_SPC  SFT_T(KC_SPC)
+#define CT_SPC  CTL_T(KC_SPC)
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-    ALT_TAB,KC_PIPE,KC_AT  ,KC_HASH,KC_ASTR,KC_PERC,                KC_LABK,KC_LPRN,KC_LBRC,KC_LCBR,KC_BSPC,KC_DEL ,
+    ALT_TAB,KC_PIPE,KC_AT  ,KC_HASH,KC_ASTR,KC_PERC,                KC_QUES,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_INS ,
     KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
     KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUOT,
     KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_SLSH,KC_QUES,
-                            KC_LALT,TD_LWIN,KC_LCTL,KC_LSFT,SFT_ENT,KC_SPC ,MO(_FN),KC_INS ,
+                            KC_LALT,TD_LWIN,KC_LCTL,KC_LSFT,SFT_ENT,CT_SPC ,MO(_FN),KC_DEL ,
                             TD_ESC ,                CPY_PST,CUT_PST,                TD_IME
     ),
     [_FN] = LAYOUT(
     KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
-    _______,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                XXXXXXX,KC_HOME,KC_UP  ,KC_END ,XXXXXXX,XXXXXXX,
-    _______,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                XXXXXXX,KC_LEFT,KC_DOWN,KC_RGHT,XXXXXXX,XXXXXXX,
-    _______,KC_0   ,KC_1   ,KC_2   ,KC_3   ,XXXXXXX,                XXXXXXX,KC_WBAK,KC_WREF,KC_WFWD,XXXXXXX,XXXXXXX,
+    _______,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                DM_REC1,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,DM_REC2,
+    _______,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                DM_PLY1,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,DM_PLY2,
+    _______,KC_0   ,KC_1   ,KC_2   ,KC_3   ,KC_CALC,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
                             KC_EQL ,TD_DOT ,KC_0   ,KC_PENT,KC_RSFT,KC_RCTL,MO(_FN),KC_RALT,
-                            KC_CALC,                _______,_______,                KC_CAPS
+                            KC_ESC ,                _______,_______,                KC_CAPS
     )
 };
 
@@ -99,23 +100,24 @@ void matrix_scan_user(void) { // The very important timer.
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
     mod_state = get_mods();
+    typing_timer = is_typing_timer_active ? timer_read() : 0;
     switch (index) {
     case 0:
         if (clockwise) {
             if (mod_state & MOD_MASK_SHIFT) {
                 del_mods(MOD_MASK_SHIFT);
-                IS_LAYER_ON(_FN) ? tap_code(KC_BRIU) : tap_code16(C(KC_VOLU));
+                IS_LAYER_ON(_FN) ? tap_code(KC_BRIU) : tap_code(KC_PGDN);
                 set_mods(mod_state);
             } else {
-                IS_LAYER_ON(_FN) ? tap_code(KC_PGDN) : tap_code16(C(KC_Y));
+                IS_LAYER_ON(_FN) ? tap_code(KC_VOLU) : tap_code(KC_WFWD);
             }
         } else {
             if (mod_state & MOD_MASK_SHIFT) {
                 del_mods(MOD_MASK_SHIFT);
-                IS_LAYER_ON(_FN) ? tap_code(KC_BRID) : tap_code16(C(KC_VOLD));            
+                IS_LAYER_ON(_FN) ? tap_code(KC_BRID) : tap_code(KC_PGUP);            
                 set_mods(mod_state);
             } else {
-                IS_LAYER_ON(_FN) ? tap_code(KC_PGUP) : tap_code16(C(KC_Z));
+                IS_LAYER_ON(_FN) ? tap_code(KC_VOLD) : tap_code(KC_WBAK);
             }
         }
         break;
@@ -164,6 +166,8 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case KC_ESC:
         clear_mods();
+        typing_timer = is_typing_timer_active ? timer_read() : 0;
+        alt_tab_timer = is_alt_tab_active ? timer_read() : 0;
         break;
     }
 }
