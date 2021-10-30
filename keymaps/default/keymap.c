@@ -44,6 +44,7 @@ enum {
 #define CPY_PST TD(COPY_PASTE)
 
 //
+#define SFT_ENT  KC_SFTENT
 #define ST_SPC  SFT_T(KC_SPC)
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
@@ -51,15 +52,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
     KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUOT,
     KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_SLSH,KC_QUES,
-                            KC_LALT,TD_LWIN,KC_LCTL,KC_LSFT,ST_SPC ,KC_ENT ,MO(_FN),KC_INS ,
+                            KC_LALT,TD_LWIN,KC_LCTL,KC_LSFT,SFT_ENT,KC_SPC ,MO(_FN),KC_INS ,
                             TD_ESC ,                CPY_PST,CUT_PST,                TD_IME
     ),
     [_FN] = LAYOUT(
     KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
-    _______,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                KC_PGUP,KC_HOME,KC_UP  ,KC_END ,KC_BRIU,KC_VOLU,
-    _______,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                KC_PGDN,KC_LEFT,KC_DOWN,KC_RGHT,KC_BRID,KC_VOLD,
-    _______,KC_0   ,KC_1   ,KC_2   ,KC_3   ,XXXXXXX,                XXXXXXX,KC_WBAK,KC_WREF,KC_WFWD,KC_WSCH,KC_MUTE,
-                            KC_EQL ,TD_DOT ,KC_0   ,KC_PENT,KC_RSFT,KC_RCTL,MO(_FN),KC_INS ,
+    _______,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                XXXXXXX,KC_HOME,KC_UP  ,KC_END ,XXXXXXX,XXXXXXX,
+    _______,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                XXXXXXX,KC_LEFT,KC_DOWN,KC_RGHT,XXXXXXX,XXXXXXX,
+    _______,KC_0   ,KC_1   ,KC_2   ,KC_3   ,XXXXXXX,                XXXXXXX,KC_WBAK,KC_WREF,KC_WFWD,XXXXXXX,XXXXXXX,
+                            KC_EQL ,TD_DOT ,KC_0   ,KC_PENT,KC_RSFT,KC_RCTL,MO(_FN),KC_RALT,
                             KC_CALC,                _______,_______,                KC_CAPS
     )
 };
@@ -79,7 +80,7 @@ void keyboard_pre_init_user(void) {
 
 void matrix_scan_user(void) { // The very important timer.
     writePin(TXLED, IS_LAYER_OFF(_FN));
-    // writePin(RXLED, IS_LAYER_OFF(_FN));
+    writePin(RXLED, IS_LAYER_OFF(_FN));
 
     if (is_alt_tab_active) {
         if (timer_elapsed(alt_tab_timer) > 1000) {
