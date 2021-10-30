@@ -20,4 +20,4 @@ BACKLIGHT_ENABLE = no       # Enable keyboard backlight functionality
 RGBLIGHT_ENABLE = no        # Enable keyboard RGB underglow
 AUDIO_ENABLE = no           # Audio output
 
-DEBOUNCE_TYPE = sym_eager_pr
+DEBOUNCE_TYPE = sym_defer_g
