@@ -23,8 +23,7 @@ enum layer_names {
 
 // Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
-    QMKBEST = SAFE_RANGE,
-    ALT_TAB,
+    ALT_TAB = SAFE_RANGE,
     CUT_PST
 };
 
@@ -42,34 +41,33 @@ enum {
 #define TD_IME  TD(TD_IME_CAPSLOCK)
 #define TD_ESC  TD(TD_ESCAPE_SCREENSHOT)
 #define CPY_PST TD(COPY_PASTE)
-
-//
-#define SFT_ENT  KC_SFTENT
-#define ST_SPC  SFT_T(KC_SPC)
+#define SFT_ENT KC_SFTENT
 #define CT_SPC  CTL_T(KC_SPC)
+#define LT_INS  LT(_FN, KC_INS)
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-    ALT_TAB,KC_PIPE,KC_AT  ,KC_HASH,KC_ASTR,KC_PERC,                KC_QUES,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_INS ,
+    TD_ESC ,KC_PIPE,KC_AT  ,KC_HASH,KC_ASTR,KC_PERC,                KC_QUES,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_CAPS,
     KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
     KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUOT,
     KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_SLSH,KC_QUES,
-                            KC_LALT,TD_LWIN,KC_LCTL,KC_LSFT,SFT_ENT,CT_SPC ,MO(_FN),KC_DEL ,
-                            TD_ESC ,                CPY_PST,CUT_PST,                TD_IME
+                            KC_LALT,TD_LWIN,KC_LCTL,KC_LSFT,SFT_ENT,CT_SPC ,LT_INS ,KC_DEL ,
+                            ALT_TAB,                CPY_PST,CUT_PST,                TD_IME
     ),
     [_FN] = LAYOUT(
     KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
     _______,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                DM_REC1,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,DM_REC2,
     _______,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                DM_PLY1,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,DM_PLY2,
-    _______,KC_0   ,KC_1   ,KC_2   ,KC_3   ,KC_CALC,                KC_MPRV,KC_MRWD,KC_MPLY,KC_MSTP,KC_MFFD,KC_MNXT,
-                            KC_EQL ,TD_DOT ,KC_0   ,KC_PENT,KC_RSFT,KC_RCTL,MO(_FN),KC_RALT,
-                            KC_ESC ,                _______,_______,                KC_CAPS
+    _______,KC_0   ,KC_1   ,KC_2   ,KC_3   ,KC_CALC,                XXXXXXX,KC_MPRV,KC_MPLY,KC_MNXT,XXXXXXX,XXXXXXX,
+                            KC_EQL ,TD_DOT ,KC_0   ,KC_PENT,KC_RSFT,KC_RCTL,TG(_FN),KC_RALT,
+                            _______,                _______,_______,                _______
     )
 };
 
-bool is_typing_timer_active = false;
-uint16_t typing_timer = 0;
 bool is_alt_tab_active = false;
 uint16_t alt_tab_timer = 0;
+bool is_typing_timer_active = false;
+uint16_t typing_timer = 0;
 uint8_t mod_state;
 
 void keyboard_pre_init_user(void) {
@@ -108,22 +106,26 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 IS_LAYER_ON(_FN) ? tap_code(KC_BRIU) : tap_code(KC_Y);
             } else if (mod_state & MOD_MASK_SHIFT) {
                 del_mods(MOD_MASK_SHIFT);
-                IS_LAYER_ON(_FN) ? tap_code(KC_BRIU) : tap_code(KC_PGDN);
+                IS_LAYER_ON(_FN) ? tap_code(KC_WH_R) : tap_code(KC_PGDN);
                 set_mods(mod_state);
             } else if (mod_state & MOD_MASK_ALT) {
-                IS_LAYER_ON(_FN) ? tap_code(KC_VOLD) : tap_code(KC_BTN4);
+                IS_LAYER_ON(_FN) ? tap_code(KC_MNXT) : tap_code(KC_BTN5);
+            } else if (mod_state & MOD_MASK_GUI) {
+                IS_LAYER_ON(_FN) ? tap_code(XXXXXXX) : tap_code16(C(KC_RGHT));
             } else {
-                IS_LAYER_ON(_FN) ? tap_code(KC_VOLU) : tap_code(KC_BTN4);
+                IS_LAYER_ON(_FN) ? tap_code(KC_VOLU) : tap_code(KC_BTN5);
             }
         } else {
             if (mod_state & MOD_MASK_CTRL) {
                 IS_LAYER_ON(_FN) ? tap_code(KC_BRID) : tap_code(KC_Z);
             } else if (mod_state & MOD_MASK_SHIFT) {
                 del_mods(MOD_MASK_SHIFT);
-                IS_LAYER_ON(_FN) ? tap_code(KC_BRID) : tap_code(KC_PGUP);            
+                IS_LAYER_ON(_FN) ? tap_code(KC_WH_L) : tap_code(KC_PGUP);            
                 set_mods(mod_state);
             } else if (mod_state & MOD_MASK_ALT) {
-                IS_LAYER_ON(_FN) ? tap_code(KC_VOLD) : tap_code(KC_BTN4);
+                IS_LAYER_ON(_FN) ? tap_code(KC_MPRV) : tap_code(KC_BTN4);
+            } else if (mod_state & MOD_MASK_GUI) {
+                IS_LAYER_ON(_FN) ? tap_code(XXXXXXX) : tap_code16(C(KC_LEFT));
             } else {
                 IS_LAYER_ON(_FN) ? tap_code(KC_VOLD) : tap_code(KC_BTN4);
             }
@@ -134,19 +136,12 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (!is_typing_timer_active) is_typing_timer_active = IS_LAYER_ON(_FN);
-    else typing_timer = timer_read();
+    if (!is_typing_timer_active)
+        is_typing_timer_active = IS_LAYER_ON(_FN);
+    else
+        typing_timer = timer_read();
 
     switch (keycode) {
-        case QMKBEST:
-            if (record->event.pressed) {
-                // when keycode QMKBEST is pressed
-                tap_code16(C(KC_C));
-            } else {
-                // when keycode QMKBEST is released
-                tap_code16(C(KC_V));
-            }
-            break;
         case ALT_TAB:
             if (record->event.pressed) {
                 if (!is_alt_tab_active) {
@@ -174,8 +169,8 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case KC_ESC:
         clear_mods();
-        typing_timer = is_typing_timer_active ? timer_read() : 0;
         alt_tab_timer = is_alt_tab_active ? timer_read() : 0;
+        typing_timer = is_typing_timer_active ? timer_read() : 0;
         break;
     }
 }
