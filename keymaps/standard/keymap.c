@@ -58,8 +58,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
     _______,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                DM_REC1,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,DM_REC2,
     _______,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                DM_PLY1,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,DM_PLY2,
-    _______,KC_0   ,KC_1   ,KC_2   ,KC_3   ,KC_CALC,                XXXXXXX,KC_MPRV,KC_MPLY,KC_MNXT,XXXXXXX,XXXXXXX,
-                            KC_EQL ,TD_DOT ,KC_0   ,KC_PENT,KC_RSFT,KC_RCTL,TG(_FN),KC_RALT,
+    _______,KC_CALC,KC_1   ,KC_2   ,KC_3   ,KC_PERC,                KC_MPRV,KC_MPLY,KC_MNXT,XXXXXXX,XXXXXXX,XXXXXXX,
+                            KC_EQL ,TD_DOT ,KC_0   ,SFT_ENT,KC_RSFT,KC_RCTL,TG(_FN),KC_RALT,
                             _______,                _______,_______,                _______
     )
 };
@@ -105,29 +105,25 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
             if (mod_state & MOD_MASK_CTRL) {
                 IS_LAYER_ON(_FN) ? tap_code(KC_BRIU) : tap_code(KC_Y);
             } else if (mod_state & MOD_MASK_SHIFT) {
-                del_mods(MOD_MASK_SHIFT);
-                IS_LAYER_ON(_FN) ? tap_code(KC_WH_R) : tap_code(KC_PGDN);
-                set_mods(mod_state);
+                IS_LAYER_ON(_FN) ? tap_code(KC_WH_R) : tap_code16(C(KC_RGHT));
             } else if (mod_state & MOD_MASK_ALT) {
                 IS_LAYER_ON(_FN) ? tap_code(KC_MNXT) : tap_code(KC_BTN5);
             } else if (mod_state & MOD_MASK_GUI) {
                 IS_LAYER_ON(_FN) ? tap_code(XXXXXXX) : tap_code16(C(KC_RGHT));
             } else {
-                IS_LAYER_ON(_FN) ? tap_code(KC_VOLU) : tap_code(KC_BTN5);
+                IS_LAYER_ON(_FN) ? tap_code(KC_VOLU) : tap_code(KC_PGDN);
             }
         } else {
             if (mod_state & MOD_MASK_CTRL) {
                 IS_LAYER_ON(_FN) ? tap_code(KC_BRID) : tap_code(KC_Z);
             } else if (mod_state & MOD_MASK_SHIFT) {
-                del_mods(MOD_MASK_SHIFT);
-                IS_LAYER_ON(_FN) ? tap_code(KC_WH_L) : tap_code(KC_PGUP);            
-                set_mods(mod_state);
+                IS_LAYER_ON(_FN) ? tap_code(KC_WH_L) : tap_code16(C(KC_LEFT));            
             } else if (mod_state & MOD_MASK_ALT) {
                 IS_LAYER_ON(_FN) ? tap_code(KC_MPRV) : tap_code(KC_BTN4);
             } else if (mod_state & MOD_MASK_GUI) {
                 IS_LAYER_ON(_FN) ? tap_code(XXXXXXX) : tap_code16(C(KC_LEFT));
             } else {
-                IS_LAYER_ON(_FN) ? tap_code(KC_VOLD) : tap_code(KC_BTN4);
+                IS_LAYER_ON(_FN) ? tap_code(KC_VOLD) : tap_code(KC_PGUP);
             }
         }
         break;
@@ -184,27 +180,27 @@ const key_override_t at_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_G
 const key_override_t hash_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_HASH, KC_TILDE);
 const key_override_t asterisk_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_ASTERISK, KC_AMPERSAND);
 const key_override_t percent_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_PERCENT, KC_DOLLAR);
-const key_override_t left_angle_bracket_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_ANGLE_BRACKET, KC_RIGHT_ANGLE_BRACKET);
 const key_override_t left_paren_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_PAREN, KC_RIGHT_PAREN);
 const key_override_t left_bracket_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_LBRACKET, KC_RBRACKET);
 const key_override_t left_curly_bracket_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_CURLY_BRACE, KC_RIGHT_CURLY_BRACE);
+const key_override_t left_angle_bracket_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_ANGLE_BRACKET, KC_RIGHT_ANGLE_BRACKET);
 const key_override_t slash_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_BSLASH);
 
 // This globally defines all key overrides to be used
 const key_override_t **key_overrides = (const key_override_t *[]){
     &comma_key_override,
     &dot_key_override,
+    &slash_key_override,
     &question_key_override,
     &pipe_key_override,
     &at_key_override,
     &hash_key_override,
     &asterisk_key_override,
     &percent_key_override,
-    &left_angle_bracket_key_override,
     &left_paren_key_override,
     &left_bracket_key_override,
     &left_curly_bracket_key_override,
-    &slash_key_override,
+    &left_angle_bracket_key_override,
     NULL // Null terminate the array of overrides!
 };
 
