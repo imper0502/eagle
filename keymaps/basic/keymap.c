@@ -21,20 +21,6 @@ enum layer_names {
     _FN
 };
 
-// Defines the keycodes used by our macros in process_record_user
-enum custom_keycodes {
-    ALT_TAB = SAFE_RANGE,
-    CPY_PST,
-};
-
-// Tap Dance declarations
-enum {
-    TD_WIN_FN,
-    TD_DOT_FN
-};
-
-#define TD_LWIN TD(TD_WIN_FN)
-#define TD_DOT  TD(TD_DOT_FN)
 #define LT_INS  LT(_FN, KC_INS)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -43,71 +29,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
     KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUOT,
     KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_SLSH,KC_RSFT,
-                            KC_LALT,TD_LWIN,KC_LCTL,KC_LSFT,KC_ENT ,KC_SPC ,LT_INS ,KC_DEL ,
-                            ALT_TAB,                CPY_PST,XXXXXXX,                XXXXXXX
+                            KC_LALT,KC_LWIN,KC_LCTL,KC_LSFT,KC_ENT ,KC_SPC ,LT_INS ,KC_DEL ,
+                            XXXXXXX,                XXXXXXX,XXXXXXX,                XXXXXXX
     ),
     [_FN] = LAYOUT(
     KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
     _______,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                XXXXXXX,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,XXXXXXX,
     _______,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                XXXXXXX,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,XXXXXXX,
-    _______,KC_0   ,KC_1   ,KC_2   ,KC_3   ,KC_CALC,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-                            KC_EQL ,TD_DOT ,KC_0   ,KC_PENT,KC_RSFT,KC_RCTL,TG(_FN),KC_RALT,
-                            _______,                _______,XXXXXXX,                XXXXXXX
+    _______,XXXXXXX,KC_1   ,KC_2   ,KC_3   ,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
+                            KC_EQL ,KC_DOT ,KC_0   ,KC_PENT,KC_RSFT,KC_RCTL,TG(_FN),KC_RALT,
+                            XXXXXXX,                XXXXXXX,XXXXXXX,                XXXXXXX
     )
 };
-
-bool is_alt_tab_active = false;
-uint16_t alt_tab_timer = 0;
-
-void keyboard_pre_init_user(void) {
-    setPinOutput(TXLED);
-    setPinOutput(RXLED);
-    writePin(TXLED, LED_OFF);
-    writePin(RXLED, LED_OFF);
-}
-
-void matrix_scan_user(void) {
-    writePin(TXLED, IS_LAYER_OFF(_FN));
-    writePin(RXLED, IS_LAYER_OFF(_FN));
-
-    if (is_alt_tab_active) {
-        if (timer_elapsed(alt_tab_timer) > 1000) {
-            unregister_code(KC_LALT);
-            is_alt_tab_active = false;
-        }
-    }
-}
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case ALT_TAB:
-            if (record->event.pressed) {
-                if (!is_alt_tab_active) {
-                    is_alt_tab_active = true;
-                    register_code(KC_LALT);
-                }
-                alt_tab_timer = timer_read();
-                register_code(KC_TAB);
-            } else {
-                unregister_code(KC_TAB);
-            }
-            break;
-        case CPY_PST:
-            if (record->event.pressed) {
-                SEND_STRING(SS_LCTL("c"));
-            } else {
-                SEND_STRING(SS_LCTL("v"));
-            }
-            break;
-    }
-    return true;
-}
 
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case KC_ESC:
         clear_mods();
-        alt_tab_timer = is_alt_tab_active ? timer_read() : 0;
         break;
     }
 }
@@ -143,10 +81,4 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     &left_curly_bracket_key_override,
     &slash_key_override,
     NULL // Null terminate the array of overrides!
-};
-
-// Tap Dance
-qk_tap_dance_action_t tap_dance_actions[] = {
-    [TD_WIN_FN] = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_LWIN, _FN),
-    [TD_DOT_FN] = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_DOT , _FN)
 };
