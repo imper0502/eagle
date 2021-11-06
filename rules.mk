@@ -20,6 +20,6 @@ BACKLIGHT_ENABLE = no       # Enable keyboard backlight functionality
 RGBLIGHT_ENABLE = no        # Enable keyboard RGB underglow
 AUDIO_ENABLE = no           # Audio output
 
-DEBOUNCE_TYPE = sym_defer_g
+DEBOUNCE_TYPE = sym_eager_pk
 TAP_DANCE_ENABLE = yes
 KEY_OVERRIDE_ENABLE = yes
