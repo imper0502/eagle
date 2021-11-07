@@ -124,33 +124,45 @@ void matrix_scan_user(void) {
 }
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
+    if (!is_typing_timer_active)
+        is_typing_timer_active = IS_LAYER_ON(_FN);
+    typing_timer = timer_read();
     mod_state = get_mods();
-    typing_timer = is_typing_timer_active ? timer_read() : 0;
     switch (index) {
     case 0:
         if (clockwise) {
-            if (mod_state & MOD_MASK_CTRL) {
-                IS_LAYER_ON(_FN) ? tap_code(KC_BRIU) : tap_code(KC_Y);
-            } else if (mod_state & MOD_MASK_SHIFT) {
-                IS_LAYER_ON(_FN) ? tap_code(KC_WH_R) : tap_code16(C(KC_RGHT));
+            if ((mod_state & MOD_MASK_CS) == (MOD_BIT(KC_LCTL) | MOD_BIT(KC_LSFT))
+            ||  (mod_state & MOD_MASK_CS) == (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RSFT))) {
+                del_mods(MOD_MASK_CS);
+                IS_LAYER_ON(_FN) ? tap_code(XXXXXXX) : tap_code(KC_PGDN);
+                set_mods(mod_state);
             } else if (mod_state & MOD_MASK_ALT) {
+                del_mods(MOD_MASK_ALT);
                 IS_LAYER_ON(_FN) ? tap_code(KC_MNXT) : tap_code(KC_BTN5);
-            } else if (mod_state & MOD_MASK_GUI) {
-                IS_LAYER_ON(_FN) ? tap_code(XXXXXXX) : tap_code16(C(KC_RGHT));
+                set_mods(mod_state);
+            } else if (mod_state & MOD_MASK_SG) {
+                IS_LAYER_ON(_FN) ? tap_code(KC_BRIU) : tap_code16(C(KC_RGHT));
+            } else if (mod_state & MOD_MASK_CTRL) {
+                IS_LAYER_ON(_FN) ? tap_code(KC_TAB)  : tap_code(KC_Y);
             } else {
-                IS_LAYER_ON(_FN) ? tap_code(KC_VOLU) : tap_code(KC_PGDN);
+                IS_LAYER_ON(_FN) ? tap_code(KC_VOLU) : tap_code(KC_WH_D);
             }
         } else {
-            if (mod_state & MOD_MASK_CTRL) {
-                IS_LAYER_ON(_FN) ? tap_code(KC_BRID) : tap_code(KC_Z);
-            } else if (mod_state & MOD_MASK_SHIFT) {
-                IS_LAYER_ON(_FN) ? tap_code(KC_WH_L) : tap_code16(C(KC_LEFT));            
+            if ((mod_state & MOD_MASK_CS) == (MOD_BIT(KC_LCTL) | MOD_BIT(KC_LSFT))
+            ||  (mod_state & MOD_MASK_CS) == (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RSFT))) {
+                del_mods(MOD_MASK_CS);
+                IS_LAYER_ON(_FN) ? tap_code(XXXXXXX)     : tap_code(KC_PGUP);
+                set_mods(mod_state);
             } else if (mod_state & MOD_MASK_ALT) {
-                IS_LAYER_ON(_FN) ? tap_code(KC_MPRV) : tap_code(KC_BTN4);
-            } else if (mod_state & MOD_MASK_GUI) {
-                IS_LAYER_ON(_FN) ? tap_code(XXXXXXX) : tap_code16(C(KC_LEFT));
+                del_mods(MOD_MASK_ALT);
+                IS_LAYER_ON(_FN) ? tap_code(KC_MPRV)     : tap_code(KC_BTN4);
+                set_mods(mod_state);
+            } else if (mod_state & MOD_MASK_SG) {
+                IS_LAYER_ON(_FN) ? tap_code(KC_BRID)     : tap_code16(C(KC_LEFT));            
+            } else if (mod_state & MOD_MASK_CTRL) {
+                IS_LAYER_ON(_FN) ? tap_code16(S(KC_TAB)) : tap_code(KC_Z);
             } else {
-                IS_LAYER_ON(_FN) ? tap_code(KC_VOLD) : tap_code(KC_PGUP);
+                IS_LAYER_ON(_FN) ? tap_code(KC_VOLD)     : tap_code(KC_WH_U);
             }
         }
         break;
@@ -161,7 +173,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (!is_typing_timer_active)
         is_typing_timer_active = IS_LAYER_ON(_FN);
-        typing_timer = timer_read();
+    typing_timer = timer_read();
     mod_state = get_mods();
     switch (keycode) {
         case ALT_TAB:
@@ -188,8 +200,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code(KC_BTN2);
             } else {
                 tap_code(KC_BTN1);
-    }
-        break;
+            }
+            break;
 
     }
     return true;
