@@ -50,38 +50,44 @@ enum {
 #define LT_MINS LT(_FN, KC_MINS)
 #define CPY_PST TD(COPY_PASTE)
 
+// To disable key overrides
+#define ST_LBRC SFT_T(KC_LBRC)
+#define ST_RBRC RSFT_T(KC_RBRC)
+#define ST_SLSH RSFT_T(KC_SLSH)
+#define CT_DOT  RCTL_T(KC_DOT)
+#define CT_COMM RCTL_T(KC_COMM)
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-    TD_ESC ,KC_PIPE,KC_AT  ,KC_HASH,KC_AMPR,KC_PERC,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_BSPC,
-    KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
-    KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUOT,
-    KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_SLSH,KC_QUES,
-                            KC_LALT,TD_LWIN,KC_LSFT,KC_LCTL,CTL_ENT,SFT_SPC,LT_INS ,KC_DEL ,
-                            ALT_TAB,                CPY_PST,BTN_2_1,                TD_IME
+        TD_ESC ,KC_PIPE,KC_AT  ,KC_HASH,KC_AMPR,KC_PERC,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_PSCR,
+        KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
+        KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUOT,
+        KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_SLSH,KC_QUES,
+                                KC_LALT,TD_LWIN,KC_LSFT,KC_LCTL,CTL_ENT,SFT_SPC,LT_INS ,KC_DEL ,
+                                ALT_TAB,                CPY_PST,BTN_2_1,                TD_IME
     ),
     [QWT] = LAYOUT(
-    KC_GESC,KC_1   ,KC_2   ,KC_3   ,KC_4   ,KC_5   ,                KC_6   ,KC_7   ,KC_8   ,KC_9   ,KC_0   ,KC_BSPC,
-    KC_TAB ,KC_Q   ,KC_W   ,KC_E   ,KC_R   ,KC_T   ,                KC_Y   ,KC_U   ,KC_I   ,KC_O   ,KC_P   ,KC_BSLS,
-    KC_CAPS,KC_A   ,KC_S   ,KC_D   ,KC_F   ,KC_G   ,                KC_H   ,KC_J   ,KC_K   ,KC_L   ,KC_SCLN,KC_QUOT,
-    KC_LBRC,KC_Z   ,KC_X   ,KC_C   ,KC_V   ,KC_B   ,                KC_N   ,KC_M   ,KC_COMM,KC_DOT ,KC_SLSH,KC_RBRC,
-                            KC_LALT,KC_LWIN,KC_LSFT,KC_LCTL,CTL_ENT,SFT_SPC,LT_MINS,KC_EQL ,
-                            _______,                _______,_______,                _______
+        KC_GESC,KC_1   ,KC_2   ,KC_3   ,KC_4   ,KC_5   ,                KC_6   ,KC_7   ,KC_8   ,KC_9   ,KC_0   ,KC_BSPC,
+        KC_TAB ,KC_Q   ,KC_W   ,KC_E   ,KC_R   ,KC_T   ,                KC_Y   ,KC_U   ,KC_I   ,KC_O   ,KC_P   ,KC_BSLS,
+        KC_CAPS,KC_A   ,KC_S   ,KC_D   ,KC_F   ,KC_G   ,                KC_H   ,KC_J   ,KC_K   ,KC_L   ,KC_SCLN,KC_QUOT,
+        ST_LBRC,KC_Z   ,KC_X   ,KC_C   ,KC_V   ,KC_B   ,                KC_N   ,KC_M   ,CT_COMM,CT_DOT ,ST_SLSH,ST_RBRC,
+                                KC_LALT,KC_LWIN,KC_LSFT,KC_LCTL,CTL_ENT,SFT_SPC,LT_MINS,KC_EQL ,
+                                _______,                _______,_______,                _______
     ),
     [_FN] = LAYOUT(
-    KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
-    KC_TAB ,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                DM_REC1,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,DM_REC2,
-    KC_BSPC,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                DM_PLY1,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,DM_PLY2,
-    KC_CALC,KC_PERC,KC_1   ,KC_2   ,KC_3   ,KC_DLR ,                KC_MPRV,KC_MPLY,KC_MNXT,KC_VOLD,KC_MUTE,KC_VOLU,
-                            KC_EQL ,TD_DOT ,KC_0   ,CTL_ENT,KC_RCTL,KC_RSFT,TG(_FN),KC_RALT,
-                            KC_ESC ,                KC_TAB ,BTN_2_1,                KC_CAPS
+        KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
+        KC_TAB ,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                DM_REC1,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,DM_REC2,
+        KC_BSPC,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                DM_PLY1,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,DM_PLY2,
+        KC_CALC,KC_PERC,KC_1   ,KC_2   ,KC_3   ,KC_DLR ,                KC_MPRV,KC_MPLY,KC_MNXT,KC_VOLD,KC_MUTE,KC_VOLU,
+                                KC_EQL ,TD_DOT ,KC_0   ,CTL_ENT,KC_RCTL,KC_RSFT,TG(_FN),KC_RALT,
+                                KC_ESC ,                KC_TAB ,BTN_2_1,                KC_CAPS
     ),
     [COMMAND] = LAYOUT(
-    XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-    XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,KC_PSCR,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-    XXXXXXX,KC_APP , RESET ,KC_SLCK,XXXXXXX,XXXXXXX,                KC_MAIL,KC_NLCK,KC_MYCM,XXXXXXX,XXXXXXX,XXXXXXX,
-    XXXXXXX,XXXXXXX,XXXXXXX,KC_CALC,TG(QWT),XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-                            XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-                            XXXXXXX,                XXXXXXX,XXXXXXX,                XXXXXXX
+        XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
+        XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
+        XXXXXXX,KC_APP , RESET ,KC_SLCK,TG(QWT),KC_MSEL,                KC_MAIL,KC_NLCK,KC_EJCT,XXXXXXX,XXXXXXX,XXXXXXX,
+        XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
+                                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
+                                XXXXXXX,                XXXXXXX,XXXXXXX,                XXXXXXX
     )
 };
 
@@ -115,12 +121,8 @@ void matrix_scan_user(void) {
             is_typing_timer_active = false;
         }
     }
-
-    if ((get_mods() & MOD_MASK_CTRL) == MOD_MASK_CTRL) {
-        layer_on(COMMAND);
-    } else {
-        layer_off(COMMAND);
-    }
+    
+    (get_mods() & MOD_MASK_CTRL) == MOD_MASK_CTRL ? layer_on(COMMAND) : layer_off(COMMAND);
 }
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
