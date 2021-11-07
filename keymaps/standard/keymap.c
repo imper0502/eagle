@@ -236,18 +236,12 @@ typedef enum {
     OTHERWISE
 } td_state_t;
 
-typedef struct {
-    bool is_press_action;
-    td_state_t state;
-} td_tap_t;
-
 // Create a global instance of the tapdance state type
 static td_state_t td_state;
 
 // Declare tap dance functions:
 // Function to determine the current tapdance state
 uint8_t current_dance(qk_tap_dance_state_t *state);
-// Determine the tapdance state to return
 uint8_t current_dance(qk_tap_dance_state_t *state) {
     switch (state->count) {
         case 1:
@@ -261,7 +255,6 @@ uint8_t current_dance(qk_tap_dance_state_t *state) {
 }
 
 // `finished` and `reset` functions for each tapdance keycode
-// 
 void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
 void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
     td_state = current_dance(state);

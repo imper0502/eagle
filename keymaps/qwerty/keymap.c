@@ -27,7 +27,7 @@ enum layer_names {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // GRAVE_ESC
-    // GRAVE_ESC_ALT_OVERRIDE   -> Always send Escape if Alt is pressed     -> x -> alt + ` = `
+    // GRAVE_ESC_ALT_OVERRIDE   -> Always send Escape if Alt is pressed     -> x -> alt + esc
     // GRAVE_ESC_GUI_OVERRIDE   -> Always send Escape if GUI is pressed     -> x -> win + ` = `
     // GRAVE_ESC_SHIFT_OVERRIDE -> Always send Escape if Shift is pressed   -> x -> sft + ` = ~
     // GRAVE_ESC_CTRL_OVERRIDE  -> Always send Escape if Control is pressed -> o -> ctl + esc
@@ -48,11 +48,3 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                             XXXXXXX,                XXXXXXX,XXXXXXX,                XXXXXXX
     ),
 };
-
-void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-    case KC_ESC:
-        clear_mods();
-        break;
-    }
-}

@@ -42,14 +42,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
-void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-    case KC_ESC:
-        clear_mods();
-        break;
-    }
-}
-
 // Key Overrides
 const key_override_t pipe_override = ko_make_basic(MOD_MASK_SHIFT, KC_PIPE, KC_CIRCUMFLEX);
 // @
