@@ -58,10 +58,10 @@ enum {
 #define CT_COMM RCTL_T(KC_COMM)
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-        TD_ESC ,KC_QUES,KC_AT  ,KC_HASH,KC_AMPR,KC_PIPE,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_PSCR,
+        TD_ESC ,KC_PIPE,KC_AMPR,KC_HASH,KC_AT  ,CUT_PST,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_PSCR,
         KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
         KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUOT,
-        KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_SLSH,KC_RSFT,
+        KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_SLSH,KC_QUES,
                                 KC_LALT,TD_LWIN,KC_LSFT,KC_LCTL,CTL_ENT,SFT_SPC,LT_INS ,KC_DEL ,
                                 ALT_TAB,                CPY_PST,BTN_2_1,                TD_IME
     ),
@@ -77,14 +77,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
         KC_TAB ,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                DM_REC1,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,DM_REC2,
         KC_BSPC,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                DM_PLY1,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,DM_PLY2,
-        KC_CALC,KC_PERC,KC_1   ,KC_2   ,KC_3   ,KC_DLR ,                KC_MPRV,KC_MPLY,KC_MNXT,KC_VOLD,KC_MUTE,KC_VOLU,
+        KC_CALC,KC_PERC,KC_1   ,KC_2   ,KC_3   ,KC_DLR ,                KC_MPRV,KC_MPLY,KC_MNXT,KC_MUTE,KC_VOLD,KC_VOLU,
                                 KC_EQL ,TD_DOT ,KC_0   ,CTL_ENT,KC_RCTL,KC_RSFT,TG(_FN),KC_RALT,
                                 KC_ESC ,                KC_TAB ,BTN_2_1,                KC_CAPS
     ),
     [COMMAND] = LAYOUT(
         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-        XXXXXXX,KC_APP , RESET ,KC_SLCK,TG(QWT),KC_MSEL,                KC_MAIL,KC_NLCK,KC_EJCT,XXXXXXX,XXXXXXX,XXXXXXX,
+        XXXXXXX,KC_APP , RESET ,KC_SLCK,TG(QWT),XXXXXXX,                KC_MAIL,KC_NLCK,KC_EJCT,XXXXXXX,XXXXXXX,XXXXXXX,
         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
                                 XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
                                 XXXXXXX,                XXXXXXX,XXXXXXX,                XXXXXXX
@@ -191,18 +191,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
         case CUT_PST:
-            if (record->event.pressed) {
-                SEND_STRING(SS_LCTL("x"));
-            } else {
-                SEND_STRING(SS_LCTL("v"));
-            }
+            (record->event.pressed) ? SEND_STRING(SS_LCTL("x")) : SEND_STRING(SS_LCTL("v"));
             break;
         case BTN_2_1:
-            if (record->event.pressed) {
-                tap_code(KC_BTN2);
-            } else {
-                tap_code(KC_BTN1);
-            }
+            (record->event.pressed) ? tap_code(KC_BTN2) : tap_code(KC_BTN1);
             break;
 
     }
@@ -210,11 +202,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 // Key Overrides
-const key_override_t question_override = ko_make_basic(MOD_MASK_SHIFT, KC_QUESTION, KC_EXCLAIM);    // ?!
-const key_override_t at_override = ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_CIRCUMFLEX);             // @^
-const key_override_t hash_override = ko_make_basic(MOD_MASK_SHIFT, KC_HASH, KC_DOLLAR);             // #$
-const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_ASTERISK); // &*
 const key_override_t pipe_override = ko_make_basic(MOD_MASK_SHIFT, KC_PIPE, KC_PERCENT);            // |%
+const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_ASTERISK); // &*
+const key_override_t hash_override = ko_make_basic(MOD_MASK_SHIFT, KC_HASH, KC_CIRCUMFLEX);         // #^
+const key_override_t at_override = ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_DOLLAR);                 // @$
 // `~
 const key_override_t left_paren_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_PAREN, KC_RIGHT_PAREN);
 const key_override_t left_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LBRACKET, KC_RBRACKET);
@@ -223,14 +214,14 @@ const key_override_t left_angle_bracket_override = ko_make_basic(MOD_MASK_SHIFT,
 const key_override_t comma_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMMA, KC_SCOLON);           // ,;
 const key_override_t dot_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLON);                // .:
 const key_override_t slash_override = ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_BSLASH);
+const key_override_t question_override = ko_make_basic(MOD_MASK_SHIFT, KC_QUESTION, KC_EXCLAIM);    // ?!
 
 // This globally defines all key overrides to be used
 const key_override_t **key_overrides = (const key_override_t *[]){
-    &question_override,
-    &at_override,
-    &hash_override,
-    &ampersand_override,
     &pipe_override,
+    &ampersand_override,
+    &hash_override,
+    &at_override,
     &left_paren_override,
     &left_bracket_override,
     &left_curly_bracket_override,
@@ -238,6 +229,7 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     &comma_override,
     &dot_override,
     &slash_override,
+    &question_override,
     NULL // Null terminate the array of overrides!
 };
 
@@ -260,6 +252,7 @@ uint8_t current_dance(qk_tap_dance_state_t *state) {
         case 1:
             if (!state->interrupted && !state->pressed) return SINGLE_TAP;
             else if (state->pressed) return SINGLE_HOLD;
+            else return OTHERWISE;
         case 2:
             if (!state->pressed) return DOUBLE_TAP;
         default:
