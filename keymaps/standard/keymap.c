@@ -58,10 +58,10 @@ enum {
 #define CT_COMM RCTL_T(KC_COMM)
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-        TD_ESC ,KC_PIPE,KC_AT  ,KC_HASH,KC_AMPR,KC_PERC,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_PSCR,
+        TD_ESC ,KC_QUES,KC_AT  ,KC_HASH,KC_AMPR,KC_PIPE,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_PSCR,
         KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
         KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUOT,
-        KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_SLSH,KC_QUES,
+        KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_SLSH,KC_RSFT,
                                 KC_LALT,TD_LWIN,KC_LSFT,KC_LCTL,CTL_ENT,SFT_SPC,LT_INS ,KC_DEL ,
                                 ALT_TAB,                CPY_PST,BTN_2_1,                TD_IME
     ),
@@ -210,27 +210,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 // Key Overrides
-const key_override_t pipe_override = ko_make_basic(MOD_MASK_SHIFT, KC_PIPE, KC_CIRCUMFLEX);
-// @
-const key_override_t hash_override = ko_make_basic(MOD_MASK_SHIFT, KC_HASH, KC_TILDE);
-const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_ASTERISK);
-// %
-const key_override_t grave_override = ko_make_basic(MOD_MASK_SHIFT, KC_GRAVE, KC_DOLLAR);
+const key_override_t question_override = ko_make_basic(MOD_MASK_SHIFT, KC_QUESTION, KC_EXCLAIM);    // ?!
+const key_override_t at_override = ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_CIRCUMFLEX);             // @^
+const key_override_t hash_override = ko_make_basic(MOD_MASK_SHIFT, KC_HASH, KC_DOLLAR);             // #$
+const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_ASTERISK); // &*
+const key_override_t pipe_override = ko_make_basic(MOD_MASK_SHIFT, KC_PIPE, KC_PERCENT);            // |%
+// `~
 const key_override_t left_paren_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_PAREN, KC_RIGHT_PAREN);
 const key_override_t left_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LBRACKET, KC_RBRACKET);
 const key_override_t left_curly_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_CURLY_BRACE, KC_RIGHT_CURLY_BRACE);
 const key_override_t left_angle_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_ANGLE_BRACKET, KC_RIGHT_ANGLE_BRACKET);
-const key_override_t comma_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMMA, KC_SCOLON);
-const key_override_t dot_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLON);
+const key_override_t comma_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMMA, KC_SCOLON);           // ,;
+const key_override_t dot_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLON);                // .:
 const key_override_t slash_override = ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_BSLASH);
-const key_override_t question_override = ko_make_basic(MOD_MASK_SHIFT, KC_QUESTION, KC_EXCLAIM);
 
 // This globally defines all key overrides to be used
 const key_override_t **key_overrides = (const key_override_t *[]){
-    &pipe_override,
+    &question_override,
+    &at_override,
     &hash_override,
     &ampersand_override,
-    &grave_override,
+    &pipe_override,
     &left_paren_override,
     &left_bracket_override,
     &left_curly_bracket_override,
@@ -238,7 +238,6 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     &comma_override,
     &dot_override,
     &slash_override,
-    &question_override,
     NULL // Null terminate the array of overrides!
 };
 
