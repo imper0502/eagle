@@ -51,19 +51,19 @@ enum {
 #define CPY_PST TD(COPY_PASTE)
 
 // To disable key overrides
-#define ST_LBRC SFT_T(KC_LBRC)
+#define ST_LBRC LSFT_T(KC_LBRC)
 #define ST_RBRC RSFT_T(KC_RBRC)
 #define ST_SLSH RSFT_T(KC_SLSH)
 #define CT_DOT  RCTL_T(KC_DOT)
 #define CT_COMM RCTL_T(KC_COMM)
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-        TD_ESC ,KC_PIPE,KC_AMPR,KC_HASH,KC_AT  ,CUT_PST,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_PSCR,
+        ALT_TAB,KC_PIPE,KC_AMPR,KC_HASH,KC_AT  ,KC_SPC ,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_SLSH,
         KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
-        KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUOT,
-        KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_SLSH,KC_QUES,
-                                KC_LALT,TD_LWIN,KC_LSFT,KC_LCTL,CTL_ENT,SFT_SPC,LT_INS ,KC_DEL ,
-                                ALT_TAB,                CPY_PST,BTN_2_1,                TD_IME
+        KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
+        KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_QUOT,KC_RSFT,
+                                KC_LALT,TD_LWIN,KC_LSFT,KC_LCTL,CTL_ENT,SFT_SPC,MO(_FN),KC_ENT ,
+                                TD_ESC ,                CPY_PST,KC_ENT ,                TD_IME
     ),
     [QWT] = LAYOUT(
         KC_GESC,KC_1   ,KC_2   ,KC_3   ,KC_4   ,KC_5   ,                KC_6   ,KC_7   ,KC_8   ,KC_9   ,KC_0   ,KC_BSPC,
@@ -75,11 +75,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_FN] = LAYOUT(
         KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
-        KC_TAB ,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                DM_REC1,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,DM_REC2,
-        KC_BSPC,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                DM_PLY1,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,DM_PLY2,
+        KC_TAB ,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                DM_REC1,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,KC_INS ,
+        KC_BSPC,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                DM_PLY1,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,KC_DEL ,
         KC_CALC,KC_PERC,KC_1   ,KC_2   ,KC_3   ,KC_DLR ,                KC_MPRV,KC_MPLY,KC_MNXT,KC_MUTE,KC_VOLD,KC_VOLU,
                                 KC_EQL ,TD_DOT ,KC_0   ,CTL_ENT,KC_RCTL,KC_RSFT,TG(_FN),KC_RALT,
-                                KC_ESC ,                KC_TAB ,BTN_2_1,                KC_CAPS
+                                KC_ESC ,                KC_TAB ,XXXXXXX,                KC_CAPS
     ),
     [COMMAND] = LAYOUT(
         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
