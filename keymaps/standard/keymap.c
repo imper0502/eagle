@@ -26,24 +26,20 @@ enum layer_names {
 // Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
     ALT_TAB = SAFE_RANGE,
-    CUT_PST,
     BTN_2_1
 };
 
 // Tap Dance declarations
-enum {
+enum tap_dance_names {
     WIN_FNLOCK,
-    DOT_FNLOCK,
     IME_CAPSLOCK,
-    ESCAPE_SCREENSHOT,
+    INSERT_SCREENSHOT,
     COPY_PASTE,
 };
 
 #define TD_LWIN TD(WIN_FNLOCK)
-#define TD_DOT  TD(DOT_FNLOCK)
 #define TD_IME  TD(IME_CAPSLOCK)
-#define TD_ESC  TD(ESCAPE_SCREENSHOT)
-#define SFT_T_0 LSFT_T(KC_0)
+#define TD_INS  TD(INSERT_SCREENSHOT)
 #define CTL_ENT RCTL_T(KC_ENT)
 #define SFT_SPC RSFT_T(KC_SPC)
 #define LT_INS  LT(_FN, KC_INS)
@@ -58,12 +54,12 @@ enum {
 #define CT_COMM RCTL_T(KC_COMM)
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-        ALT_TAB,KC_PIPE,KC_AMPR,KC_HASH,KC_AT  ,KC_SPC ,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_SLSH,
+        KC_BTN4,KC_BSLS,KC_AT  ,KC_ASTR,KC_AMPR,KC_SLSH,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,ALT_TAB,
         KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
         KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
         KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_QUOT,KC_RSFT,
-                                KC_LALT,TD_LWIN,KC_LSFT,KC_LCTL,CTL_ENT,SFT_SPC,MO(_FN),KC_ENT ,
-                                TD_ESC ,                CPY_PST,KC_ENT ,                TD_IME
+                                KC_LALT,TD_LWIN,KC_LSFT,KC_LCTL,CTL_ENT,SFT_SPC,MO(_FN),KC_DEL ,
+                            KC_ESC ,                    CPY_PST,TD_INS ,                    TD_IME
     ),
     [QWT] = LAYOUT(
         KC_GESC,KC_1   ,KC_2   ,KC_3   ,KC_4   ,KC_5   ,                KC_6   ,KC_7   ,KC_8   ,KC_9   ,KC_0   ,KC_BSPC,
@@ -71,15 +67,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_CAPS,KC_A   ,KC_S   ,KC_D   ,KC_F   ,KC_G   ,                KC_H   ,KC_J   ,KC_K   ,KC_L   ,KC_SCLN,KC_QUOT,
         ST_LBRC,KC_Z   ,KC_X   ,KC_C   ,KC_V   ,KC_B   ,                KC_N   ,KC_M   ,CT_COMM,CT_DOT ,ST_SLSH,ST_RBRC,
                                 KC_LALT,KC_LWIN,KC_LSFT,KC_LCTL,CTL_ENT,SFT_SPC,LT_MINS,KC_EQL ,
-                                _______,                _______,_______,                _______
+                            _______,                    _______,_______,                    _______
     ),
     [_FN] = LAYOUT(
         KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
         KC_TAB ,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                DM_REC1,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,KC_INS ,
         KC_BSPC,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                DM_PLY1,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,KC_DEL ,
         KC_CALC,KC_PERC,KC_1   ,KC_2   ,KC_3   ,KC_DLR ,                KC_MPRV,KC_MPLY,KC_MNXT,KC_MUTE,KC_VOLD,KC_VOLU,
-                                KC_EQL ,TD_DOT ,KC_0   ,CTL_ENT,KC_RCTL,KC_RSFT,TG(_FN),KC_RALT,
-                                KC_ESC ,                KC_TAB ,XXXXXXX,                KC_CAPS
+                                KC_EQL ,KC_DOT ,KC_0   ,CTL_ENT,KC_RCTL,KC_RSFT,TG(_FN),KC_RALT,
+                            KC_ESC ,                    BTN_2_1,XXXXXXX,                    KC_CAPS
     ),
     [COMMAND] = LAYOUT(
         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
@@ -87,7 +83,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX,KC_APP , RESET ,KC_SLCK,TG(QWT),XXXXXXX,                KC_MAIL,KC_NLCK,KC_EJCT,XXXXXXX,XXXXXXX,XXXXXXX,
         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
                                 XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-                                XXXXXXX,                XXXXXXX,XXXXXXX,                XXXXXXX
+                            XXXXXXX,                    XXXXXXX,XXXXXXX,                    XXXXXXX
     )
 };
 
@@ -116,7 +112,7 @@ void matrix_scan_user(void) {
     }
 
     if (is_typing_timer_active && IS_LAYER_ON(_FN)) {
-        if (timer_elapsed(typing_timer) > 30000) {
+        if (timer_elapsed(typing_timer) > 180000) {
             layer_off(_FN);
             is_typing_timer_active = false;
         }
@@ -190,9 +186,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_TAB);
             }
             break;
-        case CUT_PST:
-            (record->event.pressed) ? SEND_STRING(SS_LCTL("x")) : SEND_STRING(SS_LCTL("v"));
-            break;
         case BTN_2_1:
             (record->event.pressed) ? tap_code(KC_BTN2) : tap_code(KC_BTN1);
             break;
@@ -202,34 +195,31 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 // Key Overrides
-const key_override_t pipe_override = ko_make_basic(MOD_MASK_SHIFT, KC_PIPE, KC_PERCENT);            // |%
-const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_ASTERISK); // &*
-const key_override_t hash_override = ko_make_basic(MOD_MASK_SHIFT, KC_HASH, KC_CIRCUMFLEX);         // #^
-const key_override_t at_override = ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_DOLLAR);                 // @$
-// `~
+const key_override_t at_override = ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_CIRCUMFLEX);           // @^
+const key_override_t astersk_override = ko_make_basic(MOD_MASK_SHIFT, KC_ASTERISK, KC_HASH);      // *#
+const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_DOLLAR); // &$
+const key_override_t slash_override = ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_PERCENT);        // /%
 const key_override_t left_paren_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_PAREN, KC_RIGHT_PAREN);
 const key_override_t left_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LBRACKET, KC_RBRACKET);
 const key_override_t left_curly_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_CURLY_BRACE, KC_RIGHT_CURLY_BRACE);
 const key_override_t left_angle_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_ANGLE_BRACKET, KC_RIGHT_ANGLE_BRACKET);
-const key_override_t comma_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMMA, KC_SCOLON);           // ,;
-const key_override_t dot_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLON);                // .:
-const key_override_t slash_override = ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_BSLASH);
-const key_override_t question_override = ko_make_basic(MOD_MASK_SHIFT, KC_QUESTION, KC_EXCLAIM);    // ?!
+const key_override_t question_override = ko_make_basic(MOD_MASK_SHIFT, KC_QUESTION, KC_EXCLAIM);  // ?!
+const key_override_t comma_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMMA, KC_SCOLON);         // ,;
+const key_override_t dot_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLON);              // .:
 
 // This globally defines all key overrides to be used
 const key_override_t **key_overrides = (const key_override_t *[]){
-    &pipe_override,
-    &ampersand_override,
-    &hash_override,
     &at_override,
+    &astersk_override,
+    &ampersand_override,
+    &slash_override,
     &left_paren_override,
     &left_bracket_override,
     &left_curly_bracket_override,
     &left_angle_bracket_override,
+    &question_override,
     &comma_override,
     &dot_override,
-    &slash_override,
-    &question_override,
     NULL // Null terminate the array of overrides!
 };
 
@@ -286,8 +276,7 @@ void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
 // Tap Dance
 qk_tap_dance_action_t tap_dance_actions[] = {
     [WIN_FNLOCK]        = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_LWIN, _FN),
-    [DOT_FNLOCK]        = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_DOT , _FN),
     [IME_CAPSLOCK]      = ACTION_TAP_DANCE_DOUBLE(G(KC_SPC) , KC_CAPS),
-    [ESCAPE_SCREENSHOT] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, LSG(KC_S)),
+    [INSERT_SCREENSHOT] = ACTION_TAP_DANCE_DOUBLE(KC_INSERT, LSG(KC_S)),
     [COPY_PASTE]        = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset)
 };
