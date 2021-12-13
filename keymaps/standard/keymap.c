@@ -47,9 +47,9 @@ enum tap_dance_names {
 #define CPY_PST TD(COPY_PASTE)
 
 // To disable key overrides
-#define ST_LBRC LSFT_T(KC_LBRC)
-#define ST_RBRC RSFT_T(KC_RBRC)
-#define ST_SLSH RSFT_T(KC_SLSH)
+#define CT_LBRC RCTL_T(KC_LBRC)
+#define CT_RBRC RCTL_T(KC_RBRC)
+#define CT_SLSH RCTL_T(KC_SLSH)
 #define CT_DOT  RCTL_T(KC_DOT)
 #define CT_COMM RCTL_T(KC_COMM)
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -62,12 +62,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                             KC_ESC ,                    CPY_PST,TD_INS ,                    TD_IME
     ),
     [QWT] = LAYOUT(
-        KC_GESC,KC_1   ,KC_2   ,KC_3   ,KC_4   ,KC_5   ,                KC_6   ,KC_7   ,KC_8   ,KC_9   ,KC_0   ,KC_BSPC,
+        KC_ESC ,KC_1   ,KC_2   ,KC_3   ,KC_4   ,KC_5   ,                KC_6   ,KC_7   ,KC_8   ,KC_9   ,KC_0   ,KC_BSPC,
         KC_TAB ,KC_Q   ,KC_W   ,KC_E   ,KC_R   ,KC_T   ,                KC_Y   ,KC_U   ,KC_I   ,KC_O   ,KC_P   ,KC_BSLS,
         KC_CAPS,KC_A   ,KC_S   ,KC_D   ,KC_F   ,KC_G   ,                KC_H   ,KC_J   ,KC_K   ,KC_L   ,KC_SCLN,KC_QUOT,
-        ST_LBRC,KC_Z   ,KC_X   ,KC_C   ,KC_V   ,KC_B   ,                KC_N   ,KC_M   ,CT_COMM,CT_DOT ,ST_SLSH,ST_RBRC,
-                                KC_LALT,KC_LWIN,KC_LSFT,KC_LCTL,CTL_ENT,SFT_SPC,LT_MINS,KC_EQL ,
-                            _______,                    _______,_______,                    _______
+        KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_V   ,KC_B   ,                KC_N   ,KC_M   ,CT_COMM,CT_DOT ,CT_SLSH,KC_RSFT,
+                                KC_LALT,KC_LWIN,KC_LSFT,KC_LCTL,_______,_______,_______,KC_GRV ,
+                            CT_LBRC,                    KC_MINS,KC_EQL ,                    CT_RBRC
     ),
     [_FN] = LAYOUT(
         KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
