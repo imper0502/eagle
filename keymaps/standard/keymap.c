@@ -15,21 +15,16 @@
  */
 #include QMK_KEYBOARD_H
 
-// Defines names for use in layer keycodes and the keymap
 enum layer_names {
-    _BS,
-    QWT,
-    _FN,
-    COMMAND
+    _BS, QWT,
+    _FN, COMMAND
 };
 
-// Defines the keycodes used by our macros in process_record_user
 enum custom_keycodes {
     ALT_TAB = SAFE_RANGE,
     BTN_2_1
 };
 
-// Tap Dance declarations
 enum tap_dance_names {
     WIN_FNLOCK,
     IME_CAPSLOCK,
@@ -37,21 +32,19 @@ enum tap_dance_names {
     COPY_PASTE,
 };
 
+// Alias of keycodes
 #define TD_LWIN TD(WIN_FNLOCK)
 #define TD_IME  TD(IME_CAPSLOCK)
 #define TD_INS  TD(INSERT_SCREENSHOT)
+#define CPY_PST TD(COPY_PASTE)
+
 #define CTL_ENT RCTL_T(KC_ENT)
 #define SFT_SPC RSFT_T(KC_SPC)
 #define LT_INS  LT(_FN, KC_INS)
 #define LT_MINS LT(_FN, KC_MINS)
-#define CPY_PST TD(COPY_PASTE)
 
-// To disable key overrides
-#define CT_LBRC RCTL_T(KC_LBRC)
-#define CT_RBRC RCTL_T(KC_RBRC)
-#define CT_SLSH RCTL_T(KC_SLSH)
-#define CT_DOT  RCTL_T(KC_DOT)
-#define CT_COMM RCTL_T(KC_COMM)
+/*
+ * Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
         KC_BTN4,KC_BSLS,KC_AT  ,KC_ASTR,KC_AMPR,KC_SLSH,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,ALT_TAB,
@@ -62,31 +55,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                             KC_ESC ,                    CPY_PST,TD_INS ,                    TD_IME
     ),
     [QWT] = LAYOUT(
-        KC_ESC ,KC_1   ,KC_2   ,KC_3   ,KC_4   ,KC_5   ,                KC_6   ,KC_7   ,KC_8   ,KC_9   ,KC_0   ,KC_BSPC,
-        KC_TAB ,KC_Q   ,KC_W   ,KC_E   ,KC_R   ,KC_T   ,                KC_Y   ,KC_U   ,KC_I   ,KC_O   ,KC_P   ,KC_BSLS,
-        KC_CAPS,KC_A   ,KC_S   ,KC_D   ,KC_F   ,KC_G   ,                KC_H   ,KC_J   ,KC_K   ,KC_L   ,KC_SCLN,KC_QUOT,
-        KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_V   ,KC_B   ,                KC_N   ,KC_M   ,CT_COMM,CT_DOT ,CT_SLSH,KC_RSFT,
-                                KC_LALT,KC_LWIN,KC_LSFT,KC_LCTL,_______,_______,_______,KC_GRV ,
-                            CT_LBRC,                    KC_MINS,KC_EQL ,                    CT_RBRC
+        _______,_______,_______,_______,_______,_______,                _______,_______,_______,_______,_______,_______,
+        _______,_______,_______,KC_E   ,KC_R   ,KC_T   ,                KC_Y   ,KC_U   ,KC_I   ,KC_O   ,KC_P   ,KC_QUES,
+        _______,_______,KC_S   ,KC_D   ,KC_F   ,_______,                KC_H   ,KC_J   ,KC_K   ,KC_L   ,KC_MINS,KC_EQL ,
+        _______,_______,_______,_______,KC_V   ,KC_B   ,                KC_N   ,KC_M   ,_______,_______,_______,_______,
+                                _______,_______,_______,_______,_______,_______,_______,_______,
+                            _______,                    _______,_______,                    _______
     ),
     [_FN] = LAYOUT(
         KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
-        KC_TAB ,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                DM_REC1,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,KC_INS ,
-        KC_BSPC,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                DM_PLY1,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,KC_DEL ,
+        KC_TAB ,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                KC_BRIU,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,KC_INS ,
+        KC_BSPC,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                KC_BRID,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,KC_DEL ,
         KC_CALC,KC_PERC,KC_1   ,KC_2   ,KC_3   ,KC_DLR ,                KC_MPRV,KC_MPLY,KC_MNXT,KC_MUTE,KC_VOLD,KC_VOLU,
-                                KC_EQL ,KC_DOT ,KC_0   ,CTL_ENT,KC_RCTL,KC_RSFT,TG(_FN),KC_RALT,
+                                KC_EQL ,KC_DOT ,KC_0   ,KC_ENT ,KC_RCTL,KC_RSFT,TG(_FN),KC_RALT,
                             KC_ESC ,                    BTN_2_1,XXXXXXX,                    KC_CAPS
     ),
     [COMMAND] = LAYOUT(
         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-        XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-        XXXXXXX,KC_APP , RESET ,KC_SLCK,TG(QWT),XXXXXXX,                KC_MAIL,KC_NLCK,KC_EJCT,XXXXXXX,XXXXXXX,XXXXXXX,
+        XXXXXXX,TG(QWT),XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
+        XXXXXXX,KC_APP , RESET ,KC_SLCK,XXXXXXX,XXXXXXX,                KC_MAIL,KC_NLCK,KC_EJCT,XXXXXXX,XXXXXXX,XXXXXXX,
         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
                                 XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
                             XXXXXXX,                    XXXXXXX,XXXXXXX,                    XXXXXXX
     )
 };
 
+/*
+ * Custom Keycodes & Behavior */
 bool is_alt_tab_active = false;
 uint16_t alt_tab_timer = 0;
 bool is_typing_timer_active = false;
@@ -121,6 +116,34 @@ void matrix_scan_user(void) {
     (get_mods() & MOD_MASK_CTRL) == MOD_MASK_CTRL ? layer_on(COMMAND) : layer_off(COMMAND);
 }
 
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!is_typing_timer_active)
+        is_typing_timer_active = IS_LAYER_ON(_FN);
+    typing_timer = timer_read();
+    mod_state = get_mods();
+    switch (keycode) {
+        case ALT_TAB:
+            if (record->event.pressed) {
+                if (!is_alt_tab_active) {
+                    is_alt_tab_active = true;
+                    register_code(KC_LALT);
+                }
+                alt_tab_timer = timer_read();
+                register_code(KC_TAB);
+            } else {
+                unregister_code(KC_TAB);
+            }
+            break;
+        case BTN_2_1:
+            (record->event.pressed) ? tap_code(KC_BTN2) : tap_code(KC_BTN1);
+            break;
+
+    }
+    return true;
+}
+
+/*
+ * Retry Encoders */
 bool encoder_update_user(uint8_t index, bool clockwise) {
     if (!is_typing_timer_active)
         is_typing_timer_active = IS_LAYER_ON(_FN);
@@ -168,33 +191,8 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     return false;
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (!is_typing_timer_active)
-        is_typing_timer_active = IS_LAYER_ON(_FN);
-    typing_timer = timer_read();
-    mod_state = get_mods();
-    switch (keycode) {
-        case ALT_TAB:
-            if (record->event.pressed) {
-                if (!is_alt_tab_active) {
-                    is_alt_tab_active = true;
-                    register_code(KC_LALT);
-                }
-                alt_tab_timer = timer_read();
-                register_code(KC_TAB);
-            } else {
-                unregister_code(KC_TAB);
-            }
-            break;
-        case BTN_2_1:
-            (record->event.pressed) ? tap_code(KC_BTN2) : tap_code(KC_BTN1);
-            break;
-
-    }
-    return true;
-}
-
-// Key Overrides
+/*
+ * Key Override */
 const key_override_t at_override = ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_CIRCUMFLEX);           // @^
 const key_override_t astersk_override = ko_make_basic(MOD_MASK_SHIFT, KC_ASTERISK, KC_HASH);      // *#
 const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_DOLLAR); // &$
@@ -207,7 +205,6 @@ const key_override_t question_override = ko_make_basic(MOD_MASK_SHIFT, KC_QUESTI
 const key_override_t comma_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMMA, KC_SCOLON);         // ,;
 const key_override_t dot_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLON);              // .:
 
-// This globally defines all key overrides to be used
 const key_override_t **key_overrides = (const key_override_t *[]){
     &at_override,
     &astersk_override,
@@ -223,20 +220,26 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     NULL // Null terminate the array of overrides!
 };
 
-// Define a type containing as many tapdance states as you need
+/*
+ * Tap Dance */
 typedef enum {
-    SINGLE_TAP,
-    SINGLE_HOLD,
-    DOUBLE_TAP,
-    OTHERWISE
-} td_state_t;
+    SINGLE_TAP, SINGLE_HOLD,
+    DOUBLE_TAP, OTHERWISE
+} td_state_t; // Define a type containing as many tapdance states
 
-// Create a global instance of the tapdance state type
-static td_state_t td_state;
+static td_state_t td_state; // Create a global instance of the tapdance state type
 
-// Declare tap dance functions:
-// Function to determine the current tapdance state
 uint8_t current_dance(qk_tap_dance_state_t *state);
+void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
+void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [WIN_FNLOCK]        = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_LWIN, _FN),
+    [IME_CAPSLOCK]      = ACTION_TAP_DANCE_DOUBLE(G(KC_SPC) , KC_CAPS),
+    [INSERT_SCREENSHOT] = ACTION_TAP_DANCE_DOUBLE(KC_INSERT, LSG(KC_S)),
+    [COPY_PASTE]        = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset)
+};
+
 uint8_t current_dance(qk_tap_dance_state_t *state) {
     switch (state->count) {
         case 1:
@@ -250,8 +253,6 @@ uint8_t current_dance(qk_tap_dance_state_t *state) {
     }
 }
 
-// `finished` and `reset` functions for each tapdance keycode
-void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
 void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
     td_state = current_dance(state);
     switch (td_state) {
@@ -262,7 +263,6 @@ void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
     }
 }
 
-void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
 void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (td_state) {
         case SINGLE_TAP:  unregister_code16(C(KC_V)); break;
@@ -272,11 +272,3 @@ void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
     }
     td_state = OTHERWISE;
 }
-
-// Tap Dance
-qk_tap_dance_action_t tap_dance_actions[] = {
-    [WIN_FNLOCK]        = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_LWIN, _FN),
-    [IME_CAPSLOCK]      = ACTION_TAP_DANCE_DOUBLE(G(KC_SPC) , KC_CAPS),
-    [INSERT_SCREENSHOT] = ACTION_TAP_DANCE_DOUBLE(KC_INSERT, LSG(KC_S)),
-    [COPY_PASTE]        = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset)
-};
