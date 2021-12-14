@@ -1,1 +1,1 @@
-# The via keymap for seraph
+# The via keymap for eagle

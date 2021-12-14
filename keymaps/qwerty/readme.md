@@ -1,1 +1,1 @@
-# The qwerty keymap for seraph
+# The qwerty keymap for eagle

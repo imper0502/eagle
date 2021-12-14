@@ -1,1 +1,1 @@
-# The qwerty keymap with key overriding for seraph
+# The qwerty keymap with key overriding for eagle

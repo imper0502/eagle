@@ -1,1 +1,1 @@
-# The basic keymap for seraph
+# The basic keymap for eagle
