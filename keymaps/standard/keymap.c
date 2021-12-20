@@ -26,22 +26,20 @@ enum custom_keycodes {
 };
 
 enum tap_dance_names {
-    WIN_FNLOCK,
+    ALT_FNLOCK,
+    EQL_FNLOCK,
     IME_CAPSLOCK,
     INSERT_SCREENSHOT,
     COPY_PASTE,
 };
 
 // Alias of keycodes
-#define TD_LWIN TD(WIN_FNLOCK)
+#define TD_LALT TD(ALT_FNLOCK)
+#define TD_EQL  TD(EQL_FNLOCK)
 #define TD_IME  TD(IME_CAPSLOCK)
 #define TD_INS  TD(INSERT_SCREENSHOT)
 #define CPY_PST TD(COPY_PASTE)
-
-#define CTL_ENT RCTL_T(KC_ENT)
 #define SFT_SPC RSFT_T(KC_SPC)
-#define LT_INS  LT(_FN, KC_INS)
-#define LT_MINS LT(_FN, KC_MINS)
 
 /*
  * Keymaps */
@@ -49,9 +47,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
         KC_BTN4,KC_BSLS,KC_AT  ,KC_ASTR,KC_AMPR,KC_SLSH,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,ALT_TAB,
         KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
-        KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
+        KC_LCTL,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
         KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_QUOT,KC_RSFT,
-                                KC_LALT,TD_LWIN,KC_LSFT,KC_LCTL,CTL_ENT,SFT_SPC,MO(_FN),KC_DEL ,
+                                TD_LALT,KC_LCTL,KC_BSPC,KC_LWIN,KC_ENT ,SFT_SPC,MO(_FN),KC_DEL ,
                             KC_ESC ,                    CPY_PST,TD_INS ,                    TD_IME
     ),
     [QWT] = LAYOUT(
@@ -67,13 +65,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB ,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                KC_BRIU,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,KC_INS ,
         KC_BSPC,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                KC_BRID,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,KC_DEL ,
         KC_CALC,KC_PERC,KC_1   ,KC_2   ,KC_3   ,KC_DLR ,                KC_MPRV,KC_MPLY,KC_MNXT,KC_MUTE,KC_VOLD,KC_VOLU,
-                                KC_EQL ,KC_DOT ,KC_0   ,KC_ENT ,KC_RCTL,KC_RSFT,TG(_FN),KC_RALT,
+                                TD_EQL ,KC_DOT ,KC_0   ,KC_ENT ,KC_RCTL,KC_RSFT,_______,KC_RALT,
                             KC_ESC ,                    BTN_2_1,XXXXXXX,                    KC_CAPS
     ),
     [COMMAND] = LAYOUT(
         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
         XXXXXXX,TG(QWT),XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-        XXXXXXX,KC_APP , RESET ,KC_SLCK,XXXXXXX,XXXXXXX,                KC_MAIL,KC_NLCK,KC_EJCT,XXXXXXX,XXXXXXX,XXXXXXX,
+        XXXXXXX,KC_APP , RESET ,KC_SLCK,XXXXXXX,XXXXXXX,                KC_MAIL,KC_NLCK,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
                                 XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
                             XXXXXXX,                    XXXXXXX,XXXXXXX,                    XXXXXXX
@@ -113,7 +111,7 @@ void matrix_scan_user(void) {
         }
     }
     
-    (get_mods() & MOD_MASK_CTRL) == MOD_MASK_CTRL ? layer_on(COMMAND) : layer_off(COMMAND);
+    (get_mods() & MOD_MASK_SHIFT) == MOD_MASK_SHIFT ? layer_on(COMMAND) : layer_off(COMMAND);
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -234,7 +232,8 @@ void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
 void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
 
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [WIN_FNLOCK]        = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_LWIN, _FN),
+    [ALT_FNLOCK]        = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_LALT, _FN),
+    [EQL_FNLOCK]        = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_EQL,  _FN),
     [IME_CAPSLOCK]      = ACTION_TAP_DANCE_DOUBLE(G(KC_SPC) , KC_CAPS),
     [INSERT_SCREENSHOT] = ACTION_TAP_DANCE_DOUBLE(KC_INSERT, LSG(KC_S)),
     [COPY_PASTE]        = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset)
