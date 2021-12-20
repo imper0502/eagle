@@ -83,7 +83,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 bool is_alt_tab_active = false;
 uint16_t alt_tab_timer = 0;
 bool is_typing_timer_active = false;
-uint16_t typing_timer = 0;
+uint16_t typing_timer = 0; // range: 0 ~ 65535
 uint8_t mod_state;
 
 void keyboard_pre_init_user(void) {
@@ -105,7 +105,7 @@ void matrix_scan_user(void) {
     }
 
     if (is_typing_timer_active && IS_LAYER_ON(_FN)) {
-        if (timer_elapsed(typing_timer) > 180000) {
+        if (timer_elapsed(typing_timer) > 60000) {
             layer_off(_FN);
             is_typing_timer_active = false;
         }
