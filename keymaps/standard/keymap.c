@@ -39,6 +39,7 @@ enum tap_dance_names {
 #define TD_IME  TD(IME_CAPSLOCK)
 #define TD_INS  TD(INSERT_SCREENSHOT)
 #define CPY_PST TD(COPY_PASTE)
+#define RSFT_BS RSFT_T(KC_BSPC)
 #define SFT_SPC RSFT_T(KC_SPC)
 
 /*
@@ -49,7 +50,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
         KC_LCTL,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
         KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_QUOT,KC_RSFT,
-                                TD_LALT,KC_LCTL,KC_BSPC,KC_LWIN,KC_ENT ,SFT_SPC,MO(_FN),KC_DEL ,
+                                TD_LALT,KC_RCTL,RSFT_BS,KC_LWIN,KC_ENT ,SFT_SPC,MO(_FN),KC_DEL ,
                             KC_ESC ,                    CPY_PST,TD_INS ,                    TD_IME
     ),
     [QWT] = LAYOUT(
@@ -111,7 +112,7 @@ void matrix_scan_user(void) {
         }
     }
     
-    (get_mods() & MOD_MASK_SHIFT) == MOD_MASK_SHIFT ? layer_on(COMMAND) : layer_off(COMMAND);
+    (get_mods() & MOD_MASK_CTRL) == MOD_MASK_CTRL ? layer_on(COMMAND) : layer_off(COMMAND);
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
