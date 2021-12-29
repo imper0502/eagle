@@ -17,17 +17,16 @@
 
 // Defines names for use in layer keycodes and the keymap
 enum layer_names {
-    _BS,
-    _FN
+    _BS, _FN
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
     KC_ESC ,KC_BSLS,KC_AT  ,KC_ASTR,KC_AMPR,KC_SLSH,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_BSPC,
     KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
-    KC_CAPS,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
+    KC_LWIN,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
     KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_QUOT,KC_RSFT,
-                            KC_LALT,KC_LWIN,KC_LSFT,KC_LCTL,KC_ENT ,KC_SPC ,MO(_FN),KC_DEL ,
+                            KC_LALT,KC_LCTL,KC_LSFT,KC_CAPS,KC_ENT ,KC_SPC ,MO(_FN),KC_DEL ,
                         XXXXXXX,                    XXXXXXX,KC_INS ,                    XXXXXXX
     ),
     [_FN] = LAYOUT(
@@ -35,7 +34,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                XXXXXXX,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,KC_INS ,
     _______,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                XXXXXXX,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,KC_DEL ,
     _______,XXXXXXX,KC_1   ,KC_2   ,KC_3   ,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-                            KC_EQL ,KC_DOT ,KC_0   ,KC_ENT ,KC_RCTL,KC_RSFT,TG(_FN),KC_RALT,
+                            KC_EQL ,KC_DOT ,KC_0   ,_______,_______,KC_RSFT,KC_RCTL,KC_RALT,
                         XXXXXXX,                    XXXXXXX,XXXXXXX,                    XXXXXXX
     )
 };

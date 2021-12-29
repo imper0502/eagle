@@ -21,7 +21,7 @@ enum layer_names {
 };
 
 enum tap_dance_names {
-    ALT_TAB,
+    ALT_TABLE,
     EQL_FNLOCK,
     IME_CAPSLOCK,
     COPY_PASTE_SCREENSHOT,
@@ -30,6 +30,7 @@ enum tap_dance_names {
 // Alias of keycodes
 #define TD_EQL  TD(EQL_FNLOCK)
 #define TD_IME  TD(IME_CAPSLOCK)
+#define ALT_TAB TD(ALT_TABLE)
 #define CPY_PST TD(COPY_PASTE_SCREENSHOT)
 #define SFT_SPC LSFT_T(KC_SPC)   
 #define FNT_TAB LT(_FN, KC_TAB)
@@ -38,7 +39,7 @@ enum tap_dance_names {
  * Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-        KC_BTN4,KC_BSLS,KC_AT  ,KC_ASTR,KC_AMPR,KC_SLSH,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,TD(ALT_TAB),
+        KC_BTN4,KC_BSLS,KC_AT  ,KC_ASTR,KC_AMPR,KC_SLSH,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,ALT_TAB,
         KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
         KC_LWIN,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
         KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_QUOT,KC_RSFT,
@@ -85,7 +86,7 @@ void keyboard_pre_init_user(void) {
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case TD(ALT_TAB):
+        case TD(ALT_TABLE):
             return TAPPING_TERM + 500;
         default:
             return TAPPING_TERM;
@@ -202,14 +203,14 @@ static td_state_t td_state; // Create a global instance of the tapdance state ty
 uint8_t current_dance(qk_tap_dance_state_t *state);
 void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
 void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
-void td_alt_tab_each_tap(qk_tap_dance_state_t *state, void *user_data);
-void td_alt_tab_finished(qk_tap_dance_state_t *state, void *user_data);
+void td_alt_tabLE_each_tap(qk_tap_dance_state_t *state, void *user_data);
+void td_alt_tabLE_finished(qk_tap_dance_state_t *state, void *user_data);
 
 qk_tap_dance_action_t tap_dance_actions[] = {
     [EQL_FNLOCK]   = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_EQL,  _FN),
     [IME_CAPSLOCK] = ACTION_TAP_DANCE_DOUBLE(G(KC_SPC) , KC_CAPS),
     [COPY_PASTE_SCREENSHOT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
-    [ALT_TAB] = ACTION_TAP_DANCE_FN_ADVANCED(td_alt_tab_each_tap, td_alt_tab_finished, NULL)
+    [ALT_TABLE] = ACTION_TAP_DANCE_FN_ADVANCED(td_alt_tabLE_each_tap, td_alt_tabLE_finished, NULL)
 };
 
 uint8_t current_dance(qk_tap_dance_state_t *state) {
@@ -240,13 +241,13 @@ void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
     td_state = OTHERWISE;
 }
 
-void td_alt_tab_each_tap(qk_tap_dance_state_t *state, void *user_data) {
+void td_alt_tabLE_each_tap(qk_tap_dance_state_t *state, void *user_data) {
     switch (state->count) {
         case 1: add_mods(MOD_BIT(KC_LALT));
         default:          tap_code(KC_TAB);
     }
 }
 
-void td_alt_tab_finished(qk_tap_dance_state_t *state, void *user_data) {
+void td_alt_tabLE_finished(qk_tap_dance_state_t *state, void *user_data) {
     del_mods(MOD_BIT(KC_LALT));
 }

@@ -15,48 +15,37 @@
  */
 #include QMK_KEYBOARD_H
 
-// Defines names for use in layer keycodes and the keymap
 enum layer_names {
-    _BS,
-    _FN
+    _BS, _FN
 };
 
-// Defines the keycodes used by our macros in process_record_user
-enum custom_keycodes {
-    ALT_TAB = SAFE_RANGE,
-    CPY_PST,
+enum tap_dance_names {
+    ALT_TABLE,
+    COPY_PASTE_SCREENSHOT
 };
 
-// Tap Dance declarations
-enum {
-    WIN_FN,
-    INSERT_SCREENSHOT
-};
-
-#define TD_LWIN TD(WIN_FN)
-#define TD_INS  TD(INSERT_SCREENSHOT)
+// Alias of keycodes
+#define ALT_TAB TD(ALT_TABLE)
+#define CPY_PST TD(COPY_PASTE_SCREENSHOT)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
     KC_ESC ,KC_BSLS,KC_AT  ,KC_ASTR,KC_AMPR,KC_SLSH,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_BSPC,
     KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
-    KC_BSPC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
+    KC_LWIN,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
     KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_QUOT,KC_RSFT,
-                            KC_LALT,TD_LWIN,KC_LSFT,KC_LCTL,KC_ENT ,KC_SPC ,MO(_FN),KC_DEL ,
-                        ALT_TAB,                    CPY_PST,TD_INS ,                    KC_CAPS
+                            KC_LALT,KC_LCTL,KC_LSFT,KC_BSPC,KC_ENT ,KC_SPC ,MO(_FN),KC_DEL ,
+                        ALT_TAB,                    CPY_PST,KC_INS ,                    KC_CAPS
     ),
     [_FN] = LAYOUT(
     KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
     _______,KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                XXXXXXX,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,KC_INS ,
     _______,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                XXXXXXX,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,KC_DEL ,
     _______,KC_0   ,KC_1   ,KC_2   ,KC_3   ,KC_CALC,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-                            KC_EQL ,KC_DOT ,KC_0   ,KC_ENT ,KC_RCTL,KC_RSFT,TG(_FN),KC_RALT,
-                        _______,                    _______,XXXXXXX,                    XXXXXXX
+                            KC_EQL ,KC_DOT ,KC_0   ,_______,_______,KC_RSFT,KC_RCTL,KC_RALT,
+                        _______,                    _______,_______,                    _______
     )
 };
-
-bool is_alt_tab_active = false;
-uint16_t alt_tab_timer = 0;
 
 void keyboard_pre_init_user(void) {
     setPinOutput(TXLED);
@@ -68,38 +57,15 @@ void keyboard_pre_init_user(void) {
 void matrix_scan_user(void) {
     writePin(TXLED, IS_LAYER_OFF(_FN));
     writePin(RXLED, IS_LAYER_OFF(_FN));
-
-    if (is_alt_tab_active) {
-        if (timer_elapsed(alt_tab_timer) > 1000) {
-            unregister_code(KC_LALT);
-            is_alt_tab_active = false;
-        }
-    }
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case ALT_TAB:
-            if (record->event.pressed) {
-                if (!is_alt_tab_active) {
-                    is_alt_tab_active = true;
-                    register_code(KC_LALT);
-                }
-                alt_tab_timer = timer_read();
-                register_code(KC_TAB);
-            } else {
-                unregister_code(KC_TAB);
-            }
-            break;
-        case CPY_PST:
-            if (record->event.pressed) {
-                SEND_STRING(SS_LCTL("c"));
-            } else {
-                SEND_STRING(SS_LCTL("v"));
-            }
-            break;
+        case TD(ALT_TAB):
+            return TAPPING_TERM + 500;
+        default:
+            return TAPPING_TERM;
     }
-    return true;
 }
 
 // Key Overrides
@@ -131,8 +97,61 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     NULL // Null terminate the array of overrides!
 };
 
-// Tap Dance
+/*
+ * Tap Dance */
+typedef enum {
+    SINGLE_TAP, SINGLE_HOLD,
+    DOUBLE_TAP, OTHERWISE
+} td_state_t; // Define a type containing as many tapdance states
+
+static td_state_t td_state; // Create a global instance of the tapdance state type
+
+uint8_t current_dance(qk_tap_dance_state_t *state);
+void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
+void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
+void td_alt_tab_each_tap(qk_tap_dance_state_t *state, void *user_data);
+void td_alt_tab_finished(qk_tap_dance_state_t *state, void *user_data);
+
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [WIN_FN] = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_LWIN, _FN),
-    [INSERT_SCREENSHOT] = ACTION_TAP_DANCE_DOUBLE(KC_INSERT, LSG(KC_S))
+    [COPY_PASTE_SCREENSHOT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
+    [ALT_TABLE] = ACTION_TAP_DANCE_FN_ADVANCED(td_alt_tab_each_tap, td_alt_tab_finished, NULL)
 };
+
+uint8_t current_dance(qk_tap_dance_state_t *state) {
+    switch (state->count) {
+        case 1:  return (state->interrupted || !state->pressed) ? SINGLE_TAP : SINGLE_HOLD;
+        case 2:  return DOUBLE_TAP;
+        default: return OTHERWISE;
+    }
+}
+
+void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
+    td_state = current_dance(state);
+    switch (td_state) {
+        case SINGLE_TAP:  register_code16(C(KC_V));   break;
+        case SINGLE_HOLD: tap_code16(C(KC_C));        break;
+        case DOUBLE_TAP:  register_code16(LSG(KC_S)); break;
+        default:          layer_on(_FN);             return;
+    }
+}
+
+void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
+    switch (td_state) {
+        case SINGLE_TAP:  unregister_code16(C(KC_V));   break;
+        case SINGLE_HOLD: tap_code16(C(KC_V));          break;
+        case DOUBLE_TAP:  unregister_code16(LSG(KC_S)); break;
+        default:                                       return;
+    }
+    td_state = OTHERWISE;
+}
+
+void td_alt_tab_each_tap(qk_tap_dance_state_t *state, void *user_data) {
+    switch (state->count) {
+        case 1: add_mods(MOD_BIT(KC_LALT));
+        default:          tap_code(KC_TAB);
+    }
+}
+
+void td_alt_tab_finished(qk_tap_dance_state_t *state, void *user_data) {
+    del_mods(MOD_BIT(KC_LALT));
+}
