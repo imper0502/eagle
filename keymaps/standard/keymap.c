@@ -27,7 +27,6 @@ enum tap_dance_names {
     COPY_PASTE_SCREENSHOT,
 };
 
-// Alias of keycodes
 #define TD_EQL  TD(EQL_FNLOCK)
 #define TD_IME  TD(IME_CAPSLOCK)
 #define ALT_TAB TD(ALT_TABLE)
@@ -35,8 +34,7 @@ enum tap_dance_names {
 #define SFT_SPC LSFT_T(KC_SPC)   
 #define FNT_TAB LT(_FN, KC_TAB)
 
-/*
- * Keymaps */
+/* Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
         KC_BTN4,KC_BSLS,KC_AT  ,KC_ASTR,KC_AMPR,KC_SLSH,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,ALT_TAB,
@@ -72,8 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
-/*
- * Custom Keycodes & Behavior */
+/* Behavior */
 uint16_t typing_timer = 0; // range: 0 ~ 65535
 uint8_t mod_state;
 
@@ -82,15 +79,6 @@ void keyboard_pre_init_user(void) {
     setPinOutput(RXLED);
     writePin(TXLED, LED_OFF);
     writePin(RXLED, LED_OFF);
-}
-
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case TD(ALT_TABLE):
-            return TAPPING_TERM + 500;
-        default:
-            return TAPPING_TERM;
-    }
 }
 
 void matrix_scan_user(void) {
@@ -111,8 +99,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-/*
- * Retry Encoders */
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case TD(ALT_TABLE):
+            return TAPPING_TERM + 500;
+        default:
+            return TAPPING_TERM;
+    }
+}
+
+/* Retry Encoders */
 bool encoder_update_user(uint8_t index, bool clockwise) {
     typing_timer = timer_read();
     mod_state = get_mods();
@@ -162,8 +158,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     return false;
 }
 
-/*
- * Key Override */
+/* Key Override */
 const key_override_t at_override = ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_CIRCUMFLEX);           // @^
 const key_override_t astersk_override = ko_make_basic(MOD_MASK_SHIFT, KC_ASTERISK, KC_HASH);      // *#
 const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_DOLLAR); // &$
@@ -191,8 +186,7 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
     NULL // Null terminate the array of overrides!
 };
 
-/*
- * Tap Dance */
+/* Tap Dance */
 typedef enum {
     SINGLE_TAP, SINGLE_HOLD,
     DOUBLE_TAP, OTHERWISE
