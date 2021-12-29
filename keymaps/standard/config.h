@@ -1,2 +1,3 @@
+#define TAPPING_TERM_PER_KEY
 #define ENCODERS_PAD_A { D3 }
 #define ENCODERS_PAD_B { D2 }
