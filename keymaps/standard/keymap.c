@@ -21,16 +21,44 @@ enum layer_names {
 };
 
 enum tap_dance_names {
-    ALT_TABLE,
     EQL_FNLOCK,
     IME_CAPSLOCK,
-    COPY_PASTE_SCREENSHOT,
+    ALT_TABLE,
+    COPY_PASTE_SCREENSHOT_FNLOCK,
+};
+
+/* Key Override */
+const key_override_t at_override = ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_CIRCUMFLEX);           // @^
+const key_override_t astersk_override = ko_make_basic(MOD_MASK_SHIFT, KC_ASTERISK, KC_HASH);      // *#
+const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_DOLLAR); // &$
+const key_override_t slash_override = ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_PERCENT);        // /%
+const key_override_t left_paren_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_PAREN, KC_RIGHT_PAREN);
+const key_override_t left_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LBRACKET, KC_RBRACKET);
+const key_override_t left_curly_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_CURLY_BRACE, KC_RIGHT_CURLY_BRACE);
+const key_override_t left_angle_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_ANGLE_BRACKET, KC_RIGHT_ANGLE_BRACKET);
+const key_override_t question_override = ko_make_basic(MOD_MASK_SHIFT, KC_QUESTION, KC_EXCLAIM);  // ?!
+const key_override_t comma_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMMA, KC_SCOLON);         // ,;
+const key_override_t dot_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLON);              // .:
+
+const key_override_t **key_overrides = (const key_override_t *[]) {
+    &at_override,
+    &astersk_override,
+    &ampersand_override,
+    &slash_override,
+    &left_paren_override,
+    &left_bracket_override,
+    &left_curly_bracket_override,
+    &left_angle_bracket_override,
+    &question_override,
+    &comma_override,
+    &dot_override,
+    NULL // Null terminate the array of overrides!
 };
 
 #define TD_EQL  TD(EQL_FNLOCK)
 #define TD_IME  TD(IME_CAPSLOCK)
 #define ALT_TAB TD(ALT_TABLE)
-#define CPY_PST TD(COPY_PASTE_SCREENSHOT)
+#define CPY_PST TD(COPY_PASTE_SCREENSHOT_FNLOCK)
 #define SFT_SPC LSFT_T(KC_SPC)   
 #define FNT_TAB LT(_FN, KC_TAB)
 
@@ -71,9 +99,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 /* Behavior */
-uint16_t typing_timer = 0; // range: 0 ~ 65535
-uint8_t mod_state;
-
 void keyboard_pre_init_user(void) {
     setPinOutput(TXLED);
     setPinOutput(RXLED);
@@ -81,6 +106,7 @@ void keyboard_pre_init_user(void) {
     writePin(RXLED, LED_OFF);
 }
 
+uint16_t typing_timer = 0; // range: 0 ~ 65535
 void matrix_scan_user(void) {
     writePin(TXLED, IS_LAYER_OFF(_FN));
     writePin(RXLED, IS_LAYER_OFF(_FN));
@@ -108,7 +134,67 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
+/* Tap Dance */
+typedef enum {
+    SINGLE_TAP, SINGLE_HOLD,
+    DOUBLE_TAP, OTHERWISE
+} td_state_t;
+
+td_state_t current_dance(qk_tap_dance_state_t *state) {
+    switch (state->count) {
+        case 1:  return (state->interrupted || !state->pressed) ? SINGLE_TAP : SINGLE_HOLD;
+        case 2:  return DOUBLE_TAP;
+        default: return OTHERWISE;
+    }
+}
+
+void td_alt_tab_each_tap(qk_tap_dance_state_t *state, void *user_data);
+void td_alt_tab_finished(qk_tap_dance_state_t *state, void *user_data);
+void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
+void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [EQL_FNLOCK]   = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_EQL,  _FN),
+    [IME_CAPSLOCK] = ACTION_TAP_DANCE_DOUBLE(G(KC_SPC) , KC_CAPS),
+    [ALT_TABLE] = ACTION_TAP_DANCE_FN_ADVANCED(td_alt_tab_each_tap, td_alt_tab_finished, NULL),
+    [COPY_PASTE_SCREENSHOT_FNLOCK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
+};
+
+void td_alt_tab_each_tap(qk_tap_dance_state_t *state, void *user_data) {
+    switch (state->count) {
+        case 1: add_mods(MOD_BIT(KC_LALT));
+        default:          tap_code(KC_TAB);
+    }
+}
+
+void td_alt_tab_finished(qk_tap_dance_state_t *state, void *user_data) {
+    del_mods(MOD_BIT(KC_LALT));
+}
+
+static td_state_t td_state;
+
+void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
+    td_state = current_dance(state);
+    switch (td_state) {
+        case SINGLE_TAP:  register_code16(C(KC_V));   break;
+        case SINGLE_HOLD: tap_code16(C(KC_C));        break;
+        case DOUBLE_TAP:  register_code16(LSG(KC_S)); break;
+        default:          layer_on(_FN);             return;
+    }
+}
+
+void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
+    switch (td_state) {
+        case SINGLE_TAP:  unregister_code16(C(KC_V));   break;
+        case SINGLE_HOLD: tap_code16(C(KC_V));          break;
+        case DOUBLE_TAP:  unregister_code16(LSG(KC_S)); break;
+        default:                                       return;
+    }
+    td_state = OTHERWISE;
+}
+
 /* Retry Encoders */
+uint8_t mod_state;
 bool encoder_update_user(uint8_t index, bool clockwise) {
     typing_timer = timer_read();
     mod_state = get_mods();
@@ -156,92 +242,4 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
         break;
     }
     return false;
-}
-
-/* Key Override */
-const key_override_t at_override = ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_CIRCUMFLEX);           // @^
-const key_override_t astersk_override = ko_make_basic(MOD_MASK_SHIFT, KC_ASTERISK, KC_HASH);      // *#
-const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_DOLLAR); // &$
-const key_override_t slash_override = ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_PERCENT);        // /%
-const key_override_t left_paren_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_PAREN, KC_RIGHT_PAREN);
-const key_override_t left_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LBRACKET, KC_RBRACKET);
-const key_override_t left_curly_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_CURLY_BRACE, KC_RIGHT_CURLY_BRACE);
-const key_override_t left_angle_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_ANGLE_BRACKET, KC_RIGHT_ANGLE_BRACKET);
-const key_override_t question_override = ko_make_basic(MOD_MASK_SHIFT, KC_QUESTION, KC_EXCLAIM);  // ?!
-const key_override_t comma_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMMA, KC_SCOLON);         // ,;
-const key_override_t dot_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLON);              // .:
-
-const key_override_t **key_overrides = (const key_override_t *[]) {
-    &at_override,
-    &astersk_override,
-    &ampersand_override,
-    &slash_override,
-    &left_paren_override,
-    &left_bracket_override,
-    &left_curly_bracket_override,
-    &left_angle_bracket_override,
-    &question_override,
-    &comma_override,
-    &dot_override,
-    NULL // Null terminate the array of overrides!
-};
-
-/* Tap Dance */
-typedef enum {
-    SINGLE_TAP, SINGLE_HOLD,
-    DOUBLE_TAP, OTHERWISE
-} td_state_t; // Define a type containing as many tapdance states
-
-static td_state_t td_state; // Create a global instance of the tapdance state type
-
-uint8_t current_dance(qk_tap_dance_state_t *state);
-void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
-void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
-void td_alt_tabLE_each_tap(qk_tap_dance_state_t *state, void *user_data);
-void td_alt_tabLE_finished(qk_tap_dance_state_t *state, void *user_data);
-
-qk_tap_dance_action_t tap_dance_actions[] = {
-    [EQL_FNLOCK]   = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_EQL,  _FN),
-    [IME_CAPSLOCK] = ACTION_TAP_DANCE_DOUBLE(G(KC_SPC) , KC_CAPS),
-    [COPY_PASTE_SCREENSHOT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
-    [ALT_TABLE] = ACTION_TAP_DANCE_FN_ADVANCED(td_alt_tabLE_each_tap, td_alt_tabLE_finished, NULL)
-};
-
-uint8_t current_dance(qk_tap_dance_state_t *state) {
-    switch (state->count) {
-        case 1:  return (state->interrupted || !state->pressed) ? SINGLE_TAP : SINGLE_HOLD;
-        case 2:  return DOUBLE_TAP;
-        default: return OTHERWISE;
-    }
-}
-
-void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
-    td_state = current_dance(state);
-    switch (td_state) {
-        case SINGLE_TAP:  register_code16(C(KC_V));   break;
-        case SINGLE_HOLD: tap_code16(C(KC_C));        break;
-        case DOUBLE_TAP:  register_code16(LSG(KC_S)); break;
-        default:          layer_on(_FN);             return;
-    }
-}
-
-void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
-    switch (td_state) {
-        case SINGLE_TAP:  unregister_code16(C(KC_V));   break;
-        case SINGLE_HOLD: tap_code16(C(KC_V));          break;
-        case DOUBLE_TAP:  unregister_code16(LSG(KC_S)); break;
-        default:                                       return;
-    }
-    td_state = OTHERWISE;
-}
-
-void td_alt_tabLE_each_tap(qk_tap_dance_state_t *state, void *user_data) {
-    switch (state->count) {
-        case 1: add_mods(MOD_BIT(KC_LALT));
-        default:          tap_code(KC_TAB);
-    }
-}
-
-void td_alt_tabLE_finished(qk_tap_dance_state_t *state, void *user_data) {
-    del_mods(MOD_BIT(KC_LALT));
 }
