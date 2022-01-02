@@ -21,10 +21,9 @@ enum layer_names {
 };
 
 enum tap_dance_names {
-    EQL_FNLOCK,
     IME_CAPSLOCK,
     ALT_TABLE,
-    COPY_PASTE_SCREENSHOT_FNLOCK,
+    COPY_PASTE_FNLOCK_SCREENSHOT,
 };
 
 /* Key Override */
@@ -55,10 +54,9 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
     NULL // Null terminate the array of overrides!
 };
 
-#define TD_EQL  TD(EQL_FNLOCK)
 #define TD_IME  TD(IME_CAPSLOCK)
 #define ALT_TAB TD(ALT_TABLE)
-#define CPY_PST TD(COPY_PASTE_SCREENSHOT_FNLOCK)
+#define CPY_PST TD(COPY_PASTE_FNLOCK_SCREENSHOT)
 #define SFT_SPC LSFT_T(KC_SPC)   
 #define FNT_TAB LT(_FN, KC_TAB)
 
@@ -85,7 +83,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       S(KC_TAB),KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                KC_BRIU,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,KC_INS ,
         KC_ESC ,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                KC_BRID,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,KC_DEL ,
         KC_CALC,KC_PERC,KC_1   ,KC_2   ,KC_3   ,KC_TAB ,                KC_MPRV,KC_MPLY,KC_MNXT,KC_MUTE,KC_VOLD,KC_VOLU,
-                                TD_EQL ,KC_PDOT,KC_0   ,_______,_______,KC_RSFT,KC_RCTL,KC_RALT,
+                                KC_EQL ,KC_PDOT,KC_0   ,_______,_______,KC_RSFT,KC_RCTL,KC_RALT,
                             KC_PENT,                    _______,_______,                    KC_CAPS
     ),
     [MY_COMMAND] = LAYOUT(
@@ -102,6 +100,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 void keyboard_pre_init_user(void) {
     setPinOutput(TXLED);
     setPinOutput(RXLED);
+
     writePin(TXLED, LED_OFF);
     writePin(RXLED, LED_OFF);
 }
@@ -109,11 +108,8 @@ void keyboard_pre_init_user(void) {
 void matrix_scan_user(void) {
     writePin(TXLED, IS_LAYER_OFF(_FN));
     writePin(RXLED, IS_LAYER_OFF(_FN));
-}
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     get_mods() == MOD_MASK_SHIFT ? layer_on(MY_COMMAND) : layer_off(MY_COMMAND);
-    return true;
 }
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
@@ -145,10 +141,9 @@ void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
 void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
 
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [EQL_FNLOCK]   = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_EQL,  _FN),
     [IME_CAPSLOCK] = ACTION_TAP_DANCE_DOUBLE(G(KC_SPC) , KC_CAPS),
     [ALT_TABLE] = ACTION_TAP_DANCE_FN_ADVANCED(td_alt_tab_each_tap, td_alt_tab_finished, NULL),
-    [COPY_PASTE_SCREENSHOT_FNLOCK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
+    [COPY_PASTE_FNLOCK_SCREENSHOT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
 };
 
 void td_alt_tab_each_tap(qk_tap_dance_state_t *state, void *user_data) {
@@ -167,21 +162,20 @@ static td_state_t td_state;
 void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
     td_state = current_dance(state);
     switch (td_state) {
-        case SINGLE_TAP:  register_code16(C(KC_V));   break;
-        case SINGLE_HOLD: tap_code16(C(KC_C));        break;
-        case DOUBLE_TAP:  register_code16(LSG(KC_S)); break;
-        default:          layer_on(_FN);             return;
+        case SINGLE_TAP:  register_code16(C(KC_V));    break;
+        case SINGLE_HOLD: tap_code16(C(KC_C));         break;
+        case DOUBLE_TAP:  layer_invert(_FN);           break;
+        default:          register_code16(LSG(KC_S)); return;
     }
 }
 
 void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (td_state) {
-        case SINGLE_TAP:  unregister_code16(C(KC_V));   break;
-        case SINGLE_HOLD: tap_code16(C(KC_V));          break;
-        case DOUBLE_TAP:  unregister_code16(LSG(KC_S)); break;
-        default:                                       return;
+        case SINGLE_TAP:  unregister_code16(C(KC_V));    break;
+        case SINGLE_HOLD: tap_code16(C(KC_V));           break;
+        case DOUBLE_TAP:  /* This line is necessary. */  break;
+        default:          unregister_code16(LSG(KC_S)); return;
     }
-    td_state = OTHERWISE;
 }
 
 /* Retry Encoders */
