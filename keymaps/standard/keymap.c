@@ -27,10 +27,11 @@ enum tap_dance_names {
 };
 
 /* Key Override */
-const key_override_t at_override = ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_CIRCUMFLEX);           // @^
-const key_override_t astersk_override = ko_make_basic(MOD_MASK_SHIFT, KC_ASTERISK, KC_HASH);      // *#
-const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_DOLLAR); // &$
-const key_override_t slash_override = ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_PERCENT);        // /%
+const key_override_t at_override = ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_CIRCUMFLEX);             // @^
+const key_override_t hash_override = ko_make_basic(MOD_MASK_SHIFT, KC_HASH, KC_DOLLAR);             // #$
+const key_override_t astersk_override = ko_make_basic(MOD_MASK_SHIFT, KC_ASTERISK, KC_AMPERSAND);   // *&
+const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_ASTERISK); // &*
+const key_override_t slash_override = ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_PERCENT);          // /%
 const key_override_t left_paren_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_PAREN, KC_RIGHT_PAREN);
 const key_override_t left_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LBRACKET, KC_RBRACKET);
 const key_override_t left_curly_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_CURLY_BRACE, KC_RIGHT_CURLY_BRACE);
@@ -41,6 +42,7 @@ const key_override_t dot_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COL
 
 const key_override_t **key_overrides = (const key_override_t *[]) {
     &at_override,
+    &hash_override,
     &astersk_override,
     &ampersand_override,
     &slash_override,
@@ -57,18 +59,17 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 #define TD_IME  TD(IME_CAPSLOCK)
 #define ALT_TAB TD(ALT_TABLE)
 #define CPY_PST TD(COPY_PASTE_FNLOCK_SCREENSHOT)
-#define SFT_SPC LSFT_T(KC_SPC)   
-#define FNT_TAB LT(_FN, KC_TAB)
+#define FN_SPC  LT(_FN, KC_SPC)
 
 /* Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-        KC_BTN4,KC_BSLS,KC_AT  ,KC_ASTR,KC_AMPR,KC_SLSH,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,ALT_TAB,
+        KC_BTN4,KC_SLSH,KC_AT  ,KC_HASH,KC_AMPR,KC_BSLS,                KC_GRV ,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,ALT_TAB,
         KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
         KC_LWIN,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
         KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_QUOT,KC_RSFT,
-                                KC_LALT,KC_LCTL,KC_RSFT,KC_BSPC,KC_ENT ,SFT_SPC,FNT_TAB,KC_DEL ,
-                            KC_ESC ,                    CPY_PST,KC_INS ,                    TD_IME
+                                KC_LALT,KC_LCTL,KC_RSFT,KC_BSPC,KC_ENT ,FN_SPC ,KC_DEL ,KC_INS ,
+                            KC_ESC ,                    CPY_PST,KC_TAB,                    TD_IME
     ),
     [_QW] = LAYOUT(
         _______,_______,_______,_______,_______,_______,                _______,_______,_______,_______,_______,_______,
@@ -81,9 +82,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FN] = LAYOUT(
         KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
       S(KC_TAB),KC_PSLS,KC_7   ,KC_8   ,KC_9   ,KC_PMNS,                KC_BRIU,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,KC_INS ,
-        KC_ESC ,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                KC_BRID,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,KC_DEL ,
+        _______,KC_PAST,KC_4   ,KC_5   ,KC_6   ,KC_PPLS,                KC_BRID,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,KC_DEL ,
         KC_CALC,KC_PERC,KC_1   ,KC_2   ,KC_3   ,KC_TAB ,                KC_MPRV,KC_MPLY,KC_MNXT,KC_MUTE,KC_VOLD,KC_VOLU,
-                                KC_EQL ,KC_PDOT,KC_0   ,_______,_______,KC_RSFT,KC_RCTL,KC_RALT,
+                                KC_EQL ,KC_DOT ,KC_0   ,_______,_______,KC_RSFT,KC_RCTL,KC_RALT,
                             KC_PENT,                    _______,_______,                    KC_CAPS
     ),
     [MY_COMMAND] = LAYOUT(
@@ -109,7 +110,7 @@ void matrix_scan_user(void) {
     writePin(TXLED, IS_LAYER_OFF(_FN));
     writePin(RXLED, IS_LAYER_OFF(_FN));
 
-    get_mods() == MOD_MASK_SHIFT ? layer_on(MY_COMMAND) : layer_off(MY_COMMAND);
+   get_mods() == MOD_MASK_SHIFT ? layer_on(MY_COMMAND) : layer_off(MY_COMMAND);
 }
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
@@ -185,7 +186,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     switch (index) {
     case 0:
         if (IS_LAYER_ON(_FN)) {
-            if (mod_state & MOD_MASK_SHIFT) {
+            if (mod_state & MOD_MASK_CS) {
                 clockwise ? tap_code(KC_BRIU) : tap_code(KC_BRID);
             } else {
                 clockwise ? tap_code(KC_VOLU) : tap_code(KC_VOLD);
