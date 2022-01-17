@@ -135,6 +135,18 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
+bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case FN_SPC :
+        case FN_RCTL:
+        case FN_LALT:
+            return true;
+        default:
+            return false;
+    }
+    return false;
+}
+
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case KC_LSFT:
