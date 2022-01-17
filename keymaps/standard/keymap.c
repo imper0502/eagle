@@ -119,9 +119,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 void keyboard_pre_init_user(void) {
     setPinOutput(TXLED);
     setPinOutput(RXLED);
-
-    writePin(TXLED, LED_OFF);
-    writePin(RXLED, LED_OFF);
 }
 
 void matrix_scan_user(void) {
@@ -136,6 +133,18 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         default:
             return TAPPING_TERM;
     }
+}
+
+void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case KC_LSFT:
+        case KC_RSFT:
+        case OS_RSFT:
+            get_mods() == MOD_MASK_SHIFT ? layer_on(MY_COMMAND) : layer_off(MY_COMMAND);
+        default:
+            return;
+    }
+    return;
 }
 
 /* Tap Dance */
