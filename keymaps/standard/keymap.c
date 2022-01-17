@@ -29,7 +29,6 @@ enum tap_dance_names {
 /* Key Override */
 const key_override_t at_override = ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_CIRCUMFLEX);             // @^
 const key_override_t hash_override = ko_make_basic(MOD_MASK_SHIFT, KC_HASH, KC_DOLLAR);             // #$
-const key_override_t astersk_override = ko_make_basic(MOD_MASK_SHIFT, KC_ASTERISK, KC_AMPERSAND);   // *&
 const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_ASTERISK); // &*
 const key_override_t slash_override = ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_PERCENT);          // /%
 const key_override_t left_paren_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_PAREN, KC_RIGHT_PAREN);
@@ -43,7 +42,6 @@ const key_override_t dot_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COL
 const key_override_t **key_overrides = (const key_override_t *[]) {
     &at_override,
     &hash_override,
-    &astersk_override,
     &ampersand_override,
     &slash_override,
     &left_paren_override,
@@ -56,21 +54,24 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
     NULL // Null terminate the array of overrides!
 };
 
-#define TD_IME  TD(IME_CAPSLOCK)
 #define ALT_TAB TD(ALT_TABLE)
 #define CPY_PST TD(COPY_PASTE_FNLOCK_SCREENSHOT)
+#define TD_LANG TD(IME_CAPSLOCK)
+#define GUI_ESC LGUI_T(KC_ESC)
+#define OS_RSFT OSM(MOD_RSFT)
 #define FN_SPC  LT(_FN, KC_SPC)
-#define FN_ALT  LM(_FN, MOD_RALT)
+#define FN_RCTL LM(_FN, MOD_RCTL)
+#define FN_LALT LM(_FN, MOD_LALT)
 
 /* Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
         ALT_TAB,KC_GRV ,KC_AT  ,KC_HASH,KC_AMPR,KC_SLSH,                KC_BSLS,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,KC_BTN4,
         KC_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
-        KC_LWIN,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
-        KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_QUOT,KC_RSFT,
-                                KC_LALT,KC_LCTL,KC_RSFT,KC_BSPC,KC_ENT ,FN_SPC ,KC_DEL ,FN_ALT ,
-                            KC_ESC ,                    CPY_PST,KC_INS ,                    TD_IME
+        GUI_ESC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
+        KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_QUOT,KC_RALT,
+                                KC_LALT,KC_LCTL,OS_RSFT,KC_BSPC,KC_ENT ,FN_SPC ,FN_RCTL,FN_LALT,
+                            KC_ESC ,                    CPY_PST,KC_INS ,                    TD_LANG
     ),
     [_QW] = LAYOUT(
         _______,_______,_______,_______,_______,_______,                _______,_______,_______,_______,_______,_______,
