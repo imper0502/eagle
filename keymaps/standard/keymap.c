@@ -124,39 +124,39 @@ void keyboard_pre_init_user(void) {
 }
 
 void matrix_scan_user(void) {
-    writePin(TXLED, IS_LAYER_OFF(_FN));
-    writePin(RXLED, IS_LAYER_OFF(_FN));
+    bool led_pins_state = IS_LAYER_ON(_FN)||IS_LAYER_ON(_NP)||IS_LAYER_ON(_GM) ? LED_ON : !LED_ON;
+    writePin(TXLED, led_pins_state);
+    writePin(RXLED, led_pins_state);
 }
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case TD(ALT_TABLE):
-            return TAPPING_TERM + 500;
-        default:
-            return TAPPING_TERM;
+    case TD(ALT_TABLE):
+        return TAPPING_TERM + 500;
+    default:
+        return TAPPING_TERM;
     }
 }
 
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case FN_SPC :
-        case FN_RCTL:
-        case FN_LALT:
-            return true;
-        default:
-            return false;
+    case FN_SPC :
+    case FN_RCTL:
+    case FN_LALT:
+        return true;
+    default:
+        return false;
     }
-    return false;
 }
 
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case KC_LSFT:
-        case KC_RSFT:
-        case OS_RSFT:
-            get_mods() == MOD_MASK_SHIFT ? layer_on(MY_COMMAND) : layer_off(MY_COMMAND);
-        default:
-            return;
+    case KC_LSFT:
+    case KC_RSFT:
+    case OS_RSFT:
+        get_mods() == MOD_MASK_SHIFT ? layer_on(MY_COMMAND) : layer_off(MY_COMMAND);
+    default:
+        return;
     }
     return;
 }
