@@ -158,7 +158,6 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
         break;
     case KC_ESC:
     case GM_ESC:
-    case GUI_ESC:
         clear_mods();
     default:
         return;
