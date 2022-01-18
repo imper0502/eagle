@@ -155,10 +155,14 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
     case KC_RSFT:
     case OS_RSFT:
         get_mods() == MOD_MASK_SHIFT ? layer_on(MY_COMMAND) : layer_off(MY_COMMAND);
+        break;
+    case KC_ESC:
+    case GM_ESC:
+    case GUI_ESC:
+        clear_mods();
     default:
         return;
     }
-    return;
 }
 
 /* Tap Dance */
