@@ -145,8 +145,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define BOOTMAGIC_LITE_ROW 0
 // #define BOOTMAGIC_LITE_COLUMN 0
 
-#define TAPPING_TERM 275
-
 #define TXLED D5
 #define RXLED B0
 #define LED_ON 0

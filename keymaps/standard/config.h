@@ -1,5 +1,5 @@
 #pragma once
-
+#define TAPPING_TERM 225
 #define TAPPING_TERM_PER_KEY
 #define TAPPING_FORCE_HOLD_PER_KEY
 #define ONESHOT_TAP_TOGGLE 3
