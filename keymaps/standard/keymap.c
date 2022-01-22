@@ -25,6 +25,7 @@ enum tap_dance_names {
     IME_CAPSLOCK,
     ALT_TABLE,
     COPY_PASTE_FNLOCK_SCREENSHOT,
+    INSERT_SCREENSHOT_NUMPAD
 };
 
 /* Key Override */
@@ -58,6 +59,7 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 #define ALT_TAB TD(ALT_TABLE)
 #define TD_LANG TD(IME_CAPSLOCK)
 #define CPY_PST TD(COPY_PASTE_FNLOCK_SCREENSHOT)
+#define INS_SHT TD(INSERT_SCREENSHOT_NUMPAD)
 #define GUI_ESC LGUI_T(KC_ESC)
 #define OS_LSFT OSM(MOD_LSFT)
 #define OS_RSFT OSM(MOD_RSFT)
@@ -76,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         GUI_ESC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
         KC_RSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_QUOT,KC_LSFT,
                                 KC_LALT,KC_LCTL,OS_LSFT,KC_BSPC,KC_ENT ,FN_SPC ,FN_RCTL,FN_RALT,
-                            MK_ESC,                     CPY_PST,KC_INS ,                    TD_LANG
+                            MK_ESC,                     CPY_PST,INS_SHT,                    TD_LANG
     ),
     [_QW] = LAYOUT(
         _______,_______,_______,_______,_______,_______,                _______,_______,_______,_______,_______,_______,
@@ -196,11 +198,14 @@ void td_alt_tab_each_tap(qk_tap_dance_state_t *state, void *user_data);
 void td_alt_tab_finished(qk_tap_dance_state_t *state, void *user_data);
 void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
 void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
+void td_insert_screenshot_finished(qk_tap_dance_state_t *state, void *user_data);
+void td_insert_screenshot_reset(qk_tap_dance_state_t *state, void *user_data);
 
 qk_tap_dance_action_t tap_dance_actions[] = {
     [IME_CAPSLOCK] = ACTION_TAP_DANCE_DOUBLE(G(KC_SPC) , KC_CAPS),
     [ALT_TABLE] = ACTION_TAP_DANCE_FN_ADVANCED(td_alt_tab_each_tap, td_alt_tab_finished, NULL),
     [COPY_PASTE_FNLOCK_SCREENSHOT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
+    [INSERT_SCREENSHOT_NUMPAD] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_insert_screenshot_finished, td_insert_screenshot_reset),
 };
 
 void td_alt_tab_each_tap(qk_tap_dance_state_t *state, void *user_data) {
@@ -235,6 +240,28 @@ void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
         case DOUBLE_TAP:  /* This line is necessary. */ return;
         default:          unregister_code16(LSG(KC_S)); return;
     }
+}
+
+void td_insert_screenshot_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (get_mods() == 0) {
+            td_state = current_dance(state);
+            switch (td_state) {
+            case SINGLE_TAP: register_code16(LSG(KC_S)); return;
+            case DOUBLE_TAP: layer_invert(_NP);          return;
+            default:       /* This line is necessary. */ return;
+        }
+    }
+    register_code(KC_INS);
+}
+
+void td_insert_screenshot_reset(qk_tap_dance_state_t *state, void *user_data) {
+    if (get_mods() == 0) {
+            switch (td_state) {
+            case SINGLE_TAP: unregister_code16(LSG(KC_S)); return;
+            default:         /* This line is necessary. */ return;
+        }
+    }
+    unregister_code(KC_INS);
 }
 
 /* Retry Encoders */
