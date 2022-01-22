@@ -144,6 +144,8 @@ void matrix_scan_user(void) {
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+    case FN_SPC:
+        return TAPPING_TERM - 50;
     case TD(ALT_TABLE):
         return TAPPING_TERM + 500;
     default:
