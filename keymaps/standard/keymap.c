@@ -140,9 +140,8 @@ void keyboard_pre_init_user(void) {
 }
 
 void matrix_scan_user(void) {
-    bool led_pins_state = IS_LAYER_ON(_FN)||IS_LAYER_ON(_NP)||IS_LAYER_ON(_GM) ? LED_ON : !LED_ON;
+    bool led_pins_state = IS_LAYER_ON(_FN)||IS_LAYER_ON(_NP) ? LED_PIN_ON_STATE : !LED_PIN_ON_STATE;
     writePin(TXLED, led_pins_state);
-    writePin(RXLED, led_pins_state);
 }
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
