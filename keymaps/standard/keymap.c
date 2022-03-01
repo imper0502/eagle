@@ -31,8 +31,8 @@ enum tap_dance_names {
 
 /* Key Override */
 const key_override_t arterisk_override = ko_make_basic(MOD_MASK_SHIFT, KC_ASTERISK, KC_CIRCUMFLEX); // *^
-const key_override_t at_override =       ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_CIRCUMFLEX);       // @^
-const key_override_t hash_override =     ko_make_basic(MOD_MASK_SHIFT, KC_HASH, KC_CIRCUMFLEX);     // #^
+const key_override_t at_override =       ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_DOLLAR);           // @$
+const key_override_t hash_override =     ko_make_basic(MOD_MASK_SHIFT, KC_HASH, KC_DOLLAR);         // #$
 const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_DOLLAR);   // &$
 const key_override_t slash_override =    ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_PERCENT);       // /%
 const key_override_t left_paren_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_PAREN, KC_RIGHT_PAREN);
@@ -59,17 +59,12 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
     NULL // Null terminate the array of overrides!
 };
 
-#define ALT_TAB TD(ALT_TABLE)
 #define TD_LANG TD(IME_CAPSLOCK)
 #define CPY_PST TD(COPY_PASTE_FNLOCK_SCREENSHOT)
 #define INS_SHT TD(INSERT_SCREENSHOT_NUMPAD)
 #define GUI_ESC LGUI_T(KC_ESC)
-#define OS_LCTL OSM(MOD_LCTL)
 #define OS_LSFT OSM(MOD_LSFT)
-#define OS_RCTL OSM(MOD_RCTL)
 #define OS_RSFT OSM(MOD_RSFT)
-#define ALT_ESC A(KC_ESC)
-#define MK_ESC  LT(_MK, KC_ESC)
 #define MK_TAB  LT(_MK, KC_TAB)
 #define FN_SPC  LT(_FN, KC_SPC)
 #define FN_RCTL LM(_FN, MOD_RCTL)
@@ -78,52 +73,52 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 /* Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-        KC_GRV ,KC_ASTR,KC_AT  ,KC_HASH,KC_AMPR,KC_SLSH,                KC_BSLS,KC_LPRN,KC_LBRC,KC_LCBR,KC_LABK,TD_LANG,
-        MK_TAB ,KC_Q   ,KC_W   ,KC_F   ,KC_P   ,KC_B   ,                KC_J   ,KC_L   ,KC_U   ,KC_Y   ,KC_MINS,KC_EQL ,
-        GUI_ESC,KC_A   ,KC_R   ,KC_S   ,KC_T   ,KC_G   ,                KC_M   ,KC_N   ,KC_E   ,KC_I   ,KC_O   ,KC_QUES,
-        KC_LSFT,KC_Z   ,KC_X   ,KC_C   ,KC_D   ,KC_V   ,                KC_K   ,KC_H   ,KC_COMM,KC_DOT ,KC_QUOT,KC_RSFT,
-                                KC_LALT,OS_LCTL,OS_LSFT,KC_BSPC,KC_ENT ,FN_SPC ,FN_RCTL,FN_RALT,
-                            XXXXXXX,                    CPY_PST,INS_SHT,                    XXXXXXX
+        KC_GRV , KC_ASTR, KC_AT  , KC_HASH, KC_AMPR, KC_SLSH,                   KC_BSLS, KC_LPRN, KC_LBRC, KC_LCBR, KC_LABK, TD_LANG,
+        MK_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B   ,                   KC_J   , KC_L   , KC_U   , KC_Y   , KC_MINS, KC_EQL ,
+        GUI_ESC, KC_A   , KC_R   , KC_S   , KC_T   , KC_G   ,                   KC_M   , KC_N   , KC_E   , KC_I   , KC_O   , KC_QUES,
+        KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V   ,                   KC_K   , KC_H   , KC_COMM, KC_DOT , KC_QUOT, KC_RSFT,
+                                   KC_LALT, KC_LCTL, OS_LSFT, KC_BSPC, KC_ENT , FN_SPC , FN_RCTL, FN_RALT,
+                          XXXXXXX,                            CPY_PST, INS_SHT,                            XXXXXXX
     ),
     [_QW] = LAYOUT(
-        _______,KC_1   ,KC_2   ,KC_3   ,KC_4   ,KC_5   ,                KC_6   ,KC_7   ,KC_8   ,KC_9   ,KC_0   ,_______,
-        KC_TAB ,KC_Q   ,KC_W   ,KC_E   ,KC_R   ,KC_T   ,                KC_Y   ,KC_U   ,KC_I   ,KC_O   ,KC_P   ,KC_QUES,
-        KC_CAPS,KC_A   ,KC_S   ,KC_D   ,KC_F   ,KC_G   ,                KC_H   ,KC_J   ,KC_K   ,KC_L   ,KC_MINS,KC_EQL ,
-        _______,KC_Z   ,KC_X   ,KC_C   ,KC_V   ,KC_B   ,                KC_N   ,KC_M   ,KC_COMM,KC_DOT ,KC_QUOT,_______,
-                                _______,_______,_______,_______,_______,_______,_______,_______,
-                            _______,                    _______,_______,                    _______
+        KC_GESC, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                   KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______,
+        KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_QUES,
+        KC_CAPS, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,                   KC_H   , KC_J   , KC_K   , KC_L   , KC_MINS, KC_EQL ,
+        _______, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                   KC_N   , KC_M   , KC_COMM, KC_DOT , KC_QUOT, _______,
+                                   _______, _______, _______, _______, _______, _______, _______, _______,
+                          XXXXXXX,                            _______, _______,                            XXXXXXX
     ),
     [_MK] = LAYOUT(
-        XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-        XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,KC_WH_L,KC_MS_U,KC_WH_R,KC_WH_U,XXXXXXX,
-        XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,KC_MS_L,KC_MS_D,KC_MS_R,KC_WH_D,XXXXXXX,
-        XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-                                _______,_______,_______,_______,KC_BTN1,KC_BTN3,KC_BTN2,KC_BTN5,
-                            _______,                    _______,KC_BTN4,                    TG(_MK)
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_WH_L, KC_MS_U, KC_WH_R, KC_WH_U, XXXXXXX,
+        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, XXXXXXX,
+        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+                                   _______, _______, _______, _______, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN5,
+                          XXXXXXX,                            _______, KC_BTN4,                            XXXXXXX
     ),
     [_NP] = LAYOUT(
-        _______,_______,_______,_______,_______,_______,                _______,_______,_______,_______,_______,_______,
-        KC_TAB ,KC_PPLS,KC_7   ,KC_8   ,KC_9   ,KC_PAST,                KC_TAB ,KC_7   ,KC_8   ,KC_9   ,KC_PPLS,KC_PAST,
-        KC_ESC ,KC_PMNS,KC_4   ,KC_5   ,KC_6   ,KC_PSLS,                KC_ESC ,KC_4   ,KC_5   ,KC_6   ,KC_PMNS,KC_PSLS,
-        KC_CALC,KC_EQL ,KC_1   ,KC_2   ,KC_3   ,KC_PERC,                KC_COMM,KC_1   ,KC_2   ,KC_3   ,KC_EQL ,KC_PERC,
-                                KC_DOT ,KC_0   ,_______,_______,_______,_______,KC_0   ,KC_DOT ,
-                            XXXXXXX,                    _______,_______,                    XXXXXXX
+        _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, KC_CALC,
+        KC_TAB , KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   KC_PAST, KC_7   , KC_8   , KC_9   , KC_PPLS, KC_TAB ,
+        KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   KC_PSLS, KC_4   , KC_5   , KC_6   , KC_PMNS, KC_ESC ,
+        KC_COMM, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   KC_PERC, KC_1   , KC_2   , KC_3   , KC_EQL , KC_COMM,
+                                   KC_DOT , KC_0   , KC_PENT, _______, _______, _______, KC_0   , KC_DOT ,
+                          XXXXXXX,                            _______, TG(_NP),                            XXXXXXX
     ),
     [_FN] = LAYOUT(
-        KC_F1  ,KC_F2  ,KC_F3  ,KC_F4  ,KC_F5  ,KC_F6  ,                KC_F7  ,KC_F8  ,KC_F9  ,KC_F10 ,KC_F11 ,KC_F12 ,
-        KC_TAB ,KC_PPLS,KC_7   ,KC_8   ,KC_9   ,KC_PAST,                KC_BRIU,KC_HOME,KC_UP  ,KC_END ,KC_PGUP,KC_BSPC,
-        KC_ESC ,KC_PMNS,KC_4   ,KC_5   ,KC_6   ,KC_PSLS,                KC_BRID,KC_LEFT,KC_DOWN,KC_RGHT,KC_PGDN,KC_DEL ,
-        KC_CALC,KC_EQL ,KC_1   ,KC_2   ,KC_3   ,KC_PERC,                KC_MUTE,KC_VOLD,KC_VOLU,KC_MPRV,KC_MPLY,KC_MNXT,
-                                KC_DOT ,KC_0   ,_______,_______,_______,_______,KC_RCTL,KC_RALT,
-                            XXXXXXX,                    _______,_______,                    XXXXXXX
+        KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , KC_F6  ,                   KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F11 , KC_F12 ,
+        KC_TAB , KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   KC_BRIU, KC_HOME, KC_UP  , KC_END , KC_PGUP, KC_BSPC,
+        KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   KC_BRID, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, KC_DEL ,
+        KC_COMM, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   KC_MUTE, KC_VOLD, KC_VOLU, KC_MPRV, KC_MPLY, KC_MNXT,
+                                   KC_DOT , KC_0   , KC_PENT, _______, _______, _______, KC_RCTL, KC_RALT,
+                          XXXXXXX,                            _______, TG(_FN),                            XXXXXXX
     ),
     [MY_COMMAND] = LAYOUT(
-        XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-        XXXXXXX,TG(_QW),CG_NORM,TG(_FN),KC_PSCR,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-        XXXXXXX,XXXXXXX, RESET ,KC_SLCK,CG_TOGG,XXXXXXX,                CG_SWAP,KC_NLCK,EEP_RST,EEP_RST,CG_TOGG,XXXXXXX,
-        XXXXXXX,XXXXXXX,XXXXXXX,KC_CAPS,XXXXXXX,XXXXXXX,                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-                                XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
-                            XXXXXXX,                    XXXXXXX,XXXXXXX,                    XXXXXXX
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, TG(_QW), CG_NORM, TG(_FN), KC_PSCR, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, XXXXXXX,  RESET , KC_SLCK, CG_TOGG, TG(_QW),                   CG_SWAP, KC_NLCK, EEP_RST, EEP_RST, CG_TOGG, XXXXXXX,
+        XXXXXXX, XXXXXXX, XXXXXXX, KC_CAPS, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+                                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+                          XXXXXXX,                            XXXXXXX, XXXXXXX,                          XXXXXXX
     )
 };
 
@@ -170,7 +165,6 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
         get_mods() == MOD_MASK_SHIFT ? layer_on(MY_COMMAND) : layer_off(MY_COMMAND);
         break;
     case KC_ESC:
-    case MK_ESC:
     case KC_GESC:
         clear_mods();
     case GUI_ESC:
