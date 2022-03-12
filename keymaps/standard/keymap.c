@@ -25,6 +25,7 @@ enum layer_names {
 enum tap_dance_names {
     IME_CAPSLOCK,
     ALT_TABLE,
+    ALT_LAYERS,
     COPY_PASTE_FNLOCK_SCREENSHOT,
     INSERT_SCREENSHOT_NUMPAD,
     F_1,    F_2,    F_3,    F_4,
@@ -64,6 +65,7 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 
 #define TD_LANG TD(IME_CAPSLOCK)
 #define ALT_TAB TD(ALT_TABLE)
+#define ALT_LYS TD(ALT_LAYERS)
 #define CPY_PST TD(COPY_PASTE_FNLOCK_SCREENSHOT)
 #define INS_SHT TD(INSERT_SCREENSHOT_NUMPAD)
 #define GUI_ESC LGUI_T(KC_ESC)
@@ -90,6 +92,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         MK_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B   ,                   KC_J   , KC_L   , KC_U   , KC_Y   , KC_MINS, KC_EQL ,
         GUI_ESC, KC_A   , KC_R   , KC_S   , KC_T   , KC_G   ,                   KC_M   , KC_N   , KC_E   , KC_I   , KC_O   , KC_QUES,
  LSFT_T(KC_DEL), KC_Z   , KC_X   , KC_C   , KC_D   , KC_V   ,                   KC_K   , KC_H   , KC_COMM, KC_DOT , KC_QUOT, KC_RSFT,
+                                   ALT_LYS, KC_LCTL, OS_LSFT, KC_BSPC, KC_ENT , FN_SPC , FN_RCTL, FN_RALT,
                           XXXXXXX,                            CPY_PST, INS_SHT,                            XXXXXXX
     ),
     [_QW] = LAYOUT(
@@ -189,6 +192,7 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
 typedef enum {
     SINGLE_TAP, SINGLE_HOLD,
     DOUBLE_TAP, TAP_THEN_HOLD,
+    TRIPLE_TAP, TAP_TAP_HOLD,
     OTHERWISE
 } td_state_t;
 
@@ -196,12 +200,15 @@ td_state_t current_dance(qk_tap_dance_state_t *state) {
     switch (state->count) {
         case 1:  return (state->interrupted || !state->pressed) ? SINGLE_TAP : SINGLE_HOLD;
         case 2:  return (state->interrupted || !state->pressed) ? DOUBLE_TAP : TAP_THEN_HOLD;
+        case 3:  return (state->interrupted || !state->pressed) ? TRIPLE_TAP : TAP_TAP_HOLD;
         default: return OTHERWISE;
     }
 }
 
 void td_alt_tab_each_tap(qk_tap_dance_state_t *state, void *user_data);
 void td_alt_tab_finished(qk_tap_dance_state_t *state, void *user_data);
+void td_alt_layers_finished(qk_tap_dance_state_t *state, void *user_data);
+void td_alt_layers_reset(qk_tap_dance_state_t *state, void *user_data);
 void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
 void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
 void td_insert_screenshot_finished(qk_tap_dance_state_t *state, void *user_data);
@@ -210,6 +217,7 @@ void td_insert_screenshot_reset(qk_tap_dance_state_t *state, void *user_data);
 qk_tap_dance_action_t tap_dance_actions[] = {
     [IME_CAPSLOCK] = ACTION_TAP_DANCE_DOUBLE(S(KC_LALT) , KC_CAPS),
     [ALT_TABLE] = ACTION_TAP_DANCE_FN_ADVANCED(td_alt_tab_each_tap, td_alt_tab_finished, NULL),
+    [ALT_LAYERS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_alt_layers_finished, td_alt_layers_reset),
     [COPY_PASTE_FNLOCK_SCREENSHOT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
     [INSERT_SCREENSHOT_NUMPAD] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_insert_screenshot_finished, td_insert_screenshot_reset),
     [F_1] = ACTION_TAP_DANCE_DOUBLE(KC_F1, KC_CALC),
@@ -238,6 +246,27 @@ void td_alt_tab_finished(qk_tap_dance_state_t *state, void *user_data) {
 }
 
 static td_state_t td_state;
+
+void td_alt_layers_finished(qk_tap_dance_state_t *state, void *user_data) {
+    td_state = current_dance(state);
+    switch (td_state) {
+        case SINGLE_TAP:
+        case SINGLE_HOLD: register_mods(MOD_BIT(KC_LALT)); return;
+        case TAP_THEN_HOLD:             layer_invert(_FN); return;
+        case TAP_TAP_HOLD:              layer_invert(_MK); return;
+        default:             /* This line is necessary. */ return;
+    }
+}
+
+void td_alt_layers_reset(qk_tap_dance_state_t *state, void *user_data) {
+    switch (td_state) {
+        case SINGLE_TAP:
+        case SINGLE_HOLD: unregister_mods(MOD_BIT(KC_LALT)); return;
+        case TAP_THEN_HOLD:               layer_invert(_FN); return;
+        case TAP_TAP_HOLD:                layer_invert(_MK); return;
+        default:               /* This line is necessary. */ return;
+    }
+}
 
 void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
     td_state = current_dance(state);
