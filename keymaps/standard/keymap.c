@@ -142,8 +142,17 @@ void keyboard_pre_init_user(void) {
     setPinOutput(TXLED);
 }
 
+uint16_t _timer = 0;
+bool led_pins_state = !LED_PIN_ON_STATE;
 void matrix_scan_user(void) {
-    bool led_pins_state = IS_LAYER_ON(_FN)||IS_LAYER_ON(_NP) ? LED_PIN_ON_STATE : !LED_PIN_ON_STATE;
+    if (IS_LAYER_ON(_MK)) {
+        if (timer_elapsed(_timer) > TAPPING_TERM) {
+            led_pins_state = !led_pins_state;
+            _timer = timer_read();
+        }
+    } else {
+        led_pins_state = IS_LAYER_ON(_FN)||IS_LAYER_ON(_NP) ? LED_PIN_ON_STATE : !LED_PIN_ON_STATE;
+    }
     writePin(TXLED, led_pins_state);
 }
 
