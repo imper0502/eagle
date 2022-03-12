@@ -60,6 +60,7 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 };
 
 #define TD_LANG TD(IME_CAPSLOCK)
+#define ALT_TAB TD(ALT_TABLE)
 #define CPY_PST TD(COPY_PASTE_FNLOCK_SCREENSHOT)
 #define INS_SHT TD(INSERT_SCREENSHOT_NUMPAD)
 #define GUI_ESC LGUI_T(KC_ESC)
@@ -69,6 +70,15 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 #define FN_SPC  LT(_FN, KC_SPC)
 #define FN_RCTL LM(_FN, MOD_RCTL)
 #define FN_RALT LM(_FN, MOD_RALT)
+#define NEW_TAB C(KC_T)
+#define ALT_ESC A(KC_ESC)
+#define CLS_TAB C(KC_W)
+#define PRV_TAB C(KC_PGUP)
+#define NXT_TAB C(KC_PGDN)
+#define PRV_WIN LCA(KC_LEFT)
+#define NXT_WIN LCA(KC_RIGHT)
+#define PRV_PG  C(S(KC_PGUP))
+#define NXT_PG  C(S(KC_PGDN))
 
 /* Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -76,24 +86,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_GRV , KC_ASTR, KC_AT  , KC_HASH, KC_AMPR, KC_SLSH,                   KC_BSLS, KC_LPRN, KC_LBRC, KC_LCBR, KC_LABK, TD_LANG,
         MK_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B   ,                   KC_J   , KC_L   , KC_U   , KC_Y   , KC_MINS, KC_EQL ,
         GUI_ESC, KC_A   , KC_R   , KC_S   , KC_T   , KC_G   ,                   KC_M   , KC_N   , KC_E   , KC_I   , KC_O   , KC_QUES,
-        KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V   ,                   KC_K   , KC_H   , KC_COMM, KC_DOT , KC_QUOT, KC_RSFT,
-                                   KC_LALT, KC_LCTL, OS_LSFT, KC_BSPC, KC_ENT , FN_SPC , FN_RCTL, FN_RALT,
+ LSFT_T(KC_DEL), KC_Z   , KC_X   , KC_C   , KC_D   , KC_V   ,                   KC_K   , KC_H   , KC_COMM, KC_DOT , KC_QUOT, KC_RSFT,
                           XXXXXXX,                            CPY_PST, INS_SHT,                            XXXXXXX
     ),
     [_QW] = LAYOUT(
         KC_GESC, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                   KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______,
         KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_QUES,
         KC_CAPS, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,                   KC_H   , KC_J   , KC_K   , KC_L   , KC_MINS, KC_EQL ,
-        _______, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                   KC_N   , KC_M   , KC_COMM, KC_DOT , KC_QUOT, _______,
+        KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                   KC_N   , KC_M   , KC_COMM, KC_DOT , KC_QUOT, _______,
                                    _______, _______, _______, _______, _______, _______, _______, _______,
                           XXXXXXX,                            _______, _______,                            XXXXXXX
     ),
     [_MK] = LAYOUT(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_WH_L, KC_MS_U, KC_WH_R, KC_WH_U, XXXXXXX,
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, XXXXXXX,
+        _______, PRV_TAB, NEW_TAB, NXT_TAB, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        _______, PRV_WIN, ALT_TAB, NXT_WIN, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_WH_L, KC_MS_U, KC_WH_R, KC_WH_U, XXXXXXX,
+        _______, PRV_PG , CLS_TAB, NXT_PG , XXXXXXX, XXXXXXX,                   XXXXXXX, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, XXXXXXX,
         _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                   _______, _______, _______, _______, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN5,
+                                   _______, _______, _______, KC_DEL , KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN5,
                           XXXXXXX,                            _______, KC_BTN4,                            XXXXXXX
     ),
     [_NP] = LAYOUT(
@@ -105,9 +114,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           XXXXXXX,                            _______, TG(_NP),                            XXXXXXX
     ),
     [_FN] = LAYOUT(
-        KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , KC_F6  ,                   KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F11 , KC_F12 ,
-        KC_TAB , KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   KC_BRIU, KC_HOME, KC_UP  , KC_END , KC_PGUP, KC_BSPC,
-        KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   KC_BRID, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, KC_DEL ,
+        KC_TAB , KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   KC_BRIU, KC_HOME, KC_UP  , KC_END , KC_PGUP, ALT_TAB,
+        KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   KC_BRID, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, ALT_ESC,
         KC_COMM, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   KC_MUTE, KC_VOLD, KC_VOLU, KC_MPRV, KC_MPLY, KC_MNXT,
                                    KC_DOT , KC_0   , KC_PENT, _______, _______, _______, KC_RCTL, KC_RALT,
                           XXXXXXX,                            _______, TG(_FN),                            XXXXXXX
