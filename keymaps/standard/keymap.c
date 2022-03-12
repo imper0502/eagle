@@ -271,18 +271,18 @@ void td_alt_layers_reset(qk_tap_dance_state_t *state, void *user_data) {
 void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
     td_state = current_dance(state);
     switch (td_state) {
-        case SINGLE_TAP:    register_code16(C(KC_V));   return;
-        case SINGLE_HOLD:   tap_code16(C(KC_C));        return;
-        case DOUBLE_TAP:    layer_invert(_NP);          return;
-        case TAP_THEN_HOLD: tap_code16(C(KC_X));        return;
-        default:            register_code16(LSG(KC_S)); return;
+        case SINGLE_TAP: register_code16(C(KC_V)); return;
+        case SINGLE_HOLD:     tap_code16(C(KC_C)); return;
+        case DOUBLE_TAP:        layer_invert(_NP); return;
+        case TAP_THEN_HOLD:   tap_code16(C(KC_X)); return;
+        default:       register_code16(LSG(KC_S)); return;
     }
 }
 
 void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (td_state) {
-        case SINGLE_TAP:    unregister_code16(C(KC_V));   return;
-        case SINGLE_HOLD:   tap_code16(C(KC_V));          return;
+        case SINGLE_TAP:      unregister_code16(C(KC_V)); return;
+        case SINGLE_HOLD:            tap_code16(C(KC_V)); return;
         case DOUBLE_TAP:    /* This line is necessary. */ return;
         case TAP_THEN_HOLD: /* This line is necessary. */ return;
         default:            unregister_code16(LSG(KC_S)); return;
@@ -294,7 +294,7 @@ void td_insert_screenshot_finished(qk_tap_dance_state_t *state, void *user_data)
             td_state = current_dance(state);
             switch (td_state) {
             case SINGLE_TAP: register_code16(LSG(KC_S)); return;
-            case DOUBLE_TAP: layer_invert(_NP);          return;
+            case DOUBLE_TAP:          layer_invert(_NP); return;
             default:       /* This line is necessary. */ return;
         }
     }
