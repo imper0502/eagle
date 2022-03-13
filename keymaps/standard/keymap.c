@@ -26,7 +26,7 @@ enum tap_dance_names {
     IME_CAPSLOCK,
     ALT_TABLE,
     ALT_LAYERS,
-    COPY_PASTE_FNLOCK_SCREENSHOT,
+    COPY_PASTE_LAYERSLOCK,
     INSERT_SCREENSHOT_NUMPAD,
     F_1,    F_2,    F_3,    F_4,
     F_5,    F_6,    F_7,    F_8,
@@ -66,7 +66,7 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 #define TD_LANG TD(IME_CAPSLOCK)
 #define ALT_TAB TD(ALT_TABLE)
 #define ALT_LYS TD(ALT_LAYERS)
-#define CPY_PST TD(COPY_PASTE_FNLOCK_SCREENSHOT)
+#define CPY_PST TD(COPY_PASTE_LAYERSLOCK)
 #define INS_SHT TD(INSERT_SCREENSHOT_NUMPAD)
 #define GUI_ESC LGUI_T(KC_ESC)
 #define OS_LSFT OSM(MOD_LSFT)
@@ -227,7 +227,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [IME_CAPSLOCK] = ACTION_TAP_DANCE_DOUBLE(S(KC_LALT) , KC_CAPS),
     [ALT_TABLE] = ACTION_TAP_DANCE_FN_ADVANCED(td_alt_tab_each_tap, td_alt_tab_finished, NULL),
     [ALT_LAYERS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_alt_layers_finished, td_alt_layers_reset),
-    [COPY_PASTE_FNLOCK_SCREENSHOT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
+    [COPY_PASTE_LAYERSLOCK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
     [INSERT_SCREENSHOT_NUMPAD] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_insert_screenshot_finished, td_insert_screenshot_reset),
     [F_1] = ACTION_TAP_DANCE_DOUBLE(KC_F1, KC_CALC),
     [F_2] = ACTION_TAP_DANCE_DOUBLE(KC_F2, KC_CALC),
@@ -284,17 +284,20 @@ void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
         case SINGLE_HOLD:     tap_code16(C(KC_C)); return;
         case DOUBLE_TAP:        layer_invert(_NP); return;
         case TAP_THEN_HOLD:   tap_code16(C(KC_X)); return;
-        default:       register_code16(LSG(KC_S)); return;
+        case TRIPLE_TAP:        layer_invert(_MK); return;
+        case TAP_TAP_HOLD:    tap_code16(C(KC_A));
+                              tap_code16(C(KC_C)); return;
+        default:            tap_code16(LSG(KC_S)); return;
     }
 }
 
 void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (td_state) {
-        case SINGLE_TAP:      unregister_code16(C(KC_V)); return;
-        case SINGLE_HOLD:            tap_code16(C(KC_V)); return;
-        case DOUBLE_TAP:    /* This line is necessary. */ return;
-        case TAP_THEN_HOLD: /* This line is necessary. */ return;
-        default:            unregister_code16(LSG(KC_S)); return;
+        case SINGLE_TAP: unregister_code16(C(KC_V)); return;
+        case SINGLE_HOLD:
+        case TAP_THEN_HOLD:
+        case TAP_TAP_HOLD:      tap_code16(C(KC_V)); return;
+        default:       /* This line is necessary. */ return;
     }
 }
 
