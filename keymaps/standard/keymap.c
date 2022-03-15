@@ -337,6 +337,7 @@ void td_insert_screenshot_finished(qk_tap_dance_state_t *state, void *user_data)
             switch (td_state) {
             case SINGLE_TAP: register_code16(LSG(KC_S)); return;
             case DOUBLE_TAP:          layer_invert(_NP); return;
+            case TRIPLE_TAP:          layer_invert(_MK); return;
             default:       /* This line is necessary. */ return;
         }
     }
