@@ -27,7 +27,7 @@ enum tap_dance_names {
     ALT_TABLE,
     ALT_LAYERS,
     COPY_PASTE_LAYERSLOCK,
-    INSERT_SCREENSHOT_NUMPAD,
+    INSERT_SCREENSHOT_LAYERS,
     F_1,    F_2,    F_3,    F_4,
     F_5,    F_6,    F_7,    F_8,
     F_9,    F_10,   F_11,   F_12,
@@ -67,7 +67,7 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 #define ALT_TAB TD(ALT_TABLE)
 #define ALT_LYS TD(ALT_LAYERS)
 #define CPY_PST TD(COPY_PASTE_LAYERSLOCK)
-#define INS_SHT TD(INSERT_SCREENSHOT_NUMPAD)
+#define INS_SHT TD(INSERT_SCREENSHOT_LAYERS)
 #define GUI_ESC LGUI_T(KC_ESC)
 #define OS_LSFT OSM(MOD_LSFT)
 #define OS_RSFT OSM(MOD_RSFT)
@@ -188,7 +188,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case FN_SPC:
         return TAPPING_TERM - 25;
-    case CPY_PST:
+    case TD(COPY_PASTE_LAYERSLOCK):
         return TAPPING_TERM - 75;
     case TD(ALT_TABLE):
         return TAPPING_TERM + 500;
@@ -258,7 +258,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [ALT_TABLE] = ACTION_TAP_DANCE_FN_ADVANCED(td_alt_tab_each_tap, td_alt_tab_finished, NULL),
     [ALT_LAYERS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_alt_layers_finished, td_alt_layers_reset),
     [COPY_PASTE_LAYERSLOCK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
-    [INSERT_SCREENSHOT_NUMPAD] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_insert_screenshot_finished, td_insert_screenshot_reset),
+    [INSERT_SCREENSHOT_LAYERS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_insert_screenshot_finished, td_insert_screenshot_reset),
     [F_1] = ACTION_TAP_DANCE_DOUBLE(KC_F1, KC_CALC),
     [F_2] = ACTION_TAP_DANCE_DOUBLE(KC_F2, KC_CALC),
     [F_3] = ACTION_TAP_DANCE_DOUBLE(KC_F3, KC_CALC),
