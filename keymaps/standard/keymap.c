@@ -192,6 +192,8 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         return TAPPING_TERM - 75;
     case TD(ALT_TABLE):
         return TAPPING_TERM + 500;
+    case TD(ALT_LAYERS):
+        return TAPPING_TERM + 25;
     default:
         return TAPPING_TERM;
     }
