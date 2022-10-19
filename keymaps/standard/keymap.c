@@ -104,10 +104,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           XXXXXXX,                            _______, _______,                            XXXXXXX
     ),
     [_MK] = LAYOUT(
-        _______, PRV_TAB, NEW_TAB, NXT_TAB, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        _______, PRV_WIN, ALT_TAB, NXT_WIN, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_WH_L, KC_MS_U, KC_WH_R, KC_WH_U, XXXXXXX,
-        _______, PRV_PG , CLS_TAB, NXT_PG , XXXXXXX, XXXXXXX,                   XXXXXXX, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, XXXXXXX,
         _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        _______, TG(_MK), PRV_WIN, NEW_TAB, NXT_WIN, XXXXXXX,                   XXXXXXX, KC_WH_L, KC_MS_U, KC_WH_R, KC_WH_U, XXXXXXX,
+        _______, XXXXXXX, PRV_TAB, ALT_TAB, NXT_TAB, XXXXXXX,                   XXXXXXX, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, XXXXXXX,
+        _______, XXXXXXX, PRV_PG , CLS_TAB, NXT_PG , XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                                    _______, _______, _______, _______, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN5,
                           XXXXXXX,                            _______, KC_BTN4,                            XXXXXXX
     ),
@@ -117,7 +117,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   KC_PSLS, KC_4   , KC_5   , KC_6   , KC_PMNS, KC_ESC ,
         KC_COMM, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   KC_PERC, KC_1   , KC_2   , KC_3   , KC_EQL , KC_COMM,
                                    KC_DOT , KC_0   , KC_PENT, _______, _______, _______, KC_0   , KC_DOT ,
-                          XXXXXXX,                            _______, TG(_NP),                            XXXXXXX
+                          XXXXXXX,                            _______, INS_SHT,                            XXXXXXX
     ),
     [_FN] = LAYOUT(
         TD(F_1), TD(F_2), TD(F_3), TD(F_4), TD(F_5), TD(F_6),                   TD(F_7), TD(F_8), TD(F_9),TD(F_10),TD(F_11),TD(F_12),
@@ -230,16 +230,18 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
 /* Tap Dance */
 typedef enum {
     SINGLE_TAP, SINGLE_HOLD,
-    DOUBLE_TAP, TAP_THEN_HOLD,
+    DUAL_TAP, TAP_THEN_HOLD,
     TRIPLE_TAP, TAP_TAP_HOLD,
+    QUAD_TAP,   TRI_TAP_HOLD,
     OTHERWISE
 } td_state_t;
 
 td_state_t current_dance(qk_tap_dance_state_t *state) {
     switch (state->count) {
         case 1:  return (state->interrupted || !state->pressed) ? SINGLE_TAP : SINGLE_HOLD;
-        case 2:  return (state->interrupted || !state->pressed) ? DOUBLE_TAP : TAP_THEN_HOLD;
+        case 2:  return (state->interrupted || !state->pressed) ?   DUAL_TAP : TAP_THEN_HOLD;
         case 3:  return (state->interrupted || !state->pressed) ? TRIPLE_TAP : TAP_TAP_HOLD;
+        case 4:  return (state->interrupted || !state->pressed) ?   QUAD_TAP : TRI_TAP_HOLD;
         default: return OTHERWISE;
     }
 }
@@ -310,14 +312,15 @@ void td_alt_layers_reset(qk_tap_dance_state_t *state, void *user_data) {
 void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
     td_state = current_dance(state);
     switch (td_state) {
-        case SINGLE_TAP: register_code16(C(KC_V)); return;
-        case SINGLE_HOLD:     tap_code16(C(KC_C)); return;
-        case DOUBLE_TAP:        layer_invert(_NP); return;
-        case TAP_THEN_HOLD:   tap_code16(C(KC_X)); return;
-        case TRIPLE_TAP:        layer_invert(_MK); return;
-        case TAP_TAP_HOLD:    tap_code16(C(KC_A));
-                              tap_code16(C(KC_C)); return;
-        default:            tap_code16(LSG(KC_S)); return;
+        case SINGLE_TAP:                   register_code16(C(KC_V)); return;
+        case DUAL_TAP:                            layer_invert(_NP); return;
+        case TRIPLE_TAP:                          layer_invert(_MK); return;
+        case QUAD_TAP:                              layer_move(_BS); return;
+        case SINGLE_HOLD:                       tap_code16(C(KC_C)); return;
+        case TAP_THEN_HOLD:                     tap_code16(C(KC_X)); return;
+        case TAP_TAP_HOLD: tap_code16(C(KC_A)); tap_code16(C(KC_C)); return;
+        case TRI_TAP_HOLD: tap_code16(C(KC_A)); tap_code16(C(KC_X)); return;
+        default:                                    layer_move(_BS); return;
     }
 }
 
@@ -326,7 +329,8 @@ void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
         case SINGLE_TAP: unregister_code16(C(KC_V)); return;
         case SINGLE_HOLD:
         case TAP_THEN_HOLD:
-        case TAP_TAP_HOLD:      tap_code16(C(KC_V)); return;
+        case TAP_TAP_HOLD:
+        case TRI_TAP_HOLD:      tap_code16(C(KC_V)); return;
         default:       /* This line is necessary. */ return;
     }
 }
@@ -336,7 +340,7 @@ void td_insert_screenshot_finished(qk_tap_dance_state_t *state, void *user_data)
             td_state = current_dance(state);
             switch (td_state) {
             case SINGLE_TAP: register_code16(LSG(KC_S)); return;
-            case DOUBLE_TAP:          layer_invert(_NP); return;
+            case DUAL_TAP:            layer_invert(_NP); return;
             case TRIPLE_TAP:          layer_invert(_MK); return;
             default:       /* This line is necessary. */ return;
         }
