@@ -101,7 +101,7 @@ const key_override_t **key_overrides = (const key_override_t *[]){
  * Tap Dance */
 typedef enum {
     SINGLE_TAP, SINGLE_HOLD,
-    DOUBLE_TAP, OTHERWISE
+    DUAL_TAP, OTHERWISE
 } td_state_t; // Define a type containing as many tapdance states
 
 static td_state_t td_state; // Create a global instance of the tapdance state type
@@ -120,7 +120,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 uint8_t current_dance(qk_tap_dance_state_t *state) {
     switch (state->count) {
         case 1:  return (state->interrupted || !state->pressed) ? SINGLE_TAP : SINGLE_HOLD;
-        case 2:  return DOUBLE_TAP;
+        case 2:  return DUAL_TAP;
         default: return OTHERWISE;
     }
 }
@@ -130,7 +130,7 @@ void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
     switch (td_state) {
         case SINGLE_TAP:  register_code16(C(KC_V));   break;
         case SINGLE_HOLD: tap_code16(C(KC_C));        break;
-        case DOUBLE_TAP:  register_code16(LSG(KC_S)); break;
+        case DUAL_TAP:  register_code16(LSG(KC_S)); break;
         default:          layer_on(_FN);             return;
     }
 }
@@ -139,7 +139,7 @@ void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (td_state) {
         case SINGLE_TAP:  unregister_code16(C(KC_V));   break;
         case SINGLE_HOLD: tap_code16(C(KC_V));          break;
-        case DOUBLE_TAP:  unregister_code16(LSG(KC_S)); break;
+        case DUAL_TAP:  unregister_code16(LSG(KC_S)); break;
         default:                                       return;
     }
     td_state = OTHERWISE;
