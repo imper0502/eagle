@@ -88,7 +88,7 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 /* Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-        KC_GRV , KC_ASTR, KC_AT  , KC_HASH, KC_AMPR, KC_SLSH,                   KC_BSLS, KC_LPRN, KC_LBRC, KC_LCBR, KC_LABK, TD_LANG,
+        KC_GRV , KC_ASTR, KC_AT  , KC_HASH, KC_AMPR, KC_SLSH,                   KC_BSLS, KC_LPRN, KC_LBRC, KC_LCBR, KC_LABK, CAPS_WORD,
         MK_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B   ,                   KC_J   , KC_L   , KC_U   , KC_Y   , KC_MINS, KC_EQL ,
         GUI_ESC, KC_A   , KC_R   , KC_S   , KC_T   , KC_G   ,                   KC_M   , KC_N   , KC_E   , KC_I   , KC_O   , KC_QUES,
  LSFT_T(KC_DEL), KC_Z   , KC_X   , KC_C   , KC_D   , KC_V   ,                   KC_K   , KC_H   , KC_COMM, KC_DOT , KC_QUOT, KC_RSFT,
