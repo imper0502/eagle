@@ -1,21 +1,22 @@
-KEYBOARD := eagle
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 
-ifndef $(KEYMAP)
-KEYMAP := standard
+ifndef $(keymap)
+keymap := standard
 endif
 
 .PHONY: all init clean
 
-$(KEYBOARD)_$(KEYMAP).hex: init
+$(current_dir)_$(keymap).hex: init
 	docker run \
 		--rm \
 		--volume qmk_build:/qmk_firmware/.build \
-		--mount=type=bind,source='$(shell pwd)',target=/qmk_firmware/keyboards/$(KEYBOARD) \
+		--mount=type=bind,source='$(shell pwd)',target=/qmk_firmware/keyboards/$(current_dir) \
 		qmk:env \
 		/bin/bash -c \
 		" \
-			qmk compile --keyboard=$(KEYBOARD) --keymap=$(KEYMAP); \
-			mv /qmk_firmware/$@ /qmk_firmware/keyboards/eagle/targets/$@ \
+			qmk compile --keyboard=$(current_dir) --keymap=$(keymap); \
+			mv /qmk_firmware/$@ /qmk_firmware/keyboards/$(current_dir)/targets/$@ \
 		"
 
 init:
