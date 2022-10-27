@@ -16,86 +16,15 @@
  */
 #include QMK_KEYBOARD_H
 
-#ifdef CONSOLE_ENABLE
-#include "print.h"
-#endif
+#include "keymap.h"
 
+/* Layer Keymaps */
 enum layer_names {
     _BS, _QW,
     _MK, _NP,
     _FN, MY_COMMAND
 };
 
-enum tap_dance_names {
-    IME_CAPSLOCK,
-    ALT_TABLE,
-    ALT_LAYERS,
-    COPY_PASTE_LAYERSLOCK,
-    INSERT_SCREENSHOT_LAYERS,
-    F_1,    F_2,    F_3,    F_4,
-    F_5,    F_6,    F_7,    F_8,
-    F_9,    F_10,   F_11,   F_12,
-};
-
-/* Key Override */
-const key_override_t arterisk_override = ko_make_basic(MOD_MASK_SHIFT, KC_ASTERISK, KC_CIRCUMFLEX); // *^
-const key_override_t at_override =       ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_DOLLAR);           // @$
-const key_override_t hash_override =     ko_make_basic(MOD_MASK_SHIFT, KC_HASH, KC_DOLLAR);         // #$
-const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_DOLLAR);   // &$
-const key_override_t slash_override =    ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_PERCENT);       // /%
-const key_override_t left_paren_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_PAREN, KC_RIGHT_PAREN);
-const key_override_t left_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LBRACKET, KC_RBRACKET);
-const key_override_t left_curly_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_CURLY_BRACE, KC_RIGHT_CURLY_BRACE);
-const key_override_t left_angle_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_ANGLE_BRACKET, KC_RIGHT_ANGLE_BRACKET);
-const key_override_t question_override = ko_make_basic(MOD_MASK_SHIFT, KC_QUESTION, KC_EXCLAIM);  // ?!
-const key_override_t comma_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMMA, KC_SCOLON);         // ,;
-const key_override_t dot_override = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLON);              // .:
-
-const key_override_t **key_overrides = (const key_override_t *[]) {
-    &arterisk_override,
-    &at_override,
-    &hash_override,
-    &ampersand_override,
-    &slash_override,
-    &left_paren_override,
-    &left_bracket_override,
-    &left_curly_bracket_override,
-    &left_angle_bracket_override,
-    &question_override,
-    &comma_override,
-    &dot_override,
-    NULL // Null terminate the array of overrides!
-};
-
-#define TD_LANG TD(IME_CAPSLOCK)
-#define ALT_TAB TD(ALT_TABLE)
-#define ALT_LYS TD(ALT_LAYERS)
-#define CPY_PST TD(COPY_PASTE_LAYERSLOCK)
-#define INS_SHT TD(INSERT_SCREENSHOT_LAYERS)
-
-#define GUI_ESC LGUI_T(KC_ESC)
-#define OS_LSFT OSM(MOD_LSFT)
-#define OS_RSFT OSM(MOD_RSFT)
-#define OS_L_FN OSL(_FN)
-
-#define MK_TAB  LT(_MK, KC_TAB)
-#define FN_MINS LT(0, KC_MINS)
-#define FN_EQL  LT(0, KC_EQL)
-#define FN_SPC  LT(_FN, KC_SPC)
-#define FN_RCTL LM(_FN, MOD_RCTL)
-#define FN_RALT LM(_FN, MOD_RALT)
-
-#define ALT_ESC A(KC_ESC)
-#define NEW_TAB C(KC_T)
-#define CLS_TAB C(KC_W)
-#define PRV_TAB C(KC_PGUP)
-#define NXT_TAB C(KC_PGDN)
-#define PRV_WIN LCA(KC_LEFT)
-#define NXT_WIN LCA(KC_RIGHT)
-#define PRV_PG  C(S(KC_PGUP))
-#define NXT_PG  C(S(KC_PGDN))
-
-/* Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
         OS_L_FN, KC_ASTR, KC_AT  , KC_HASH, KC_DLR , KC_AMPR,                   KC_GRV , KC_LPRN, KC_LBRC, KC_LCBR, KC_LABK, OS_L_FN,
@@ -147,7 +76,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
-/* Behavior */
+/* LED Behavior */
 void keyboard_pre_init_user(void) {
     setPinOutput(TXLED);
     setPinOutput(RXLED);
@@ -208,6 +137,7 @@ void matrix_scan_user(void) {
     writePin(TXLED, next_led_pins_state);
 }
 
+/* Key Behavior */
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case FN_SPC:
@@ -295,53 +225,6 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 /* Tap Dance */
-typedef enum {
-    SINGLE_TAP, SINGLE_HOLD,
-    DUAL_TAP, TAP_THEN_HOLD,
-    TRIPLE_TAP, TAP_TAP_HOLD,
-    QUAD_TAP,   TRI_TAP_HOLD,
-    OTHERWISE
-} td_state_t;
-
-td_state_t current_dance(qk_tap_dance_state_t *state) {
-    switch (state->count) {
-        case 1:  return (state->interrupted || !state->pressed) ? SINGLE_TAP : SINGLE_HOLD;
-        case 2:  return (state->interrupted || !state->pressed) ?   DUAL_TAP : TAP_THEN_HOLD;
-        case 3:  return (state->interrupted || !state->pressed) ? TRIPLE_TAP : TAP_TAP_HOLD;
-        case 4:  return (state->interrupted || !state->pressed) ?   QUAD_TAP : TRI_TAP_HOLD;
-        default: return OTHERWISE;
-    }
-}
-
-void td_alt_tab_each_tap(qk_tap_dance_state_t *state, void *user_data);
-void td_alt_tab_finished(qk_tap_dance_state_t *state, void *user_data);
-void td_alt_layers_finished(qk_tap_dance_state_t *state, void *user_data);
-void td_alt_layers_reset(qk_tap_dance_state_t *state, void *user_data);
-void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data);
-void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data);
-void td_insert_screenshot_finished(qk_tap_dance_state_t *state, void *user_data);
-void td_insert_screenshot_reset(qk_tap_dance_state_t *state, void *user_data);
-
-qk_tap_dance_action_t tap_dance_actions[] = {
-    [IME_CAPSLOCK] = ACTION_TAP_DANCE_DOUBLE(S(KC_LALT) , KC_CAPS),
-    [ALT_TABLE] = ACTION_TAP_DANCE_FN_ADVANCED(td_alt_tab_each_tap, td_alt_tab_finished, NULL),
-    [ALT_LAYERS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_alt_layers_finished, td_alt_layers_reset),
-    [COPY_PASTE_LAYERSLOCK] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_copy_paste_finished, td_copy_paste_reset),
-    [INSERT_SCREENSHOT_LAYERS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_insert_screenshot_finished, td_insert_screenshot_reset),
-    [F_1] = ACTION_TAP_DANCE_DOUBLE(KC_F1, KC_CALC),
-    [F_2] = ACTION_TAP_DANCE_DOUBLE(KC_F2, KC_CALC),
-    [F_3] = ACTION_TAP_DANCE_DOUBLE(KC_F3, KC_CALC),
-    [F_4] = ACTION_TAP_DANCE_DOUBLE(KC_F4, KC_CALC),
-    [F_5] = ACTION_TAP_DANCE_DOUBLE(KC_F5, KC_CALC),
-    [F_6] = ACTION_TAP_DANCE_DOUBLE(KC_F6, KC_CALC),
-    [F_7] = ACTION_TAP_DANCE_DOUBLE(KC_F7, KC_CALC),
-    [F_8] = ACTION_TAP_DANCE_DOUBLE(KC_F8, KC_CALC),
-    [F_9] = ACTION_TAP_DANCE_DOUBLE(KC_F9, KC_CALC),
-    [F_10] = ACTION_TAP_DANCE_DOUBLE(KC_F10, KC_CALC),
-    [F_11] = ACTION_TAP_DANCE_DOUBLE(KC_F11, KC_CALC),
-    [F_12] = ACTION_TAP_DANCE_DOUBLE(KC_F12, KC_CALC),
-};
-
 void td_alt_tab_each_tap(qk_tap_dance_state_t *state, void *user_data) {
     switch (state->count) {
         case 1: add_mods(MOD_BIT(KC_LALT));
