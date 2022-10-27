@@ -14,10 +14,10 @@ enum tap_dance_names {
 
 /* Tap Dance */
 typedef enum {
-    SINGLE_TAP, SINGLE_HOLD,
-    DUAL_TAP, TAP_THEN_HOLD,
-    TRIPLE_TAP, TAP_TAP_HOLD,
-    QUAD_TAP,   TRI_TAP_HOLD,
+    SINGLE_HOLD, SINGLE_TAP,
+    TAP_THEN_HOLD, DUAL_TAP,
+    TAP_TAP_HOLD,TRIPLE_TAP,
+    TRI_TAP_HOLD,  QUAD_TAP,
     OTHERWISE
 } td_state_t;
 

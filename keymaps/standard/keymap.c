@@ -142,11 +142,11 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case FN_SPC:
         return TAPPING_TERM - 25;
-    case TD(COPY_PASTE_LAYERSLOCK):
+    case CPY_PST:
         return TAPPING_TERM - 75;
-    case TD(ALT_TABLE):
+    case ALT_TAB:
         return TAPPING_TERM + 500;
-    case TD(ALT_LAYERS):
+    case ALT_LYS:
         return TAPPING_TERM + 25;
     default:
         return TAPPING_TERM;
@@ -156,8 +156,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case FN_SPC :
-    case FN_RCTL:
-    case FN_RALT:
         return true;
     default:
         return false;

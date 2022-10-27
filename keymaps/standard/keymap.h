@@ -3,7 +3,6 @@
 #include "key_override.h"
 
 #include "tap_dance.h"
-#define TD_LANG TD(IME_CAPSLOCK)
 #define ALT_TAB TD(ALT_TABLE)
 #define ALT_LYS TD(ALT_LAYERS)
 #define CPY_PST TD(COPY_PASTE_LAYERSLOCK)
@@ -19,11 +18,9 @@
 #define OS_L_FN OSL(_FN)
 
 #define MK_TAB  LT(_MK, KC_TAB)
+#define FN_SPC  LT(_FN, KC_SPC)
 #define FN_MINS LT(0, KC_MINS)
 #define FN_EQL  LT(0, KC_EQL)
-#define FN_SPC  LT(_FN, KC_SPC)
-#define FN_RCTL LM(_FN, MOD_RCTL)
-#define FN_RALT LM(_FN, MOD_RALT)
 
 #define ALT_ESC A(KC_ESC)
 #define NEW_TAB C(KC_T)
