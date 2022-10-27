@@ -2,9 +2,9 @@
 #pragma once
 
 const key_override_t arterisk_override = ko_make_basic(MOD_MASK_SHIFT, KC_ASTERISK, KC_CIRCUMFLEX); // *^
-const key_override_t at_override =       ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_DOLLAR);           // @$
-const key_override_t hash_override =     ko_make_basic(MOD_MASK_SHIFT, KC_HASH, KC_DOLLAR);         // #$
-const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_DOLLAR);   // &$
+const key_override_t at_override =       ko_make_basic(MOD_MASK_SHIFT, KC_AT, KC_AT);               // @
+const key_override_t hash_override =     ko_make_basic(MOD_MASK_SHIFT, KC_HASH, KC_HASH);           // #
+const key_override_t ampersand_override = ko_make_basic(MOD_MASK_SHIFT, KC_AMPERSAND, KC_AMPERSAND);// &
 const key_override_t slash_override =    ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_PERCENT);       // /%
 const key_override_t left_paren_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_PAREN, KC_RIGHT_PAREN);
 const key_override_t left_bracket_override = ko_make_basic(MOD_MASK_SHIFT, KC_LBRACKET, KC_RBRACKET);
