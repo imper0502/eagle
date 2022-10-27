@@ -16,7 +16,15 @@
  */
 #include QMK_KEYBOARD_H
 
-#include "keymap.h"
+#include "key_override.h"
+
+#include "tap_dance.h"
+
+#include "keycode_user.h"
+
+#ifdef CONSOLE_ENABLE
+#include "print.h"
+#endif
 
 /* Layer Keymaps */
 enum layer_names {

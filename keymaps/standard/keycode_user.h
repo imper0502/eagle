@@ -1,16 +1,8 @@
 #pragma once
-
-#include "key_override.h"
-
-#include "tap_dance.h"
 #define ALT_TAB TD(ALT_TABLE)
 #define ALT_LYS TD(ALT_LAYERS)
 #define CPY_PST TD(COPY_PASTE_LAYERSLOCK)
 #define INS_SHT TD(INSERT_SCREENSHOT_LAYERS)
-
-#ifdef CONSOLE_ENABLE
-#include "print.h"
-#endif
 
 #define GUI_ESC LGUI_T(KC_ESC)
 #define OS_LSFT OSM(MOD_LSFT)
