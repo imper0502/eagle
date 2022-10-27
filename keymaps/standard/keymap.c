@@ -150,48 +150,62 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Behavior */
 void keyboard_pre_init_user(void) {
     setPinOutput(TXLED);
+    setPinOutput(RXLED);
 }
 
 typedef enum {
     OFF, FLASH, ON
 } led_status_t;
 
-led_status_t  led_status;
-
+led_status_t  rx_led_status;
+led_status_t  tx_led_status;
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
     case _MK:
-        led_status = FLASH;
+        tx_led_status = FLASH;
         break;
     case _NP:
     case _FN:
-        led_status = ON;
+        tx_led_status = ON;
+        break;
+    case MY_COMMAND:
+        tx_led_status = FLASH;
+        rx_led_status = FLASH;
         break;
     default:
-        led_status = OFF;
+        tx_led_status = OFF;
+        rx_led_status = OFF;
         break;
     }
   return state;
 }
 
 uint16_t _timer = 0;
-bool led_pins_state = !LED_PIN_ON_STATE;
+bool next_led_pins_state = !LED_PIN_ON_STATE;
 void matrix_scan_user(void) {
-    switch (led_status) {
+    switch (tx_led_status) {
     case ON:
-        led_pins_state = LED_PIN_ON_STATE;
+        next_led_pins_state = LED_PIN_ON_STATE;
         break;
     case FLASH:
         if (timer_elapsed(_timer) > TAPPING_TERM) {
-            led_pins_state = !led_pins_state;
+            next_led_pins_state = !next_led_pins_state;
             _timer = timer_read();
         }
         break;
     default:
-        led_pins_state = !LED_PIN_ON_STATE;
+        next_led_pins_state = !LED_PIN_ON_STATE;
         break;
     }
-    writePin(TXLED, led_pins_state);
+    switch (rx_led_status) {
+    case FLASH:
+        writePin(RXLED, !next_led_pins_state);
+        break;
+    default:
+        writePin(RXLED, !host_keyboard_led_state().caps_lock);
+        break;
+    }
+    writePin(TXLED, next_led_pins_state);
 }
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
