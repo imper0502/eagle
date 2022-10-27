@@ -72,15 +72,21 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 #define ALT_LYS TD(ALT_LAYERS)
 #define CPY_PST TD(COPY_PASTE_LAYERSLOCK)
 #define INS_SHT TD(INSERT_SCREENSHOT_LAYERS)
+
 #define GUI_ESC LGUI_T(KC_ESC)
 #define OS_LSFT OSM(MOD_LSFT)
 #define OS_RSFT OSM(MOD_RSFT)
+#define OS_L_FN OSL(_FN)
+
 #define MK_TAB  LT(_MK, KC_TAB)
+#define FN_MINS LT(0, KC_MINS)
+#define FN_EQL  LT(0, KC_EQL)
 #define FN_SPC  LT(_FN, KC_SPC)
 #define FN_RCTL LM(_FN, MOD_RCTL)
 #define FN_RALT LM(_FN, MOD_RALT)
-#define NEW_TAB C(KC_T)
+
 #define ALT_ESC A(KC_ESC)
+#define NEW_TAB C(KC_T)
 #define CLS_TAB C(KC_W)
 #define PRV_TAB C(KC_PGUP)
 #define NXT_TAB C(KC_PGDN)
@@ -92,11 +98,11 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 /* Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-        KC_GRV , KC_ASTR, KC_AT  , KC_HASH, KC_AMPR, KC_SLSH,                   KC_BSLS, KC_LPRN, KC_LBRC, KC_LCBR, KC_LABK,OSL(_FN),
-        MK_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B   ,                   KC_J   , KC_L   , KC_U   , KC_Y   , KC_MINS, KC_EQL ,
+        OS_L_FN, KC_ASTR, KC_AT  , KC_HASH, KC_DLR , KC_AMPR,                   KC_GRV , KC_LPRN, KC_LBRC, KC_LCBR, KC_LABK, OS_L_FN,
+        MK_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B   ,                   KC_J   , KC_L   , KC_U   , KC_Y   , KC_SLSH, KC_BSLS,
         GUI_ESC, KC_A   , KC_R   , KC_S   , KC_T   , KC_G   ,                   KC_M   , KC_N   , KC_E   , KC_I   , KC_O   , KC_QUES,
  LSFT_T(KC_DEL), KC_Z   , KC_X   , KC_C   , KC_D   , KC_V   ,                   KC_K   , KC_H   , KC_COMM, KC_DOT , KC_QUOT, KC_RSFT,
-                                   ALT_LYS, KC_LCTL, OS_LSFT, KC_BSPC, KC_ENT , FN_SPC , FN_RCTL, FN_RALT,
+                                   ALT_LYS, KC_LCTL, OS_LSFT, KC_BSPC, KC_ENT , FN_SPC , FN_MINS, FN_EQL ,
                           XXXXXXX,                            CPY_PST, INS_SHT,                            XXXXXXX
     ),
     [_QW] = LAYOUT(
@@ -227,6 +233,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #ifdef CONSOLE_ENABLE
     dprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
 #endif
+    switch (keycode) {
+    case LT(0, KC_MINS):
+        if (!record->tap.count) {
+            if (record->event.pressed) {
+                add_mods(MOD_RCTL);
+                layer_on(_FN);
+            }else {
+                layer_off(_FN);
+                del_mods(MOD_RCTL);
+            }
+            return false;
+        }
+        break;
+    case LT(0, KC_EQL):
+        if (!record->tap.count) {
+            if (record->event.pressed) {
+                add_mods(MOD_LALT);
+                layer_on(_FN);
+            } else {
+                layer_off(_FN);
+                del_mods(MOD_LALT);
+            }
+            return false;
+        }
+        break;
+    }
     return true;
 }
 
@@ -240,6 +272,7 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
         break;
     case KC_ESC:
     case KC_GESC:
+    case KC_CAPS:
         clear_mods();
     case GUI_ESC:
     default:
@@ -311,7 +344,7 @@ static td_state_t td_state;
 void td_alt_layers_finished(qk_tap_dance_state_t *state, void *user_data) {
     td_state = current_dance(state);
     switch (td_state) {
-        case SINGLE_TAP:
+        case SINGLE_TAP:           register_code(KC_CAPS); return;
         case SINGLE_HOLD: register_mods(MOD_BIT(KC_LALT)); return;
         case TAP_THEN_HOLD:             layer_invert(_FN); return;
         case TAP_TAP_HOLD:              layer_invert(_MK); return;
@@ -321,7 +354,7 @@ void td_alt_layers_finished(qk_tap_dance_state_t *state, void *user_data) {
 
 void td_alt_layers_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (td_state) {
-        case SINGLE_TAP:
+        case SINGLE_TAP:           unregister_code(KC_CAPS); return;
         case SINGLE_HOLD: unregister_mods(MOD_BIT(KC_LALT)); return;
         case TAP_THEN_HOLD:               layer_invert(_FN); return;
         case TAP_TAP_HOLD:                layer_invert(_MK); return;
@@ -379,6 +412,7 @@ void td_insert_screenshot_reset(qk_tap_dance_state_t *state, void *user_data) {
 }
 
 /* Retry Encoders */
+#ifdef ENCODER_ENABLE
 uint8_t mod_state;
 bool encoder_update_user(uint8_t index, bool clockwise) {
     mod_state = get_mods();
@@ -414,3 +448,4 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     }
     return false;
 }
+#endif
