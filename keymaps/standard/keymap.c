@@ -352,3 +352,11 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     return false;
 }
 #endif
+
+#ifdef COMBO_ENABLE
+const uint16_t PROGMEM mk_combo[] = {KC_S, KC_T, COMBO_END};
+combo_t key_combos[COMBO_COUNT] = {
+    COMBO(mk_combo, MO(_MK))
+};
+
+#endif
