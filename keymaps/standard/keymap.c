@@ -16,6 +16,8 @@
  */
 #include QMK_KEYBOARD_H
 
+#include "layer.h"
+
 #include "key_override.h"
 
 #include "tap_dance.h"
@@ -27,12 +29,6 @@
 #endif
 
 /* Layer Keymaps */
-enum layer_names {
-    _BS, _QW,
-    _MK, _NP,
-    _FN, MY_COMMAND
-};
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
         OS_L_FN, KC_ASTR, KC_AT  , KC_HASH, KC_DLR , KC_AMPR,                   KC_GRV , KC_LPRN, KC_LBRC, KC_LCBR, KC_LABK, OS_L_FN,
