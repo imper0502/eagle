@@ -52,9 +52,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_MK] = LAYOUT(
         _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        _______, TG(_MK), PRV_WIN, NEW_TAB, NXT_WIN, XXXXXXX,                   XXXXXXX, KC_WH_L, KC_MS_U, KC_WH_R, KC_WH_U, XXXXXXX,
-        _______, XXXXXXX, PRV_TAB, ALT_TAB, NXT_TAB, XXXXXXX,                   XXXXXXX, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, XXXXXXX,
-        _______, XXXXXXX, PRV_PG , CLS_TAB, NXT_PG , XXXXXXX,                   DM_RSTP, DM_REC1, DM_PLY1, DM_REC2, DM_PLY2, XXXXXXX,
+        _______, TG(_MK), PRV_WIN, NEW_TAB, NXT_WIN, XXXXXXX,                   DM_REC2, KC_WH_L, KC_MS_U, KC_WH_R, KC_WH_U, XXXXXXX,
+        _______, XXXXXXX, PRV_TAB, ALT_TAB, NXT_TAB, XXXXXXX,                   DM_REC1, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, XXXXXXX,
+        _______, XXXXXXX, PRV_PG , CLS_TAB, NXT_PG , XXXXXXX,                   DM_RSTP, DM_PLY1, DM_PLY2, XXXXXXX, XXXXXXX, XXXXXXX,
                                    _______, _______, _______, _______, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN5,
                           XXXXXXX,                            _______, KC_BTN4,                            XXXXXXX
     ),
