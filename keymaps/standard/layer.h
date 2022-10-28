@@ -6,5 +6,5 @@ enum layer_names {
     _MK,
     _NP,
     _FN,
-    MY_COMMAND
+    CMD
 };
