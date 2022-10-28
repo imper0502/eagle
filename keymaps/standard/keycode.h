@@ -1,4 +1,5 @@
 #pragma once
+
 #define ALT_TAB TD(ALT_TABLE)
 #define ALT_LYS TD(ALT_LAYERS)
 #define CPY_PST TD(COPY_PASTE_LAYERSLOCK)

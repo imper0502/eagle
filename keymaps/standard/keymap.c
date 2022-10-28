@@ -30,7 +30,7 @@
 #include "print.h"
 #endif
 
-#include "keycode_user.h"
+#include "keycode.h"
 
 /* Layer Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
