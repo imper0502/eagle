@@ -63,18 +63,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB , KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   KC_PAST, KC_7   , KC_8   , KC_9   , KC_PPLS, KC_TAB ,
         KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   KC_PSLS, KC_4   , KC_5   , KC_6   , KC_PMNS, KC_ESC ,
         KC_COMM, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   KC_PERC, KC_1   , KC_2   , KC_3   , KC_EQL , KC_COMM,
-                                   KC_DOT , KC_0   , KC_PENT, _______, _______, _______, KC_0   , KC_DOT ,
+                                   KC_DOT , KC_0   , KC_PENT, _______, _______, FN_SPC , KC_0   , KC_DOT ,
                           XXXXXXX,                            _______, _______,                            XXXXXXX
     ),
     [_FN] = LAYOUT(
-        TD(F_1), TD(F_2), TD(F_3), TD(F_4), TD(F_5), TD(F_6),                   TD(F_7), TD(F_8), TD(F_9),TD(F_10),TD(F_11),TD(F_12),
+        TD(F_1), TD(F_2), TD(F_3), TD(F_4), TD(F_5), TD(F_6),                   TD(F_7), TD(F_8), TD(F_9), TD(F10), TD(F11), TD(F12),
         KC_TAB , KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   KC_BRIU, KC_HOME, KC_UP  , KC_END , KC_PGUP, ALT_TAB,
         KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   KC_BRID, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, ALT_ESC,
         KC_COMM, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   KC_MUTE, KC_VOLD, KC_VOLU, KC_MPRV, KC_MPLY, KC_MNXT,
                                    KC_DOT , KC_0   , KC_PENT, _______, _______, TO(_BS), KC_RCTL, KC_RALT,
                           XXXXXXX,                            _______, _______,                            XXXXXXX
     ),
-    [MY_COMMAND] = LAYOUT(
+    [CMD] = LAYOUT(
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, TG(_QW), CG_NORM, TG(_FN), KC_PSCR, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX,  RESET , KC_SLCK, CG_TOGG, TG(_QW),                   CG_SWAP, KC_NLCK, EEP_RST, EEP_RST, CG_TOGG, XXXXXXX,
@@ -105,7 +105,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     case _FN:
         tx_led_status = ON;
         break;
-    case MY_COMMAND:
+    case CMD:
         tx_led_status = FLASH;
         rx_led_status = FLASH;
         break;
@@ -218,7 +218,7 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
     case KC_RSFT:
     case OS_LSFT:
     case OS_RSFT:
-        get_mods() == MOD_MASK_SHIFT ? layer_on(MY_COMMAND) : layer_off(MY_COMMAND);
+        get_mods() == MOD_MASK_SHIFT ? layer_on(CMD) : layer_off(CMD);
         break;
     case KC_ESC:
     case KC_GESC:

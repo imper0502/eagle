@@ -7,9 +7,9 @@ enum tap_dance_names {
     ALT_LAYERS,
     COPY_PASTE_LAYERSLOCK,
     INSERT_SCREENSHOT_LAYERS,
-    F_1,    F_2,    F_3,    F_4,
-    F_5,    F_6,    F_7,    F_8,
-    F_9,    F_10,   F_11,   F_12,
+    F_1,   F_2,   F_3,   F_4,
+    F_5,   F_6,   F_7,   F_8,
+    F_9,   F10,   F11,   F12,
 };
 
 /* Tap Dance */
@@ -55,8 +55,8 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [F_7] = ACTION_TAP_DANCE_DOUBLE(KC_F7, KC_CALC),
     [F_8] = ACTION_TAP_DANCE_DOUBLE(KC_F8, KC_CALC),
     [F_9] = ACTION_TAP_DANCE_DOUBLE(KC_F9, KC_CALC),
-    [F_10] = ACTION_TAP_DANCE_DOUBLE(KC_F10, KC_CALC),
-    [F_11] = ACTION_TAP_DANCE_DOUBLE(KC_F11, KC_CALC),
-    [F_12] = ACTION_TAP_DANCE_DOUBLE(KC_F12, KC_CALC),
+    [F10] = ACTION_TAP_DANCE_DOUBLE(KC_F10, KC_CALC),
+    [F11] = ACTION_TAP_DANCE_DOUBLE(KC_F11, KC_CALC),
+    [F12] = ACTION_TAP_DANCE_DOUBLE(KC_F12, KC_CALC),
 };
 
