@@ -180,7 +180,14 @@ void keyboard_post_init_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #ifdef CONSOLE_ENABLE
-    dprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+    dprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n",
+            keycode,
+            record->event.key.col,
+            record->event.key.row,
+            record->event.pressed,
+            record->event.time,
+            record->tap.interrupted,
+            record->tap.count);
 #endif
     switch (keycode) {
     case LT(0, KC_MINS):
@@ -339,7 +346,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 clockwise ? tap_code(KC_BTN5) : tap_code(KC_BTN4);
                 set_mods(mod_state);
             } else if (mod_state & MOD_MASK_SG) {
-                clockwise ? tap_code16(C(KC_RGHT)) : tap_code16(C(KC_LEFT));            
+                clockwise ? tap_code16(C(KC_RGHT)) : tap_code16(C(KC_LEFT));
             } else if (mod_state & MOD_MASK_CTRL) {
                 clockwise ? tap_code(KC_Y) : tap_code(KC_Z);
             } else {
