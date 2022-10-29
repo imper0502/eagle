@@ -193,11 +193,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case LT(0, KC_MINS):
         if (!record->tap.count) {
             if (record->event.pressed) {
-                add_mods(MOD_RCTL);
+                register_mods(MOD_LCTL);
                 layer_on(_FN);
             }else {
                 layer_off(_FN);
-                del_mods(MOD_RCTL);
+                unregister_mods(MOD_LCTL);
             }
             return false;
         }
@@ -205,11 +205,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case LT(0, KC_EQL):
         if (!record->tap.count) {
             if (record->event.pressed) {
-                add_mods(MOD_LALT);
+                register_mods(MOD_LALT);
                 layer_on(_FN);
             } else {
                 layer_off(_FN);
-                del_mods(MOD_LALT);
+                unregister_mods(MOD_LALT);
             }
             return false;
         }
