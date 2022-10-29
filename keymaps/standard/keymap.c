@@ -10,7 +10,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
-   
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,7 +29,7 @@
 #include "print.h"
 #endif
 
-#include "keycode.h"
+#include "keycode_user.h"
 
 /* Layer Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -44,9 +43,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_QW] = LAYOUT(
         KC_GESC, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                   KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______,
-        KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
-        KC_CAPS, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,                   KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_QUOT,
-        KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                   KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
+        KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_QUES,
+        KC_CAPS, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,                   KC_H   , KC_J   , KC_K   , KC_L   , KC_MINS, KC_EQL ,
+        KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                   KC_N   , KC_M   , KC_COMM, KC_DOT , KC_QUOT, _______,
                                    _______, _______, _______, _______, _______, _______, _______, _______,
                           XXXXXXX,                            _______, _______,                            XXXXXXX
     ),
@@ -63,16 +62,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB , KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   KC_PAST, KC_7   , KC_8   , KC_9   , KC_PPLS, KC_TAB ,
         KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   KC_PSLS, KC_4   , KC_5   , KC_6   , KC_PMNS, KC_ESC ,
         KC_COMM, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   KC_PERC, KC_1   , KC_2   , KC_3   , KC_EQL , KC_COMM,
-                                   KC_DOT , KC_0   , KC_PENT, _______, _______, FN_SPC , KC_0   , KC_DOT ,
-                          XXXXXXX,                            _______, _______,                            XXXXXXX
+                                   KC_DOT , KC_0   , KC_PENT, _______, _______, _______, KC_0   , KC_DOT ,
+                          XXXXXXX,                            _______, INS_SHT,                            XXXXXXX
     ),
     [_FN] = LAYOUT(
         TD(F_1), TD(F_2), TD(F_3), TD(F_4), TD(F_5), TD(F_6),                   TD(F_7), TD(F_8), TD(F_9), TD(F10), TD(F11), TD(F12),
         KC_TAB , KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   KC_BRIU, KC_HOME, KC_UP  , KC_END , KC_PGUP, ALT_TAB,
         KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   KC_BRID, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, ALT_ESC,
         KC_COMM, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   KC_MUTE, KC_VOLD, KC_VOLU, KC_MPRV, KC_MPLY, KC_MNXT,
-                                   KC_DOT , KC_0   , KC_PENT, _______, _______, TO(_BS), KC_RCTL, KC_RALT,
-                          XXXXXXX,                            _______, _______,                            XXXXXXX
+                                   KC_DOT , KC_0   , KC_PENT, _______, _______, _______, KC_RCTL, KC_RALT,
+                          XXXXXXX,                            _______, TG(_FN),                            XXXXXXX
     ),
     [CMD] = LAYOUT(
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
@@ -249,7 +248,7 @@ void td_alt_layers_finished(qk_tap_dance_state_t *state, void *user_data) {
     switch (td_state) {
         case SINGLE_TAP:           register_code(KC_CAPS); return;
         case SINGLE_HOLD: register_mods(MOD_BIT(KC_LALT)); return;
-        case TAP_THEN_HOLD:             layer_invert(_NP); return;
+        case TAP_THEN_HOLD:             layer_invert(_FN); return;
         case TAP_TAP_HOLD:              layer_invert(_MK); return;
         default:             /* This line is necessary. */ return;
     }
@@ -259,7 +258,7 @@ void td_alt_layers_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (td_state) {
         case SINGLE_TAP:           unregister_code(KC_CAPS); return;
         case SINGLE_HOLD: unregister_mods(MOD_BIT(KC_LALT)); return;
-        case TAP_THEN_HOLD:               layer_invert(_NP); return;
+        case TAP_THEN_HOLD:               layer_invert(_FN); return;
         case TAP_TAP_HOLD:                layer_invert(_MK); return;
         default:               /* This line is necessary. */ return;
     }
