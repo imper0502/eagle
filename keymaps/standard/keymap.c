@@ -153,8 +153,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         return TAPPING_TERM - 75;
     case ALT_TAB:
         return TAPPING_TERM + 500;
-    case ALT_LYS:
-        return TAPPING_TERM + 25;
     default:
         return TAPPING_TERM;
     }
@@ -162,7 +160,8 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-    case FN_SPC :
+    case FN_SPC:
+    case ALT_LYS:
         return true;
     default:
         return false;
@@ -253,8 +252,9 @@ static td_state_t td_state;
 void td_alt_layers_finished(qk_tap_dance_state_t *state, void *user_data) {
     td_state = current_dance(state);
     switch (td_state) {
-        case SINGLE_TAP:           register_code(KC_CAPS); return;
+        case SINGLE_TAP:
         case SINGLE_HOLD: register_mods(MOD_BIT(KC_LALT)); return;
+        case DUAL_TAP:             register_code(KC_CAPS); return;
         case TAP_THEN_HOLD:             layer_invert(_FN); return;
         case TAP_TAP_HOLD:              layer_invert(_MK); return;
         default:             /* This line is necessary. */ return;
@@ -263,8 +263,9 @@ void td_alt_layers_finished(qk_tap_dance_state_t *state, void *user_data) {
 
 void td_alt_layers_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (td_state) {
-        case SINGLE_TAP:           unregister_code(KC_CAPS); return;
+        case SINGLE_TAP:
         case SINGLE_HOLD: unregister_mods(MOD_BIT(KC_LALT)); return;
+        case DUAL_TAP:             unregister_code(KC_CAPS); return;
         case TAP_THEN_HOLD:               layer_invert(_FN); return;
         case TAP_TAP_HOLD:                layer_invert(_MK); return;
         default:               /* This line is necessary. */ return;
