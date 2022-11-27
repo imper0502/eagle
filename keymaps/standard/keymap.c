@@ -34,7 +34,7 @@
 /* Layer Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-        OS_L_FN, KC_ASTR, KC_AT  , KC_HASH, KC_DLR , KC_AMPR,                   KC_GRV , KC_LPRN, KC_LBRC, KC_LCBR, KC_LABK, OS_L_FN,
+        CAPSWRD, KC_ASTR, KC_AT  , KC_HASH, KC_DLR , KC_AMPR,                   KC_GRV , KC_LPRN, KC_LBRC, KC_LCBR, KC_LABK, OS_L_FN,
         MK_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B   ,                   KC_J   , KC_L   , KC_U   , KC_Y   , KC_SLSH, KC_BSLS,
         GUI_ESC, KC_A   , KC_R   , KC_S   , KC_T   , KC_G   ,                   KC_M   , KC_N   , KC_E   , KC_I   , KC_O   , KC_QUES,
  LSFT_T(KC_DEL), KC_Z   , KC_X   , KC_C   , KC_D   , KC_V   ,                   KC_K   , KC_H   , KC_COMM, KC_DOT , KC_QUOT, KC_RSFT,
@@ -67,8 +67,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_FN] = LAYOUT(
         TD(F_1), TD(F_2), TD(F_3), TD(F_4), TD(F_5), TD(F_6),                   TD(F_7), TD(F_8), TD(F_9), TD(F10), TD(F11), TD(F12),
-        KC_TAB , KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   KC_PGUP, KC_HOME, KC_UP  , KC_END , ALT_TAB, KC_BRIU,
-        KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, ALT_ESC, KC_BRID,
+        KC_TAB , KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   KC_BRIU, KC_HOME, KC_UP  , KC_END , KC_PGUP, ALT_TAB,
+        KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   KC_BRID, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, ALT_ESC,
         KC_COMM, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   KC_MUTE, KC_VOLD, KC_VOLU, KC_MPRV, KC_MPLY, KC_MNXT,
                                    KC_DOT , KC_0   , KC_PENT, _______, _______, TO(_BS), KC_RCTL, KC_RALT,
                           XXXXXXX,                            _______, _______,                            XXXXXXX
