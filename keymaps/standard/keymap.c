@@ -34,11 +34,11 @@
 /* Layer Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-        CAPSWRD, KC_ASTR, KC_AT  , KC_HASH, KC_DLR , KC_AMPR,                   KC_GRV , KC_LPRN, KC_LBRC, KC_LCBR, KC_LABK, OS_L_FN,
-        MK_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B   ,                   KC_J   , KC_L   , KC_U   , KC_Y   , KC_SLSH, KC_BSLS,
+        KC_DEL , KC_CIRC, KC_AT  , KC_HASH, KC_DLR , KC_AMPR,                   KC_ASTR, KC_LABK, KC_RABK, KC_LBRC, KC_RBRC, KC_GRV ,
+        KC_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B   ,                   KC_J   , KC_L   , KC_U   , KC_Y   , KC_SLSH, KC_BSLS,
         GUI_ESC, KC_A   , KC_R   , KC_S   , KC_T   , KC_G   ,                   KC_M   , KC_N   , KC_E   , KC_I   , KC_O   , KC_QUES,
- LSFT_T(KC_DEL), KC_Z   , KC_X   , KC_C   , KC_D   , KC_V   ,                   KC_K   , KC_H   , KC_COMM, KC_DOT , KC_QUOT, KC_RSFT,
-                                   ALT_LYS, KC_LCTL, OS_LSFT, KC_BSPC, KC_ENT , FN_SPC , FN_MINS, FN_EQL ,
+        KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V   ,                   KC_K   , KC_H   , KC_COMM, KC_DOT , KC_QUOT, CAPSWRD,
+                                   ALT_LYS, KC_LCTL, OS_RSFT, KC_BSPC, KC_ENT , FN_SPC , FN_MINS, FN_EQL ,
                           XXXXXXX,                            CPY_PST, INS_SHT,                            XXXXXXX
     ),
     [_QW] = LAYOUT(
