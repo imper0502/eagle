@@ -10,6 +10,7 @@
 #define OS_L_FN OSL(_FN)
 
 #define MK_TAB  LT(_MK, KC_TAB)
+#define FN_ENT  LT(0, KC_ENT)
 #define FN_SPC  LT(_FN, KC_SPC)
 #define FN_MINS LT(0, KC_MINS)
 #define FN_EQL  LT(0, KC_EQL)
