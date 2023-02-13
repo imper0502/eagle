@@ -6,13 +6,13 @@ enum combos {
   RS_LALT,
   ST_LCTL,
   RST_ALTCTL,
-  CD_MK_LAYER,
+  CD_MC_REC1,
   LU_SFTCTL,
   UY_SFTALT,
   NE_RCTL,
   EI_RALT,
   NEI_ALTCTL,
-  HCOMMA_MC_PLAY,
+  HCOMMA_MC_PLAY1,
   COMBO_LENGTH
 };
 uint16_t COMBO_LEN = COMBO_LENGTH;
@@ -36,11 +36,11 @@ combo_t key_combos[] = {
     [RS_LALT] = COMBO(left_home1_combo, KC_LALT),
     [ST_LCTL] = COMBO(left_home2_combo, KC_LCTL),
     [RST_ALTCTL] = COMBO(left_home3_combo, LCA(KC_NO)),
-    [CD_MK_LAYER] = COMBO(left_lower_combo, MO(_MK)),
+    [CD_MC_REC1] = COMBO(left_lower_combo, DM_REC1),
     [LU_SFTCTL] = COMBO(right_raise1_combo, S(C(KC_NO))),
     [UY_SFTALT] = COMBO(right_raise2_combo, LSA(KC_NO)),
     [NE_RCTL] = COMBO(right_home1_combo, KC_RCTL),
     [EI_RALT] = COMBO(right_home2_combo, KC_RALT),
     [NEI_ALTCTL] = COMBO(right_home3_combo, LCA(KC_NO)), 
-    [HCOMMA_MC_PLAY] = COMBO(right_lower_combo, DM_PLY1),
+    [HCOMMA_MC_PLAY1] = COMBO(right_lower_combo, DM_PLY1),
 };  
