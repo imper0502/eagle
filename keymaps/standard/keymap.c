@@ -34,12 +34,12 @@
 /* Layer Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-        KC_DEL , KC_CIRC, KC_AT  , KC_HASH, KC_DLR , KC_AMPR,                   KC_ASTR, KC_LABK, KC_RABK, KC_LBRC, KC_RBRC, INS_SHT,
-        KC_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B   ,                   KC_J   , KC_L   , KC_U   , KC_Y   , KC_SLSH, KC_BSLS,
-        GUI_ESC, KC_A   , KC_R   , KC_S   , KC_T   , KC_G   ,                   KC_M   , KC_N   , KC_E   , KC_I   , KC_O   , KC_GRV ,
-        KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V   ,                   KC_K   , KC_H   , KC_COMM, KC_DOT , KC_QUOT, CAPSWRD,
-                                   ALT_LYS, KC_LCTL, OS_RSFT, MK_BSPC, FN_ENT , FN_SPC , FN_MINS, FN_EQL ,
-                          XXXXXXX,                            CPY_PST, ALT_TAB,                            XXXXXXX
+        INS_PLS, KC_CIRC, KC_AT  , KC_HASH, KC_DLR , KC_AMPR,                   KC_ASTR, KC_QUES, KC_EXLM, KC_GRV , KC_TILD, CAPSWRD,
+        KC_DEL , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B   ,                   KC_J   , KC_L   , KC_U   , KC_Y   , KC_SLSH, KC_BSLS,
+        GUI_ESC, KC_A   , KC_R   , KC_S   , KC_T   , KC_G   ,                   KC_M   , KC_N   , KC_E   , KC_I   , KC_O   , GUI_TAB,
+        KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V   ,                   KC_K   , KC_H   , KC_COMM, KC_DOT , KC_QUOT, KC_RSFT,
+                                   ALT_LYS, KC_LCTL, OS_LSFT, MK_BSPC, FN_ENT , FN_SPC , FN_MINS, FN_EQL ,
+                          XXXXXXX,                            ALT_ESC, ALT_TAB,                            XXXXXXX
     ),
     [_QW] = LAYOUT(
         KC_GESC, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                   KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______,
@@ -67,9 +67,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_FN] = LAYOUT(
         TD(F_1), TD(F_2), TD(F_3), TD(F_4), TD(F_5), TD(F_6),                   TD(F_7), TD(F_8), TD(F_9), TD(F10), TD(F11), TD(F12),
-        KC_TAB , KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   KC_BRIU, KC_HOME, KC_UP  , KC_END , KC_PGUP, ALT_TAB,
-        KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   KC_BRID, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, ALT_ESC,
-        KC_COMM, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   KC_MUTE, KC_VOLD, KC_VOLU, KC_MPRV, KC_MPLY, KC_MNXT,
+        KC_TAB , KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   _______, KC_HOME, KC_UP  , KC_END , KC_PGUP, _______,
+        KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   _______, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, KC_TAB ,
+        KC_LSFT, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   _______, KC_LBRC, KC_LABK, KC_RABK, KC_RBRC, KC_RSFT,
                                    KC_DOT , KC_0   , KC_PENT, _______, _______, TO(_BS), KC_RCTL, KC_RALT,
                           XXXXXXX,                            _______, _______,                            XXXXXXX
     ),
@@ -149,7 +149,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case FN_SPC:
         return TAPPING_TERM - 25;
-    case CPY_PST:
+    case INS_PLS:
         return TAPPING_TERM - 75;
     case ALT_TAB:
         return TAPPING_TERM + 500;
@@ -285,30 +285,48 @@ void td_alt_layers_reset(qk_tap_dance_state_t *state, void *user_data) {
     }
 }
 
+uint8_t mod_state;
 void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
+    mod_state = get_mods();
     td_state = current_dance(state);
-    switch (td_state) {
-        case SINGLE_TAP:                   register_code16(C(KC_V)); return;
-        case DUAL_TAP:                            layer_invert(_NP); return;
-        case TRIPLE_TAP:                          layer_invert(_MK); return;
-        case QUAD_TAP:                              layer_move(_BS); return;
-        case SINGLE_HOLD:                       tap_code16(C(KC_C)); return;
-        case TAP_THEN_HOLD:                     tap_code16(C(KC_X)); return;
-        case TAP_TAP_HOLD: tap_code16(C(KC_A)); tap_code16(C(KC_C)); return;
-        case TRI_TAP_HOLD: tap_code16(C(KC_A)); tap_code16(C(KC_X)); return;
-        default:                                    layer_move(_BS); return;
+    if (mod_state == 0) {
+        switch (td_state) {
+            case SINGLE_TAP:                   register_code16(C(KC_V)); return;
+            case DUAL_TAP:                            layer_invert(_NP); return;
+            case TRIPLE_TAP:                          layer_invert(_MK); return;
+            case QUAD_TAP:                              layer_move(_BS); return;
+            case SINGLE_HOLD:                       tap_code16(C(KC_C)); return;
+            case TAP_THEN_HOLD:                     tap_code16(C(KC_X)); return;
+            case TAP_TAP_HOLD: tap_code16(C(KC_A)); tap_code16(C(KC_C)); return;
+            case TRI_TAP_HOLD: tap_code16(C(KC_A)); tap_code16(C(KC_X)); return;
+            default:                                    layer_move(_BS); return;
+        }
+    } else if (mod_state & MOD_MASK_GUI) {
+        switch (td_state) {
+            case SINGLE_TAP: register_code16(S(KC_S)); return;
+            default:     /* This line is necessary. */ return;
+        }
     }
+    register_code(KC_INS);
 }
 
 void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
-    switch (td_state) {
-        case SINGLE_TAP: unregister_code16(C(KC_V)); return;
-        case SINGLE_HOLD:
-        case TAP_THEN_HOLD:
-        case TAP_TAP_HOLD:
-        case TRI_TAP_HOLD:      tap_code16(C(KC_V)); return;
-        default:       /* This line is necessary. */ return;
+    if (mod_state == 0) {
+        switch (td_state) {
+            case SINGLE_TAP: unregister_code16(C(KC_V)); return;
+            case SINGLE_HOLD:
+            case TAP_THEN_HOLD:
+            case TAP_TAP_HOLD:
+            case TRI_TAP_HOLD:      tap_code16(C(KC_V)); return;
+            default:       /* This line is necessary. */ return;
+        }
+    } else if (mod_state & MOD_MASK_GUI)  {
+        switch (td_state) {
+            case SINGLE_TAP: unregister_code16(S(KC_S)); return;
+            default:     /* This line is necessary. */   return;
+        }
     }
+    unregister_code(KC_INS);
 }
 
 void td_insert_screenshot_finished(qk_tap_dance_state_t *state, void *user_data) {
@@ -336,7 +354,6 @@ void td_insert_screenshot_reset(qk_tap_dance_state_t *state, void *user_data) {
 
 /* Retry Encoders */
 #ifdef ENCODER_ENABLE
-uint8_t mod_state;
 bool encoder_update_user(uint8_t index, bool clockwise) {
     mod_state = get_mods();
     switch (index) {

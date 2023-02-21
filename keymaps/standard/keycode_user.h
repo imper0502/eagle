@@ -1,18 +1,19 @@
 #pragma once
 #define ALT_TAB TD(ALT_TABLE)
 #define ALT_LYS TD(ALT_LAYERS)
-#define CPY_PST TD(COPY_PASTE_LAYERSLOCK)
+#define INS_PLS TD(COPY_PASTE_LAYERSLOCK)
 #define INS_SHT TD(INSERT_SCREENSHOT_LAYERS)
 
 #define GUI_ESC LGUI_T(KC_ESC)
+#define GUI_TAB LGUI_T(KC_TAB)
 #define OS_LSFT OSM(MOD_LSFT)
 #define OS_RSFT OSM(MOD_RSFT)
 #define OS_L_FN OSL(_FN)
 
 #define MK_TAB  LT(_MK, KC_TAB)
-#define MK_BSPC  LT(_MK, KC_BSPC)
+#define MK_BSPC LT(_MK, KC_BSPC)
 #define FN_ENT  LT(0, KC_ENT)
-#define FN_SPC  LT(_FN, KC_SPC)
+#define FN_SPC   LT(_FN, KC_SPC)
 #define FN_MINS LT(0, KC_MINS)
 #define FN_EQL  LT(0, KC_EQL)
 
