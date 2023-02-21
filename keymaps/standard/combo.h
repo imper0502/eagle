@@ -31,16 +31,6 @@ const uint16_t PROGMEM right_home3_combo[] = {KC_N, KC_E, KC_I, COMBO_END};
 const uint16_t PROGMEM right_lower_combo[] = {KC_H, KC_COMM, COMBO_END};
 
 combo_t key_combos[] = {
-    [WF_SFTALT] = COMBO(left_raise1_combo, LSA(KC_NO)),
-    [FP_SFTCTL] = COMBO(left_raise2_combo, S(C(KC_NO))),
-    [RS_LALT] = COMBO(left_home1_combo, KC_LALT),
-    [ST_LCTL] = COMBO(left_home2_combo, KC_LCTL),
-    [RST_ALTCTL] = COMBO(left_home3_combo, LCA(KC_NO)),
     [CD_MC_REC1] = COMBO(left_lower_combo, DM_REC1),
-    [LU_SFTCTL] = COMBO(right_raise1_combo, S(C(KC_NO))),
-    [UY_SFTALT] = COMBO(right_raise2_combo, LSA(KC_NO)),
-    [NE_RCTL] = COMBO(right_home1_combo, KC_RCTL),
-    [EI_RALT] = COMBO(right_home2_combo, KC_RALT),
-    [NEI_ALTCTL] = COMBO(right_home3_combo, LCA(KC_NO)), 
-    [HCOMMA_MC_PLAY1] = COMBO(right_lower_combo, DM_PLY1),
+    [HCOMMA_MC_PLAY1] = COMBO(right_lower_combo, DM_PLY1)
 };  
