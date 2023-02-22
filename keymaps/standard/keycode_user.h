@@ -20,6 +20,8 @@
 #define QW_DOT  LSFT_T(KC_DOT)
 #define QW_SLSH LSFT_T(KC_SLSH)
 
+#define ST_PENT LSFT_T(KC_PENT)
+
 #define ALT_ESC A(KC_ESC)
 #define NEW_TAB C(KC_T)
 #define CLS_TAB C(KC_W)
