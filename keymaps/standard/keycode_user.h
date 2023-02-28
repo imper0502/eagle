@@ -5,7 +5,7 @@
 #define INS_SHT TD(INSERT_SCREENSHOT_LAYERS)
 
 #define GUI_ESC LGUI_T(KC_ESC)
-#define GUI_TAB LGUI_T(KC_TAB)
+#define GUI_TAB RGUI_T(KC_TAB)
 #define OS_LSFT OSM(MOD_LSFT)
 #define OS_RSFT OSM(MOD_RSFT)
 #define OS_L_FN OSL(_FN)

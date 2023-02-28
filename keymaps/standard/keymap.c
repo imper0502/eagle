@@ -231,18 +231,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-    case LT(0, KC_ENT):
-    case KC_LSFT:
-    case KC_RSFT:
-    case OS_LSFT:
-    case OS_RSFT:
-        get_mods() == MOD_MASK_SHIFT ? layer_on(CMD) : layer_off(CMD);
+    case KC_LGUI:
+    case KC_RGUI:
+    case LGUI_T(KC_ESC):
+    case RGUI_T(KC_TAB):
+        (get_mods() == MOD_MASK_GUI || get_mods() == MOD_MASK_CTRL) ? layer_on(CMD) : layer_off(CMD);
+        break;
+    case KC_LCTL:
+    case KC_RCTL:
+    case LCTL_T(KC_ESC):
+    case RCTL_T(KC_TAB):
+        (get_mods() == MOD_MASK_GUI || get_mods() == MOD_MASK_CTRL) ? layer_on(CMD) : layer_off(CMD);
         break;
     case KC_ESC:
     case KC_GESC:
     case KC_CAPS:
         clear_mods();
-    case GUI_ESC:
     default:
         return;
     }
