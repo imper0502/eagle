@@ -50,12 +50,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           XXXXXXX,                            _______, _______,                            XXXXXXX
     ),
     [_MK] = LAYOUT(
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        _______, TG(_MK), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   DM_REC2, KC_WH_L, KC_MS_U, KC_WH_R, KC_WH_U, XXXXXXX,
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   DM_REC1, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, XXXXXXX,
+        _______, TG(_MK), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        _______, KC_WH_U, KC_WH_L, KC_MS_U, KC_WH_R, XXXXXXX,                   DM_REC2, KC_WH_L, KC_MS_U, KC_WH_R, KC_WH_U, XXXXXXX,
+        _______, KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, XXXXXXX,                   DM_REC1, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, XXXXXXX,
         _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   DM_RSTP, DM_PLY1, DM_PLY2, XXXXXXX, XXXXXXX, XXXXXXX,
-                                   _______, _______, _______, _______, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN5,
-                          XXXXXXX,                            _______, KC_BTN4,                            XXXXXXX
+                                   KC_BTN4, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN5,
+                          XXXXXXX,                            KC_BTN5, KC_BTN4,                            XXXXXXX
     ),
     [_NP] = LAYOUT(
         _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
