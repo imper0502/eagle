@@ -50,33 +50,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           XXXXXXX,                            _______, _______,                            XXXXXXX
     ),
     [_MK] = LAYOUT(
-        _______, TG(_MK), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        _______, KC_WH_U, KC_WH_L, KC_MS_U, KC_WH_R, XXXXXXX,                   DM_REC2, KC_WH_L, KC_MS_U, KC_WH_R, KC_WH_U, XXXXXXX,
-        _______, KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, XXXXXXX,                   DM_REC1, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, XXXXXXX,
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   DM_RSTP, DM_PLY1, DM_PLY2, XXXXXXX, XXXXXXX, XXXXXXX,
+        _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
+        TO(_BS), KC_WH_U, KC_WH_L, KC_MS_U, KC_WH_R, XXXXXXX,                   _______, KC_WH_L, KC_MS_U, KC_WH_R, KC_WH_U, TO(_BS),
+        _______, KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, XXXXXXX,                   _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, _______,
+        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   DM_RSTP, DM_REC1, DM_PLY1, DM_REC2, DM_PLY2, _______,
                                    KC_BTN4, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN5,
                           XXXXXXX,                            KC_BTN5, KC_BTN4,                            XXXXXXX
     ),
     [_NP] = LAYOUT(
         _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
-        KC_TAB , KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   KC_PAST, KC_7   , KC_8   , KC_9   , KC_PPLS, KC_TAB ,
-        KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   KC_PSLS, KC_4   , KC_5   , KC_6   , KC_PMNS, KC_ESC ,
-        KC_COMM, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   KC_PERC, KC_1   , KC_2   , KC_3   , KC_EQL , KC_COMM,
+        TO(_BS), KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   KC_PAST, KC_7   , KC_8   , KC_9   , KC_PPLS, TO(_BS),
+        _______, KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   KC_PSLS, KC_4   , KC_5   , KC_6   , KC_PMNS, _______,
+        _______, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   KC_PERC, KC_1   , KC_2   , KC_3   , KC_EQL , _______,
                                    KC_DOT , KC_0   , ST_PENT, _______, _______, FN_SPC , KC_0   , KC_DOT ,
                           XXXXXXX,                            _______, _______,                            XXXXXXX
     ),
     [_FN] = LAYOUT(
-        TD(F_1), TD(F_2), TD(F_3), TD(F_4), TD(F_5), TD(F_6),                   TD(F_7), TD(F_8), TD(F_9), TD(F10), TD(F11), TD(F12),
-        KC_TAB , KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   _______, KC_HOME, KC_UP  , KC_END , KC_PGUP, _______,
-        KC_ESC , KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   _______, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, KC_TAB ,
-        KC_LSFT, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   _______, KC_LBRC, KC_LABK, KC_RABK, KC_RBRC, KC_RSFT,
+        KC_F1  , KC_F2  , KC_3   , KC_F4  , KC_F5  , KC_F6  ,                   KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F11 , KC_F12 ,
+        TO(_BS), KC_PPLS, KC_7   , KC_8   , KC_9   , KC_PAST,                   _______, KC_HOME, KC_UP  , KC_END , KC_PGUP, TO(_BS),
+        _______, KC_PMNS, KC_4   , KC_5   , KC_6   , KC_PSLS,                   _______, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, _______,
+        _______, KC_EQL , KC_1   , KC_2   , KC_3   , KC_PERC,                   _______, KC_LBRC, KC_LABK, KC_RABK, KC_RBRC, _______,
                                    KC_DOT , KC_0   , ST_PENT, _______, _______, TO(_BS), KC_RCTL, KC_RALT,
                           XXXXXXX,                            _______, _______,                            XXXXXXX
     ),
     [CMD] = LAYOUT(
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, TG(_QW), CG_NORM, TG(_FN), KC_PSCR, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        XXXXXXX, XXXXXXX,  RESET , KC_SLCK, CG_TOGG, TG(_QW),                   CG_SWAP, KC_NLCK, EEP_RST, EEP_RST, CG_TOGG, XXXXXXX,
+        TO(_BS), XXXXXXX,  RESET , KC_SLCK, CG_TOGG, TG(_QW),                   CG_SWAP, KC_NLCK, EEP_RST, EEP_RST, CG_TOGG, TO(_BS),
         XXXXXXX, XXXXXXX, XXXXXXX, KC_CAPS,  DEBUG , XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                                    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                           XXXXXXX,                            XXXXXXX, XXXXXXX,                          XXXXXXX
@@ -290,7 +290,7 @@ void td_alt_layers_reset(qk_tap_dance_state_t *state, void *user_data) {
 }
 
 uint8_t mod_state;
-void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
+void td_insert_plus_finished(qk_tap_dance_state_t *state, void *user_data) {
     mod_state = get_mods();
     td_state = current_dance(state);
     if (mod_state == 0) {
@@ -314,7 +314,7 @@ void td_copy_paste_finished(qk_tap_dance_state_t *state, void *user_data) {
     register_code(KC_INS);
 }
 
-void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
+void td_insert_plus_reset(qk_tap_dance_state_t *state, void *user_data) {
     if (mod_state == 0) {
         switch (td_state) {
             case SINGLE_TAP: unregister_code16(C(KC_V)); return;
@@ -328,29 +328,6 @@ void td_copy_paste_reset(qk_tap_dance_state_t *state, void *user_data) {
         switch (td_state) {
             case SINGLE_TAP: unregister_code16(S(KC_S)); return;
             default:     /* This line is necessary. */   return;
-        }
-    }
-    unregister_code(KC_INS);
-}
-
-void td_insert_screenshot_finished(qk_tap_dance_state_t *state, void *user_data) {
-    if (get_mods() == 0) {
-            td_state = current_dance(state);
-            switch (td_state) {
-            case SINGLE_TAP: register_code16(LSG(KC_S)); return;
-            case DUAL_TAP:            layer_invert(_NP); return;
-            case TRIPLE_TAP:          layer_invert(_MK); return;
-            default:       /* This line is necessary. */ return;
-        }
-    }
-    register_code(KC_INS);
-}
-
-void td_insert_screenshot_reset(qk_tap_dance_state_t *state, void *user_data) {
-    if (get_mods() == 0) {
-            switch (td_state) {
-            case SINGLE_TAP: unregister_code16(LSG(KC_S)); return;
-            default:         /* This line is necessary. */ return;
         }
     }
     unregister_code(KC_INS);
