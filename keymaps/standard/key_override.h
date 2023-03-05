@@ -11,15 +11,12 @@ const key_override_t exlm_override = ko_make_basic(MOD_MASK_SHIFT, KC_EXCLAIM, K
 const key_override_t grv_override  = ko_make_basic(MOD_MASK_SHIFT, KC_GRAVE, KC_BRIGHTNESS_DOWN);      // `
 const key_override_t tild_override = ko_make_basic(MOD_MASK_SHIFT, KC_TILDE, KC_BRIGHTNESS_UP);        // ~
 
-const key_override_t slsh_override = ko_make_basic(MOD_MASK_SHIFT, KC_SLASH, KC_PERCENT);              // /%
+const key_override_t slsh_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_SLASH, KC_PERCENT, ~(1 << 1)); // /%
 
-const key_override_t comm_override = ko_make_basic(MOD_MASK_SHIFT, KC_COMMA, KC_SCOLON);               // ,;
-const key_override_t dot_override  = ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_COLON);                  // .:
+const key_override_t comm_override = ko_make_with_layers(MOD_MASK_SHIFT, KC_COMMA, KC_SCOLON, ~(1 << 1));  // ,;
+const key_override_t dot_override  = ko_make_with_layers(MOD_MASK_SHIFT, KC_DOT, KC_COLON, ~(1 << 1));     // .:
 const key_override_t labk_override = ko_make_basic(MOD_MASK_SHIFT, KC_LEFT_ANGLE_BRACKET, KC_LEFT_PAREN);
 const key_override_t rabk_override = ko_make_basic(MOD_MASK_SHIFT, KC_RIGHT_ANGLE_BRACKET, KC_RIGHT_PAREN);
-
-const key_override_t insert_override_1 = ko_make_basic(MOD_MASK_SHIFT, KC_INSERT, G(KC_V));
-const key_override_t insert_override_2 = ko_make_basic(MOD_MASK_GUI, KC_INSERT, LSG(KC_S));
 
 const key_override_t **key_overrides = (const key_override_t *[]) {
     &circ_override,
@@ -37,7 +34,5 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
     &dot_override ,
     &labk_override,
     &rabk_override,
-    &insert_override_1,
-    &insert_override_2,
     NULL // Null terminate the array of overrides!
 };

@@ -5,6 +5,9 @@
 
 #define GUI_ESC LGUI_T(KC_ESC)
 #define GUI_TAB RGUI_T(KC_TAB)
+#define ALTLBRC LT(0, KC_LBRC)
+#define CTLRBRC LT(0, KC_RBRC)
+
 #define OS_LSFT OSM(MOD_LSFT)
 #define OS_RSFT OSM(MOD_RSFT)
 #define OS_L_FN OSL(_FN)
