@@ -3,8 +3,8 @@
 enum layer_names {
     _BS,
     _QW,
-    _MK,
     _NP,
+    _MK,
     _FN,
     CMD
 };

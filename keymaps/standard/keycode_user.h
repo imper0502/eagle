@@ -1,5 +1,6 @@
 #pragma once
 #define ALT_TAB TD(ALT_TABLE)
+#define ALTSTAB TD(ALT_SHIFT_TABLE)
 #define ALT_LYS TD(ALT_LAYERS)
 #define INS_PLS TD(INSERT_PLUS)
 
@@ -15,6 +16,7 @@
 #define MK_TAB  LT(_MK, KC_TAB)
 #define MK_BSPC LT(_MK, KC_BSPC)
 #define FN_ENT  LT(0, KC_ENT)
+#define FN_BSPC LT(0, KC_BSPC)
 #define FN_SPC  LT(_FN, KC_SPC)
 #define FN_MINS LT(0, KC_MINS)
 #define FN_EQL  LT(0, KC_EQL)
@@ -23,6 +25,7 @@
 #define QW_SLSH LSFT_T(KC_SLSH)
 
 #define ST_PENT LSFT_T(KC_PENT)
+#define ST_ENT  LSFT_T(KC_ENT)
 
 #define ALT_ESC A(KC_ESC)
 #define NEW_TAB C(KC_T)

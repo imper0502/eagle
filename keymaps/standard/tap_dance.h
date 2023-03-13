@@ -3,6 +3,7 @@
 
 enum tap_dance_names {
     ALT_TABLE,
+    ALT_SHIFT_TABLE,
     ALT_LAYERS,
     INSERT_PLUS,
 };
@@ -28,6 +29,8 @@ td_state_t current_dance(qk_tap_dance_state_t *state) {
 
 void td_alt_tab_each_tap(qk_tap_dance_state_t *state, void *user_data);
 void td_alt_tab_finished(qk_tap_dance_state_t *state, void *user_data);
+void td_alt_sft_tab_each_tap(qk_tap_dance_state_t *state, void *user_data);
+void td_alt_sft_tab_finished(qk_tap_dance_state_t *state, void *user_data);
 void td_alt_layers_finished(qk_tap_dance_state_t *state, void *user_data);
 void td_alt_layers_reset(qk_tap_dance_state_t *state, void *user_data);
 void td_insert_plus_finished(qk_tap_dance_state_t *state, void *user_data);
@@ -35,6 +38,7 @@ void td_insert_plus_reset(qk_tap_dance_state_t *state, void *user_data);
 
 qk_tap_dance_action_t tap_dance_actions[] = {
     [ALT_TABLE] = ACTION_TAP_DANCE_FN_ADVANCED(td_alt_tab_each_tap, td_alt_tab_finished, NULL),
+    [ALT_SHIFT_TABLE] = ACTION_TAP_DANCE_FN_ADVANCED(td_alt_sft_tab_each_tap, td_alt_sft_tab_finished, NULL),
     [ALT_LAYERS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_alt_layers_finished, td_alt_layers_reset),
     [INSERT_PLUS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_insert_plus_finished, td_insert_plus_reset),
 };
