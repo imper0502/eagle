@@ -34,33 +34,33 @@
 /* Layer Keymaps */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BS] = LAYOUT(
-        ALT_ESC, KC_CIRC, KC_AT  , KC_HASH, KC_DLR , KC_AMPR,                   KC_ASTR, KC_QUES, KC_EXLM, KC_GRV , KC_TILD, LSA_ESC,
-        MK_DEL , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B   ,                   KC_J   , KC_L   , KC_U   , KC_Y   , KC_SLSH, KC_BSLS,
-        GUI_ESC, KC_A   , KC_R   , KC_S   , KC_T   , KC_G   ,                   KC_M   , KC_N   , KC_E   , KC_I   , KC_O   , GUI_TAB,
+        KC_INSP, KC_CIRC, KC_AT  , KC_HASH, KC_DLR , KC_AMPR,                   KC_ASTR, KC_QUES, KC_EXLM, KC_GRV , KC_TILD, ALT_TAB,
+        KC_DEL , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B   ,                   KC_J   , KC_L   , KC_U   , KC_Y   , KC_SLSH, KC_BSLS,
+        KC_ESCG, KC_A   , KC_R   , KC_S   , KC_T   , KC_G   ,                   KC_M   , KC_N   , KC_E   , KC_I   , KC_O   , KC_TABG,
         KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V   ,                   KC_K   , KC_H   , KC_COMM, KC_DOT , KC_QUOT, KC_RSFT,
-                                   ALT_LYS, KC_LCTL, OS_LSFT, INS_PLS, KC_BSPC, FN_SPC , FN_MINS, FN_EQL ,
-                          XXXXXXX,                            MO(_MK), ALT_TAB,                            XXXXXXX
+                                   ALT_LYS, KC_LCTL, OS_LSFT, KC_BSPC, KC_ENT , FN_SPC , FC_MINS, FA_EQL ,
+                          XXXXXXX,                            KC_INSP, ALT_ESC,                            XXXXXXX
     ),
     [_QW] = LAYOUT(
         KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                   KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_BSPC,
         MK_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,                   KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
-        GUI_ESC, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,                   KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_QUOT,
+        KC_ESCG, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,                   KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_QUOT,
         KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                   KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
                                    ALTLBRC, CTLRBRC, _______, _______, _______, _______, _______, _______,
                           XXXXXXX,                            _______, _______,                            XXXXXXX
     ),
     [_NP] = LAYOUT(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        TO(_BS), KC_WH_U, KC_WH_L, KC_MS_U, KC_WH_R, KC_BTN4,                   KC_PAST, KC_7   , KC_8   , KC_9   , KC_PPLS, KC_ESC ,
-        KC_ESC , KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, KC_BTN5,                   KC_PSLS, KC_4   , KC_5   , KC_6   , KC_PMNS, KC_TAB ,
-        KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_BTN2,                   KC_PERC, KC_1   , KC_2   , KC_3   , KC_PENT, KC_RSFT,
-                                   KC_BTN4, KC_BTN1, KC_BTN3, _______, _______, FN_SPC , KC_0   , KC_DOT ,
-                          XXXXXXX,                            _______, _______,                            XXXXXXX
+        KC_INSP, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_DEL ,
+        TO(_BS), KC_WH_U, KC_WH_L, KC_MS_U, KC_WH_R, XXXXXXX,                   KC_PAST, KC_7   , KC_8   , KC_9   , KC_PPLS, KC_BSPC,
+        KC_ESC , KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, XXXXXXX,                   KC_PSLS, KC_4   , KC_5   , KC_6   , KC_PMNS, KC_TAB ,
+        KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_PERC, KC_1   , KC_2   , KC_3   , KC_PENT, KC_RSFT,
+                                   KC_BTN4, KC_BTN1, KC_BTN3, KC_BTN2, _______, FN_SPC , KC_0   , KC_DOT ,
+                          XXXXXXX,                            KC_BTN5, _______,                            XXXXXXX
     ),
     [_MK] = LAYOUT(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        KC_INSP, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         TO(_BS), TG(_QW), CG_NORM, KC_NLCK, KC_PSCR, XXXXXXX,                   XXXXXXX, KC_WH_L, KC_MS_U, KC_WH_R, KC_WH_U, TO(_BS),
-        GUI_ESC, XXXXXXX,  RESET , KC_SLCK, CG_TOGG, TG(_QW),                   CG_SWAP, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, GUI_TAB,
+        KC_ESCG, XXXXXXX,  RESET , KC_SLCK, CG_TOGG, TG(_QW),                   CG_SWAP, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, KC_TABG,
         KC_LSFT, XXXXXXX, XXXXXXX, KC_CAPS, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_BTN4, KC_WH_L, KC_WH_R, KC_BTN5, KC_RSFT,
                                    KC_LALT, KC_LCTL, KC_LSFT, _______, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN5,
                           XXXXXXX,                            _______, KC_BTN4,                            XXXXXXX
@@ -68,18 +68,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FN] = LAYOUT(
         KC_F1  , KC_F2  , KC_3   , KC_F4  , KC_F5  , KC_F6  ,                   KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F11 , KC_F12 ,
         TO(_BS), KC_PPLS, KC_7   , KC_8   , KC_9   , KC_LCBR,                   KC_RCBR, KC_HOME, KC_UP  , KC_END , KC_PGUP, TO(_BS),
-        GUI_ESC, KC_PMNS, KC_4   , KC_5   , KC_6   , KC_LPRN,                   KC_RPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, GUI_TAB,
+        KC_ESCG, KC_PMNS, KC_4   , KC_5   , KC_6   , KC_LPRN,                   KC_RPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, KC_TABG,
         KC_LSFT, KC_EQL , KC_1   , KC_2   , KC_3   , DM_REC1,                   DM_PLY1, KC_LBRC, KC_LABK, KC_RABK, KC_RBRC, KC_RSFT,
                                    KC_DOT , KC_0   , ST_ENT , _______, _______, KC_SPC , KC_RCTL, KC_RALT,
                           XXXXXXX,                            _______, _______,                            XXXXXXX
     ),
     [CMD] = LAYOUT(
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        XXXXXXX, TG(_QW), CG_NORM, TG(_FN), KC_PSCR, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TO(_BS),
+        XXXXXXX, TG(_QW), CG_NORM, TG(_FN), KC_PSCR, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX,  RESET , KC_SLCK, CG_TOGG, TG(_QW),                   CG_SWAP, KC_NLCK, EEP_RST, EEP_RST, CG_TOGG, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, KC_CAPS,  DEBUG , XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                                    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                          XXXXXXX,                            XXXXXXX, XXXXXXX,                          XXXXXXX
+                          XXXXXXX,                            XXXXXXX, XXXXXXX,                            XXXXXXX
     )
 };
 
@@ -149,7 +149,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case FN_SPC:
         return TAPPING_TERM - 25;
-    case INS_PLS:
+    case KC_INSP:
         return TAPPING_TERM - 75;
     case ALT_TAB:
     case ALTSTAB:
@@ -161,11 +161,11 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-    case FN_ENT:
-    case FN_BSPC:
+    case FS_ENT:
+    case FS_BSPC:
     case FN_SPC:
-    case FN_MINS:
-    case FN_EQL:
+    case FC_MINS:
+    case FA_EQL:
     case ALT_LYS:
         return true;
     default:
